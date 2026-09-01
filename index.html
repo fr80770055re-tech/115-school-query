@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桃源國小 115學年度課後班與行事曆查詢</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-100 text-zinc-800 min-h-screen p-4 md:p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-zinc-200 p-6 md:p-8">
+        
+        <h1 class="text-2xl md:text-3xl font-bold text-center mb-8 text-zinc-700">115學年度 課照學扶與行事曆查詢</h1>
+        
+        <!-- 搜尋區塊 -->
+        <div class="mb-8 flex flex-col md:flex-row gap-3">
+            <input type="text" id="searchInput" placeholder="請輸入學生姓名 (如：柯沐恩)" 
+                   class="flex-1 px-4 py-3 border border-zinc-300 rounded focus:outline-none focus:ring-2 focus:ring-zinc-400 bg-zinc-50"
+                   onkeypress="if(event.key === 'Enter') searchStudent()">
+            <button onclick="searchStudent()" 
+                    class="px-8 py-3 bg-zinc-700 text-white font-medium rounded hover:bg-zinc-800 transition-colors">
+                查詢課表
+            </button>
+        </div>
+
+        <p id="error-msg" class="text-red-600 hidden text-center mb-6 font-medium">找不到該學生資料，請確認姓名是否輸入正確。</p>
+
+        <!-- 學生課表區塊 -->
+        <div id="result-section" class="hidden mb-12">
+            <h2 class="text-xl font-semibold mb-4 border-b border-zinc-200 pb-2 text-zinc-700">
+                課後班級安排：<span id="display-name" class="text-zinc-900 ml-2"></span>
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- 星期一 -->
+                <div class="bg-zinc-50 p-4 rounded border border-zinc-200">
+                    <h3 class="font-bold text-zinc-600 mb-3 border-b border-zinc-200 pb-1">星期一</h3>
+                    <p class="mb-1 text-zinc-700">班級：<span id="mon-class" class="font-medium text-zinc-900 ml-1"></span></p>
+                    <p class="mb-1 text-zinc-700">教師：<span id="mon-teacher" class="font-medium text-zinc-900 ml-1"></span></p>
+                    <p class="text-zinc-700">教室：<span id="mon-room" class="font-medium text-zinc-900 ml-1"></span></p>
+                </div>
+                <!-- 星期二 -->
+                <div class="bg-zinc-50 p-4 rounded border border-zinc-200">
+                    <h3 class="font-bold text-zinc-600 mb-3 border-b border-zinc-200 pb-1">星期二</h3>
+                    <p class="mb-1 text-zinc-700">班級：<span id="tue-class" class="font-medium text-zinc-900 ml-1"></span></p>
+                    <p class="mb-1 text-zinc-700">教師：<span id="tue-teacher" class="font-medium text-zinc-900 ml-1"></span></p>
+                    <p class="text-zinc-700">教室：<span id="tue-room" class="font-medium text-zinc-900 ml-1"></span></p>
+                </div>
+                <!-- 星期四 -->
+                <div class="bg-zinc-50 p-4 rounded border border-zinc-200">
+                    <h3 class="font-bold text-zinc-600 mb-3 border-b border-zinc-200 pb-1">星期四</h3>
+                    <p class="mb-1 text-zinc-700">班級：<span id="thu-class" class="font-medium text-zinc-900 ml-1"></span></p>
+                    <p class="mb-1 text-zinc-700">教師：<span id="thu-teacher" class="font-medium text-zinc-900 ml-1"></span></p>
+                    <p class="text-zinc-700">教室：<span id="thu-room" class="font-medium text-zinc-900 ml-1"></span></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 全校行事曆區塊 -->
+        <div>
+            <h2 class="text-xl font-semibold mb-4 border-b border-zinc-200 pb-2 text-zinc-700">全校近期行事曆</h2>
+            <div id="calendar-container" class="space-y-4">
+                <p class="text-zinc-500">載入中...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let studentsData = [];
+
+        // 頁面載入時，自動抓取兩份 JSON
+        window.onload = async function() {
+            try {
+                // 讀取行事曆
+                const calResponse = await fetch('calendar.json');
+                const calendarData = await calResponse.json();
+                renderCalendar(calendarData);
+
+                // 讀取學生名單
+                const stdResponse = await fetch('students.json');
+                studentsData = await stdResponse.json();
+            } catch (error) {
+                console.error("資料載入失敗", error);
+                document.getElementById('calendar-container').innerHTML = '<p class="text-red-500">資料載入失敗，請確認檔案是否在伺服器上。</p>';
+            }
+        };
+
+        // 渲染行事曆畫面
+        function renderCalendar(data) {
+            const container = document.getElementById('calendar-container');
+            container.innerHTML = ''; 
+            
+            data.forEach(weekData => {
+                if(weekData.events.length === 0) return; // 沒活動跳過
+                
+                const block = document.createElement('div');
+                block.className = 'bg-zinc-50 p-4 rounded border border-zinc-200';
+                
+                let eventsHtml = weekData.events.map(event => `<li class="ml-4 list-disc text-zinc-700">${event}</li>`).join('');
+                
+                block.innerHTML = `
+                    <h3 class="font-bold text-zinc-800 mb-2">第 ${weekData.week} 週 <span class="text-sm font-normal text-zinc-500 ml-2">${weekData.date}</span></h3>
+                    <ul class="space-y-1">${eventsHtml}</ul>
+                `;
+                container.appendChild(block);
+            });
+        }
+
+        // 查詢學生課表
+        function searchStudent() {
+            const input = document.getElementById('searchInput').value.trim();
+            const resultSection = document.getElementById('result-section');
+            const errorMsg = document.getElementById('error-msg');
+            
+            const student = studentsData.find(s => s.name === input);
+
+            if (student) {
+                errorMsg.classList.add('hidden');
+                resultSection.classList.remove('hidden');
+                document.getElementById('display-name').textContent = student.name;
+                
+                const days = ['mon', 'tue', 'thu'];
+                const dayKeys = ['monday', 'tuesday', 'thursday'];
+                
+                days.forEach((prefix, index) => {
+                    const dayData = student.schedule[dayKeys[index]] || {};
+                    document.getElementById(`${prefix}-class`).textContent = dayData.class_name || '無';
+                    document.getElementById(`${prefix}-teacher`).textContent = dayData.teacher || '-';
+                    document.getElementById(`${prefix}-room`).textContent = dayData.classroom || '-';
+                });
+            } else {
+                errorMsg.classList.remove('hidden');
+                resultSection.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1314 @@
+[
+  {
+    "name": "吳練",
+    "schedule": {
+      "monday": {
+        "class_name": "學力班",
+        "teacher": "李宜庭",
+        "classroom": "電腦"
+      },
+      "tuesday": {
+        "class_name": "學力班",
+        "teacher": "謝朝欽",
+        "classroom": "六忠"
+      },
+      "thursday": {
+        "class_name": "學力班",
+        "teacher": "許丹群",
+        "classroom": "六忠"
+      }
+    }
+  },
+  {
+    "name": "顏澎祈",
+    "schedule": {
+      "monday": {
+        "class_name": "學力班",
+        "teacher": "李宜庭",
+        "classroom": "電腦"
+      },
+      "tuesday": {
+        "class_name": "學力班",
+        "teacher": "謝朝欽",
+        "classroom": "六忠"
+      },
+      "thursday": {
+        "class_name": "學力班",
+        "teacher": "許丹群",
+        "classroom": "六忠"
+      }
+    }
+  },
+  {
+    "name": "吳宇寧",
+    "schedule": {
+      "monday": {
+        "class_name": "學力班",
+        "teacher": "李宜庭",
+        "classroom": "電腦"
+      },
+      "tuesday": {
+        "class_name": "學力班",
+        "teacher": "謝朝欽",
+        "classroom": "六忠"
+      },
+      "thursday": {
+        "class_name": "學力班",
+        "teacher": "許丹群",
+        "classroom": "六忠"
+      }
+    }
+  },
+  {
+    "name": "林承妤",
+    "schedule": {
+      "monday": {
+        "class_name": "學力班",
+        "teacher": "李宜庭",
+        "classroom": "電腦"
+      },
+      "tuesday": {
+        "class_name": "英語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      },
+      "thursday": {
+        "class_name": "學力班",
+        "teacher": "許丹群",
+        "classroom": "六忠"
+      }
+    }
+  },
+  {
+    "name": "柯沐恩",
+    "schedule": {
+      "monday": {
+        "class_name": "數學A班",
+        "teacher": "許丹群",
+        "classroom": "專科教室"
+      },
+      "tuesday": {
+        "class_name": "學力班",
+        "teacher": "謝朝欽",
+        "classroom": "六忠"
+      },
+      "thursday": {
+        "class_name": "學力班",
+        "teacher": "許丹群",
+        "classroom": "六忠"
+      }
+    }
+  },
+  {
+    "name": "池家勝",
+    "schedule": {
+      "monday": {
+        "class_name": "數學A班",
+        "teacher": "許丹群",
+        "classroom": "專科教室"
+      },
+      "tuesday": {
+        "class_name": "英語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      },
+      "thursday": {
+        "class_name": "國語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      }
+    }
+  },
+  {
+    "name": "顏彼得",
+    "schedule": {
+      "monday": {
+        "class_name": "數學A班",
+        "teacher": "許丹群",
+        "classroom": "專科教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "謝馨",
+    "schedule": {
+      "monday": {
+        "class_name": "數學A班",
+        "teacher": "許丹群",
+        "classroom": "專科教室"
+      },
+      "tuesday": {
+        "class_name": "英語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      },
+      "thursday": {
+        "class_name": "國語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      }
+    }
+  },
+  {
+    "name": "王巧萱",
+    "schedule": {
+      "monday": {
+        "class_name": "數學A班",
+        "teacher": "許丹群",
+        "classroom": "專科教室"
+      },
+      "tuesday": {
+        "class_name": "學力班",
+        "teacher": "謝朝欽",
+        "classroom": "六忠"
+      },
+      "thursday": {
+        "class_name": "學力班",
+        "teacher": "許丹群",
+        "classroom": "六忠"
+      }
+    }
+  },
+  {
+    "name": "蔡妤婕",
+    "schedule": {
+      "monday": {
+        "class_name": "數學A班",
+        "teacher": "許丹群",
+        "classroom": "專科教室"
+      },
+      "tuesday": {
+        "class_name": "英語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      },
+      "thursday": {
+        "class_name": "國語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      }
+    }
+  },
+  {
+    "name": "謝薔薇",
+    "schedule": {
+      "monday": {
+        "class_name": "數學A班",
+        "teacher": "許丹群",
+        "classroom": "專科教室"
+      },
+      "tuesday": {
+        "class_name": "學力班",
+        "teacher": "謝朝欽",
+        "classroom": "六忠"
+      },
+      "thursday": {
+        "class_name": "學力班",
+        "teacher": "許丹群",
+        "classroom": "六忠"
+      }
+    }
+  },
+  {
+    "name": "謝澤韋",
+    "schedule": {
+      "monday": {
+        "class_name": "數學B班",
+        "teacher": "林仲凱",
+        "classroom": "六忠"
+      },
+      "tuesday": {
+        "class_name": "英語B班",
+        "teacher": "林仲凱",
+        "classroom": "四忠"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "高上騰",
+    "schedule": {
+      "monday": {
+        "class_name": "數學B班",
+        "teacher": "林仲凱",
+        "classroom": "六忠"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "吳晨希",
+    "schedule": {
+      "monday": {
+        "class_name": "數學B班",
+        "teacher": "林仲凱",
+        "classroom": "六忠"
+      },
+      "tuesday": {
+        "class_name": "英語B班",
+        "teacher": "林仲凱",
+        "classroom": "四忠"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "吳珮慈",
+    "schedule": {
+      "monday": {
+        "class_name": "數學B班",
+        "teacher": "林仲凱",
+        "classroom": "六忠"
+      },
+      "tuesday": {
+        "class_name": "英語B班",
+        "teacher": "林仲凱",
+        "classroom": "四忠"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "吳芮晞",
+    "schedule": {
+      "monday": {
+        "class_name": "數學B班",
+        "teacher": "林仲凱",
+        "classroom": "六忠"
+      },
+      "tuesday": {
+        "class_name": "英語B班",
+        "teacher": "林仲凱",
+        "classroom": "四忠"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "顏維娜",
+    "schedule": {
+      "monday": {
+        "class_name": "數學B班",
+        "teacher": "林仲凱",
+        "classroom": "六忠"
+      },
+      "tuesday": {
+        "class_name": "英語B班",
+        "teacher": "林仲凱",
+        "classroom": "四忠"
+      },
+      "thursday": {
+        "class_name": "國語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      }
+    }
+  },
+  {
+    "name": "張語桐",
+    "schedule": {
+      "monday": {
+        "class_name": "數學B班",
+        "teacher": "林仲凱",
+        "classroom": "六忠"
+      },
+      "tuesday": {
+        "class_name": "英語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      },
+      "thursday": {
+        "class_name": "國語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      }
+    }
+  },
+  {
+    "name": "杜宜恩",
+    "schedule": {
+      "monday": {
+        "class_name": "數學C班",
+        "teacher": "謝震東",
+        "classroom": "五忠"
+      },
+      "tuesday": {
+        "class_name": "英語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      },
+      "thursday": {}
+    }
+  },
+  {
+    "name": "王葦萱",
+    "schedule": {
+      "monday": {
+        "class_name": "數學C班",
+        "teacher": "謝震東",
+        "classroom": "五忠"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "國語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      }
+    }
+  },
+  {
+    "name": "顏汶媗",
+    "schedule": {
+      "monday": {
+        "class_name": "數學C班",
+        "teacher": "謝震東",
+        "classroom": "五忠"
+      },
+      "tuesday": {
+        "class_name": "英語B班",
+        "teacher": "林仲凱",
+        "classroom": "四忠"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "許銳",
+    "schedule": {
+      "monday": {
+        "class_name": "數學C班",
+        "teacher": "謝震東",
+        "classroom": "五忠"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "王祈",
+    "schedule": {
+      "monday": {
+        "class_name": "數學C班",
+        "teacher": "謝震東",
+        "classroom": "五忠"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "潘亞夢",
+    "schedule": {
+      "monday": {
+        "class_name": "數學C班",
+        "teacher": "謝震東",
+        "classroom": "五忠"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "余恩惠",
+    "schedule": {
+      "monday": {
+        "class_name": "數學C班",
+        "teacher": "謝震東",
+        "classroom": "五忠"
+      },
+      "tuesday": {
+        "class_name": "英語B班",
+        "teacher": "林仲凱",
+        "classroom": "四忠"
+      },
+      "thursday": {
+        "class_name": "國語A班",
+        "teacher": "李宜庭",
+        "classroom": "五忠"
+      }
+    }
+  },
+  {
+    "name": "吳太顥",
+    "schedule": {
+      "monday": {
+        "class_name": "數學D班",
+        "teacher": "謝念錚",
+        "classroom": "四忠"
+      },
+      "tuesday": {
+        "class_name": "英語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      },
+      "thursday": {
+        "class_name": "國語B班",
+        "teacher": "謝震東",
+        "classroom": "四忠"
+      }
+    }
+  },
+  {
+    "name": "顏宇森",
+    "schedule": {
+      "monday": {
+        "class_name": "數學D班",
+        "teacher": "謝念錚",
+        "classroom": "四忠"
+      },
+      "tuesday": {
+        "class_name": "英語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      },
+      "thursday": {
+        "class_name": "國語B班",
+        "teacher": "謝震東",
+        "classroom": "四忠"
+      }
+    }
+  },
+  {
+    "name": "顏浩宇",
+    "schedule": {
+      "monday": {
+        "class_name": "數學D班",
+        "teacher": "謝念錚",
+        "classroom": "四忠"
+      },
+      "tuesday": {
+        "class_name": "英語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      },
+      "thursday": {
+        "class_name": "國語B班",
+        "teacher": "謝震東",
+        "classroom": "四忠"
+      }
+    }
+  },
+  {
+    "name": "謝諾伊",
+    "schedule": {
+      "monday": {
+        "class_name": "數學D班",
+        "teacher": "謝念錚",
+        "classroom": "四忠"
+      },
+      "tuesday": {
+        "class_name": "英語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      },
+      "thursday": {
+        "class_name": "國語B班",
+        "teacher": "謝震東",
+        "classroom": "四忠"
+      }
+    }
+  },
+  {
+    "name": "謝里安",
+    "schedule": {
+      "monday": {
+        "class_name": "數學D班",
+        "teacher": "謝念錚",
+        "classroom": "四忠"
+      },
+      "tuesday": {
+        "class_name": "英語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      },
+      "thursday": {
+        "class_name": "國語B班",
+        "teacher": "謝震東",
+        "classroom": "四忠"
+      }
+    }
+  },
+  {
+    "name": "高晨昊",
+    "schedule": {
+      "monday": {
+        "class_name": "數學D班",
+        "teacher": "謝念錚",
+        "classroom": "四忠"
+      },
+      "tuesday": {
+        "class_name": "英語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      },
+      "thursday": {
+        "class_name": "國語B班",
+        "teacher": "謝震東",
+        "classroom": "四忠"
+      }
+    }
+  },
+  {
+    "name": "巴力·拉發亮",
+    "schedule": {
+      "monday": {
+        "class_name": "數學E班",
+        "teacher": "曾珮荼",
+        "classroom": "三忠"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "國語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      }
+    }
+  },
+  {
+    "name": "柯旼祁",
+    "schedule": {
+      "monday": {
+        "class_name": "數學E班",
+        "teacher": "曾珮荼",
+        "classroom": "三忠"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "江孟澤",
+    "schedule": {
+      "monday": {
+        "class_name": "數學E班",
+        "teacher": "曾珮荼",
+        "classroom": "三忠"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "國語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      }
+    }
+  },
+  {
+    "name": "謝丞偉",
+    "schedule": {
+      "monday": {
+        "class_name": "數學E班",
+        "teacher": "曾珮荼",
+        "classroom": "三忠"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "國語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      }
+    }
+  },
+  {
+    "name": "柯語柔",
+    "schedule": {
+      "monday": {
+        "class_name": "數學E班",
+        "teacher": "曾珮荼",
+        "classroom": "三忠"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "吳祐勳",
+    "schedule": {
+      "monday": {
+        "class_name": "數學E班",
+        "teacher": "曾珮荼",
+        "classroom": "三忠"
+      },
+      "tuesday": {
+        "class_name": "英語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      },
+      "thursday": {
+        "class_name": "國語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      }
+    }
+  },
+  {
+    "name": "何杰睿",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "曾吉",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "洪昊宇",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "顏以樂",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "高倫勝",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "高瑜均",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "杜靚誼",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "陳曦",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "顏宇晴",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "顏維琴",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "顏芊芊",
+    "schedule": {
+      "monday": {
+        "class_name": "數學F班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "國語D班",
+        "teacher": "曾珮荼",
+        "classroom": "二忠"
+      }
+    }
+  },
+  {
+    "name": "吳倢",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "吳承緯",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "杜銘祐",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "國語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      }
+    }
+  },
+  {
+    "name": "潘亞恩",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "葉恩",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "顏箴",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "國語C班",
+        "teacher": "謝念錚",
+        "classroom": "三忠"
+      }
+    }
+  },
+  {
+    "name": "高晨宇",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "陳亮",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "王薇綺",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "吳迪",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "高彥翔",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "高彥楷",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "顏維綉",
+    "schedule": {
+      "monday": {
+        "class_name": "課照A班",
+        "teacher": "吳雅玲",
+        "classroom": "視聽教室"
+      },
+      "tuesday": {
+        "class_name": "課照C班",
+        "teacher": "吳雅玲",
+        "classroom": "專科教室"
+      },
+      "thursday": {
+        "class_name": "課照D班",
+        "teacher": "林仲凱",
+        "classroom": "專科教室"
+      }
+    }
+  },
+  {
+    "name": "江恩典",
+    "schedule": {
+      "monday": {
+        "class_name": "課照B班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "課照E班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      }
+    }
+  },
+  {
+    "name": "顏亞諾",
+    "schedule": {
+      "monday": {
+        "class_name": "課照B班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "課照E班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      }
+    }
+  },
+  {
+    "name": "顏辰浩",
+    "schedule": {
+      "monday": {
+        "class_name": "課照B班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "課照E班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      }
+    }
+  },
+  {
+    "name": "嵐葳·伊斯坦段",
+    "schedule": {
+      "monday": {
+        "class_name": "課照B班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "課照E班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      }
+    }
+  },
+  {
+    "name": "江慈欣",
+    "schedule": {
+      "monday": {
+        "class_name": "課照B班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "課照E班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      }
+    }
+  },
+  {
+    "name": "潘亞慕",
+    "schedule": {
+      "monday": {
+        "class_name": "課照B班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "課照E班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      }
+    }
+  },
+  {
+    "name": "高上勻",
+    "schedule": {
+      "monday": {
+        "class_name": "課照B班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "課照E班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      }
+    }
+  },
+  {
+    "name": "高芮艾",
+    "schedule": {
+      "monday": {
+        "class_name": "課照B班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "課照E班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      }
+    }
+  },
+  {
+    "name": "高苡樂",
+    "schedule": {
+      "monday": {
+        "class_name": "課照B班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      },
+      "tuesday": {},
+      "thursday": {
+        "class_name": "課照E班",
+        "teacher": "周雪君",
+        "classroom": "一忠"
+      }
+    }
+  }
+]
