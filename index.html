@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-<!-- (這是原本上方的星期四課表區塊) -->
+        <!-- (這是原本上方的星期四課表區塊) -->
             </div>
             
             <!-- 新增：社團資訊與提醒區塊 -->
@@ -117,7 +117,7 @@
             });
         }
 
-        // 查詢學生課表
+ // 查詢學生課表
         function searchStudent() {
             const input = document.getElementById('searchInput').value.trim();
             const resultSection = document.getElementById('result-section');
@@ -139,6 +139,11 @@
                     document.getElementById(`${prefix}-teacher`).textContent = dayData.teacher || '-';
                     document.getElementById(`${prefix}-room`).textContent = dayData.classroom || '-';
                 });
+
+                // 新增：填入社團資料
+                const clubs = student.schedule.clubs || [];
+                document.getElementById('student-clubs').textContent = clubs.length > 0 ? clubs.join('、') : '未參加社團';
+
             } else {
                 errorMsg.classList.remove('hidden');
                 resultSection.classList.add('hidden');
