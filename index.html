@@ -196,17 +196,30 @@ function isCurrentWeek(dateStr) {
   return now >= range.start && now <= range.end;
 }
 
+// 8 月起算的學年序，讓 1 月 (13) 能排在 12 月 (12) 之後，而不是排到最前面
+function eventDateKey(text) {
+  const m = text.match(/^(\d{1,2})\/(\d{1,2})/);
+  if (!m) return Infinity;
+  const mm = Number(m[1]), dd = Number(m[2]);
+  return (mm >= 8 ? mm : mm + 12) * 100 + dd;
+}
+
 function renderCalendar(data) {
   const container = document.getElementById('calendar-container');
   container.innerHTML = '';
 
-  const weeks = data.filter(w => w.events.length > 0);
+  const weeks = data
+    .filter(w => w.events.length > 0)
+    .slice()
+    .sort((a, b) => parseWeekRange(a.date).start - parseWeekRange(b.date).start);
+
   if (weeks.length === 0) {
     container.innerHTML = '<p class="loading">目前沒有排定的行事曆事項。</p>';
     return;
   }
 
   weeks.forEach(weekData => {
+    weekData = { ...weekData, events: weekData.events.slice().sort((a, b) => eventDateKey(a) - eventDateKey(b)) };
     const current = isCurrentWeek(weekData.date);
     const row = document.createElement('div');
     row.className = 'week-row' + (current ? ' current' : '');
