@@ -181,9 +181,9 @@ function parseWeekRange(dateStr) {
   if (!m) return null;
   const [, sm, sd, em, ed] = m.map(Number);
   const now = new Date();
-  const augStart = sm >= 8 ? now.getFullYear() : now.getFullYear() - 1;
-  let startYear = sm >= 8 ? augStart : augStart + 1;
-  let endYear = em >= 8 ? augStart : augStart + 1;
+  const academicYearStart = now.getMonth() + 1 >= 8 ? now.getFullYear() : now.getFullYear() - 1;
+  const startYear = sm >= 8 ? academicYearStart : academicYearStart + 1;
+  const endYear = em >= 8 ? academicYearStart : academicYearStart + 1;
   const start = new Date(startYear, sm - 1, sd, 0, 0, 0);
   const end = new Date(endYear, em - 1, ed, 23, 59, 59);
   return { start, end };
@@ -208,10 +208,11 @@ function renderCalendar(data) {
   const container = document.getElementById('calendar-container');
   container.innerHTML = '';
 
+  const weekSortKey = dateStr => (parseWeekRange(dateStr) || {}).start ?? Infinity;
   const weeks = data
     .filter(w => w.events.length > 0)
     .slice()
-    .sort((a, b) => parseWeekRange(a.date).start - parseWeekRange(b.date).start);
+    .sort((a, b) => weekSortKey(a.date) - weekSortKey(b.date));
 
   if (weeks.length === 0) {
     container.innerHTML = '<p class="loading">目前沒有排定的行事曆事項。</p>';
