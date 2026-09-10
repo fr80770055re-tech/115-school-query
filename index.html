@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>桃源國小 115學年度課後班與行事曆查詢</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#f5f6f4; --surface:#ffffff; --surface-2:#f0f1ee; --border:#dee0d9;
+  --text:#23241f; --text-soft:#6b6e66; --text-faint:#95988e;
+  --accent:#35507a; --accent-soft:#e7ecf3; --accent-strong:#25395a; --accent-contrast:#ffffff;
+  --club:#4f7a5b; --club-soft:#e8f0ea;
+  --warn:#93600e; --warn-soft:#faf0d9;
+  --error:#a4372a; --error-soft:#f7e9e6;
+  --shadow: 0 1px 2px rgba(35,36,31,0.04), 0 8px 24px -12px rgba(35,36,31,0.12);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1b17; --surface:#222319; --surface-2:#282a1f; --border:#3a3c30;
+    --text:#eae9e1; --text-soft:#a8a999; --text-faint:#767863;
+    --accent:#8fadd6; --accent-soft:#29344a; --accent-strong:#c3d5ee; --accent-contrast:#0f1420;
+    --club:#93c2a1; --club-soft:#22301f;
+    --warn:#e3b055; --warn-soft:#3a2f16;
+    --error:#e2897b; --error-soft:#3a2420;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1a1b17; --surface:#222319; --surface-2:#282a1f; --border:#3a3c30;
+  --text:#eae9e1; --text-soft:#a8a999; --text-faint:#767863;
+  --accent:#8fadd6; --accent-soft:#29344a; --accent-strong:#c3d5ee; --accent-contrast:#0f1420;
+  --club:#93c2a1; --club-soft:#22301f;
+  --warn:#e3b055; --warn-soft:#3a2f16;
+  --error:#e2897b; --error-soft:#3a2420;
+  --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC",system-ui,sans-serif;line-height:1.6;}
+.page{max-width:720px;margin:0 auto;padding:48px 20px 80px;}
+.masthead{text-align:center;margin-bottom:36px;}
+.eyebrow{margin:0 0 10px;font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;}
+.masthead h1{margin:0 0 10px;font-family:"Noto Serif TC",serif;font-weight:700;font-size:clamp(24px,4vw,32px);text-wrap:balance;}
+.lede{margin:0;color:var(--text-soft);font-size:15px;max-width:46ch;margin:0 auto;}
+.reminder{display:flex;gap:10px;align-items:flex-start;background:var(--warn-soft);border-radius:10px;box-shadow:inset 3px 0 0 var(--warn);padding:13px 16px;margin-bottom:24px;}
+.reminder .tag{flex-shrink:0;font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--warn);background:var(--surface);border-radius:5px;padding:3px 8px;margin-top:1px;}
+.reminder p{margin:0;font-size:13.5px;color:var(--text);line-height:1.6;}
+.reminder strong{color:var(--warn);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);padding:28px;margin-bottom:28px;}
+.search-row{display:flex;gap:10px;flex-wrap:wrap;}
+#searchInput{flex:1;min-width:200px;padding:13px 16px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--text);font-size:15px;font-family:inherit;}
+#searchInput:focus{outline:2px solid var(--accent);outline-offset:1px;}
+#searchBtn{padding:13px 26px;border:none;border-radius:9px;background:var(--accent);color:var(--accent-contrast);font-weight:600;font-size:15px;font-family:inherit;cursor:pointer;transition:background .15s;}
+#searchBtn:hover{background:var(--accent-strong);}
+#searchBtn:focus-visible, #searchInput:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.error-msg{margin:14px 0 0;padding:11px 14px;border-radius:8px;background:var(--error-soft);color:var(--error);font-size:14px;font-weight:500;}
+.result{margin-top:26px;padding-top:26px;border-top:1px solid var(--border);}
+.result-name{margin:0 0 16px;font-family:"Noto Serif TC",serif;font-size:19px;font-weight:600;}
+.day-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media (max-width:560px){.day-grid{grid-template-columns:1fr;}}
+.day-card{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.day-card h3{margin:0 0 10px;font-size:14px;font-weight:700;color:var(--accent);}
+.day-card dl{margin:0;}
+.day-card dl div{display:flex;justify-content:space-between;gap:8px;padding:4px 0;font-size:13.5px;}
+.day-card dt{color:var(--text-faint);flex-shrink:0;}
+.day-card dd{margin:0;text-align:right;font-weight:500;}
+.clubs-block{margin-top:20px;}
+.clubs-block h3{margin:0 0 10px;font-size:14px;font-weight:700;color:var(--club);}
+.club-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.club-tag{background:var(--club-soft);color:var(--club);border-radius:999px;padding:5px 14px;font-size:13px;font-weight:600;}
+.club-tag.none{background:var(--surface-2);color:var(--text-faint);font-weight:500;}
+.notice{margin:14px 0 0;font-size:13px;color:var(--text-soft);}
+.notice strong{color:var(--text);}
+.calendar-section h2{font-family:"Noto Serif TC",serif;font-size:19px;font-weight:700;margin:0 0 16px;}
+.calendar-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.week-row{display:grid;grid-template-columns:112px 1fr;gap:16px;background:var(--surface);padding:14px 18px;}
+@media (max-width:520px){.week-row{grid-template-columns:1fr;gap:6px;}}
+.week-row.current{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);}
+.week-label{font-variant-numeric:tabular-nums;color:var(--text-soft);font-size:13px;line-height:1.5;}
+.week-row.current .week-label{color:var(--accent-strong);font-weight:600;}
+.week-num{display:block;font-weight:600;color:var(--text);}
+.week-row.current .week-num{color:var(--accent-strong);}
+.now-tag{display:inline-block;margin-left:6px;font-size:10px;font-weight:700;letter-spacing:.05em;background:var(--accent);color:var(--accent-contrast);border-radius:5px;padding:1px 6px;vertical-align:2px;}
+.week-events{margin:0;padding:0;list-style:none;font-size:14px;}
+.week-events li{position:relative;padding-left:14px;}
+.week-events li + li{margin-top:5px;}
+.week-events li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--text-faint);}
+.loading{color:var(--text-faint);font-size:14px;padding:14px 18px;background:var(--surface);margin:0;}
+[hidden]{display:none!important;}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <p class="eyebrow">桃源國小・115學年度</p>
+    <h1>課後班・社團・行事曆查詢</h1>
+    <p class="lede">輸入學生姓名，查詢每週課照學扶班級與社團，並掌握全校最新行事曆。</p>
+  </header>
+
+  <div class="reminder" role="note">
+    <span class="tag">提醒</span>
+    <p><strong>夜光天使</strong>為週一、二、四進行，實際活動時間僅供參考，請以老師近期公告為主。</p>
+  </div>
+
+  <section class="card" aria-label="學生查詢">
+    <div class="search-row">
+      <input id="searchInput" type="text" placeholder="輸入學生姓名，例如：柯沐恩" autocomplete="off">
+      <button id="searchBtn" type="button">查詢課表</button>
+    </div>
+    <p id="error-msg" class="error-msg" hidden>找不到「<span id="error-name"></span>」的資料，請確認姓名是否輸入正確。</p>
+
+    <div id="result-section" class="result" hidden>
+      <h2 class="result-name"><span id="display-name"></span> 的課後班表</h2>
+      <div class="day-grid">
+        <article class="day-card">
+          <h3>星期一</h3>
+          <dl>
+            <div><dt>班級</dt><dd id="mon-class"></dd></div>
+            <div><dt>教師</dt><dd id="mon-teacher"></dd></div>
+            <div><dt>教室</dt><dd id="mon-room"></dd></div>
+          </dl>
+        </article>
+        <article class="day-card">
+          <h3>星期二</h3>
+          <dl>
+            <div><dt>班級</dt><dd id="tue-class"></dd></div>
+            <div><dt>教師</dt><dd id="tue-teacher"></dd></div>
+            <div><dt>教室</dt><dd id="tue-room"></dd></div>
+          </dl>
+        </article>
+        <article class="day-card">
+          <h3>星期四</h3>
+          <dl>
+            <div><dt>班級</dt><dd id="thu-class"></dd></div>
+            <div><dt>教師</dt><dd id="thu-teacher"></dd></div>
+            <div><dt>教室</dt><dd id="thu-room"></dd></div>
+          </dl>
+        </article>
+      </div>
+
+      <div class="clubs-block">
+        <h3>參加社團</h3>
+        <div id="student-clubs" class="club-tags"></div>
+        <p class="notice">社團請假或事項交代，請電洽<strong>學輔處</strong>。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="calendar-section" aria-label="全校行事曆">
+    <h2>全校近期行事曆</h2>
+    <div id="calendar-container" class="calendar-list">
+      <p class="loading">載入中…</p>
+    </div>
+  </section>
+</div>
+
+<script>
+let studentsData = [];
+
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const [calRes, stdRes] = await Promise.all([fetch('calendar.json'), fetch('students.json')]);
+    const calendarData = await calRes.json();
+    studentsData = await stdRes.json();
+    renderCalendar(calendarData);
+  } catch (err) {
+    console.error('資料載入失敗', err);
+    document.getElementById('calendar-container').innerHTML =
+      '<p class="loading">資料載入失敗，請確認 calendar.json 與 students.json 是否與此頁面放在同一資料夾。</p>';
+  }
+
+  document.getElementById('searchBtn').addEventListener('click', searchStudent);
+  document.getElementById('searchInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') searchStudent();
+  });
+});
+
+function parseWeekRange(dateStr) {
+  const m = dateStr.match(/^(\d{2})\/(\d{2})\([^)]*\)[-~](\d{2})\/(\d{2})\(/);
+  if (!m) return null;
+  const [, sm, sd, em, ed] = m.map(Number);
+  const now = new Date();
+  const augStart = sm >= 8 ? now.getFullYear() : now.getFullYear() - 1;
+  let startYear = sm >= 8 ? augStart : augStart + 1;
+  let endYear = em >= 8 ? augStart : augStart + 1;
+  const start = new Date(startYear, sm - 1, sd, 0, 0, 0);
+  const end = new Date(endYear, em - 1, ed, 23, 59, 59);
+  return { start, end };
+}
+
+function isCurrentWeek(dateStr) {
+  const range = parseWeekRange(dateStr);
+  if (!range) return false;
+  const now = new Date();
+  return now >= range.start && now <= range.end;
+}
+
+function renderCalendar(data) {
+  const container = document.getElementById('calendar-container');
+  container.innerHTML = '';
+
+  const weeks = data.filter(w => w.events.length > 0);
+  if (weeks.length === 0) {
+    container.innerHTML = '<p class="loading">目前沒有排定的行事曆事項。</p>';
+    return;
+  }
+
+  weeks.forEach(weekData => {
+    const current = isCurrentWeek(weekData.date);
+    const row = document.createElement('div');
+    row.className = 'week-row' + (current ? ' current' : '');
+
+    const eventsHtml = weekData.events.map(ev => `<li>${ev}</li>`).join('');
+    const weekLabel = weekData.week ? `第 ${weekData.week} 週` : '';
+
+    row.innerHTML = `
+      <div class="week-label">
+        ${weekLabel ? `<span class="week-num">${weekLabel}${current ? '<span class="now-tag">本週</span>' : ''}</span>` : (current ? '<span class="now-tag">本週</span>' : '')}
+        ${weekData.date}
+      </div>
+      <ul class="week-events">${eventsHtml}</ul>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function searchStudent() {
+  const input = document.getElementById('searchInput').value.trim();
+  const resultSection = document.getElementById('result-section');
+  const errorMsg = document.getElementById('error-msg');
+
+  const student = studentsData.find(s => s.name === input);
+
+  if (!student) {
+    document.getElementById('error-name').textContent = input || '（空白）';
+    errorMsg.hidden = false;
+    resultSection.hidden = true;
+    return;
+  }
+
+  errorMsg.hidden = true;
+  resultSection.hidden = false;
+  document.getElementById('display-name').textContent = student.name;
+
+  const days = ['mon', 'tue', 'thu'];
+  const dayKeys = ['monday', 'tuesday', 'thursday'];
+  days.forEach((prefix, i) => {
+    const d = student.schedule[dayKeys[i]] || {};
+    document.getElementById(`${prefix}-class`).textContent = d.class_name || '無';
+    document.getElementById(`${prefix}-teacher`).textContent = d.teacher || '—';
+    document.getElementById(`${prefix}-room`).textContent = d.classroom || '—';
+  });
+
+  const clubs = student.schedule.clubs || [];
+  const clubsContainer = document.getElementById('student-clubs');
+  clubsContainer.innerHTML = clubs.length > 0
+    ? clubs.map(c => `<span class="club-tag">${c}</span>`).join('')
+    : '<span class="club-tag none">未參加社團</span>';
+}
+</script>
+</body>
+</html>
