@@ -183,6 +183,9 @@ let studentsData = [];
 const CLOUDINARY_CLOUD_NAME = 'jxk7in8i';
 const CLOUDINARY_UPLOAD_PRESET = 'weekly_afterschool_photo';
 
+// 上傳前的簡單密碼門檻（只能擋路人，看得到原始碼的人就能繞過，只是基本防呆）
+const WEEKLY_PHOTO_PASSCODE = '124734';
+
 const firebaseConfig = {
   apiKey: "AIzaSyB2jePwSyZH8xEux6mPc-LlYXoF7xJruIo",
   authDomain: "typhomeworksystem.firebaseapp.com",
@@ -248,6 +251,13 @@ async function uploadWeeklyPhoto() {
   }
   if (!file.type.startsWith('image/')) {
     setWeeklyPhotoStatus('請上傳圖片檔案（jpg、png 等）。', 'error');
+    return;
+  }
+
+  const passcode = window.prompt('請輸入上傳密碼：');
+  if (passcode === null) return;
+  if (passcode !== WEEKLY_PHOTO_PASSCODE) {
+    setWeeklyPhotoStatus('密碼錯誤，上傳取消。', 'error');
     return;
   }
 
