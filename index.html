@@ -175,9 +175,13 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC",
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 <script>
 let studentsData = [];
+
+// Cloudinary：免費圖床，圖片檔案實際存在這裡（未來如需修改帳號請改這兩個值）
+const CLOUDINARY_CLOUD_NAME = 'jxk7in8i';
+const CLOUDINARY_UPLOAD_PRESET = 'weekly_afterschool_photo';
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2jePwSyZH8xEux6mPc-LlYXoF7xJruIo",
@@ -188,8 +192,9 @@ const firebaseConfig = {
   appId: "1:563125021119:web:169219a4e42e3936aa990a"
 };
 firebase.initializeApp(firebaseConfig);
-const storage = firebase.storage();
-const WEEKLY_PHOTO_PATH = 'weekly-afterschool-status/current';
+const db = firebase.database();
+// Realtime Database 只存「目前最新圖片網址」這個小指標，圖片本體在 Cloudinary
+const WEEKLY_PHOTO_DB_PATH = 'weeklyAfterschoolPhoto';
 
 window.addEventListener('DOMContentLoaded', async () => {
   try {
@@ -219,17 +224,17 @@ function setWeeklyPhotoStatus(message, kind) {
   el.hidden = !message;
 }
 
-async function loadWeeklyPhoto() {
-  try {
-    const url = await storage.ref(WEEKLY_PHOTO_PATH).getDownloadURL();
+function loadWeeklyPhoto() {
+  db.ref(WEEKLY_PHOTO_DB_PATH).on('value', snapshot => {
+    const data = snapshot.val();
     const img = document.getElementById('weeklyPhotoPreview');
-    img.src = url;
-    img.hidden = false;
-  } catch (err) {
-    if (err.code !== 'storage/object-not-found') {
-      console.error('讀取本週課後班照片失敗', err);
+    if (data && data.url) {
+      img.src = data.url;
+      img.hidden = false;
+    } else {
+      img.hidden = true;
     }
-  }
+  }, err => console.error('讀取本週課後班照片失敗', err));
 }
 
 async function uploadWeeklyPhoto() {
@@ -250,12 +255,18 @@ async function uploadWeeklyPhoto() {
   setWeeklyPhotoStatus('上傳中…', '');
 
   try {
-    const ref = storage.ref(WEEKLY_PHOTO_PATH);
-    await ref.put(file, { contentType: file.type });
-    const url = await ref.getDownloadURL();
-    const img = document.getElementById('weeklyPhotoPreview');
-    img.src = url;
-    img.hidden = false;
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+      method: 'POST',
+      body: formData
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error?.message || '上傳到圖床失敗');
+
+    await db.ref(WEEKLY_PHOTO_DB_PATH).set({ url: result.secure_url, uploadedAt: Date.now() });
     setWeeklyPhotoStatus('上傳成功！', 'success');
     input.value = '';
   } catch (err) {
