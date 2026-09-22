@@ -87,6 +87,15 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC",
 .week-events li + li{margin-top:5px;}
 .week-events li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--text-faint);}
 .loading{color:var(--text-faint);font-size:14px;padding:14px 18px;background:var(--surface);margin:0;}
+.upload-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+#weeklyPhotoInput{flex:1;min-width:200px;padding:10px 12px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--text);font-size:14px;font-family:inherit;}
+#weeklyPhotoUploadBtn{padding:13px 26px;border:none;border-radius:9px;background:var(--accent);color:var(--accent-contrast);font-weight:600;font-size:15px;font-family:inherit;cursor:pointer;transition:background .15s;}
+#weeklyPhotoUploadBtn:hover{background:var(--accent-strong);}
+#weeklyPhotoUploadBtn:disabled{opacity:.6;cursor:not-allowed;}
+.upload-status{margin:12px 0 0;font-size:13.5px;color:var(--text-soft);}
+.upload-status.is-error{color:var(--error);}
+.upload-status.is-success{color:var(--club);}
+.weekly-photo-preview{margin-top:16px;max-width:100%;border-radius:10px;border:1px solid var(--border);display:block;}
 [hidden]{display:none!important;}
 </style>
 </head>
@@ -147,6 +156,16 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC",
     </div>
   </section>
 
+  <section class="card" aria-label="本週各類課後班上課情形一覽">
+    <h2 class="result-name" style="margin:0 0 14px;">本週各類課後班上課情形一覽</h2>
+    <div class="upload-row">
+      <input id="weeklyPhotoInput" type="file" accept="image/*">
+      <button id="weeklyPhotoUploadBtn" type="button">上傳圖片</button>
+    </div>
+    <p id="weeklyPhotoStatus" class="upload-status" hidden></p>
+    <img id="weeklyPhotoPreview" class="weekly-photo-preview" alt="本週各類課後班上課情形一覽" hidden>
+  </section>
+
   <section class="calendar-section" aria-label="全校行事曆">
     <h2>全校近期行事曆</h2>
     <div id="calendar-container" class="calendar-list">
@@ -155,8 +174,22 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC",
   </section>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
 <script>
 let studentsData = [];
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2jePwSyZH8xEux6mPc-LlYXoF7xJruIo",
+  authDomain: "typhomeworksystem.firebaseapp.com",
+  projectId: "typhomeworksystem",
+  storageBucket: "typhomeworksystem.firebasestorage.app",
+  messagingSenderId: "563125021119",
+  appId: "1:563125021119:web:169219a4e42e3936aa990a"
+};
+firebase.initializeApp(firebaseConfig);
+const storage = firebase.storage();
+const WEEKLY_PHOTO_PATH = 'weekly-afterschool-status/current';
 
 window.addEventListener('DOMContentLoaded', async () => {
   try {
@@ -174,7 +207,64 @@ window.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('searchInput').addEventListener('keypress', e => {
     if (e.key === 'Enter') searchStudent();
   });
+
+  document.getElementById('weeklyPhotoUploadBtn').addEventListener('click', uploadWeeklyPhoto);
+  loadWeeklyPhoto();
 });
+
+function setWeeklyPhotoStatus(message, kind) {
+  const el = document.getElementById('weeklyPhotoStatus');
+  el.textContent = message;
+  el.className = 'upload-status' + (kind ? ` is-${kind}` : '');
+  el.hidden = !message;
+}
+
+async function loadWeeklyPhoto() {
+  try {
+    const url = await storage.ref(WEEKLY_PHOTO_PATH).getDownloadURL();
+    const img = document.getElementById('weeklyPhotoPreview');
+    img.src = url;
+    img.hidden = false;
+  } catch (err) {
+    if (err.code !== 'storage/object-not-found') {
+      console.error('讀取本週課後班照片失敗', err);
+    }
+  }
+}
+
+async function uploadWeeklyPhoto() {
+  const input = document.getElementById('weeklyPhotoInput');
+  const file = input.files[0];
+  const btn = document.getElementById('weeklyPhotoUploadBtn');
+
+  if (!file) {
+    setWeeklyPhotoStatus('請先選擇一張圖片。', 'error');
+    return;
+  }
+  if (!file.type.startsWith('image/')) {
+    setWeeklyPhotoStatus('請上傳圖片檔案（jpg、png 等）。', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  setWeeklyPhotoStatus('上傳中…', '');
+
+  try {
+    const ref = storage.ref(WEEKLY_PHOTO_PATH);
+    await ref.put(file, { contentType: file.type });
+    const url = await ref.getDownloadURL();
+    const img = document.getElementById('weeklyPhotoPreview');
+    img.src = url;
+    img.hidden = false;
+    setWeeklyPhotoStatus('上傳成功！', 'success');
+    input.value = '';
+  } catch (err) {
+    console.error('上傳失敗', err);
+    setWeeklyPhotoStatus('上傳失敗，請稍後再試。', 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
 
 function parseWeekRange(dateStr) {
   const m = dateStr.match(/^(\d{2})\/(\d{2})\([^)]*\)[-~](\d{2})\/(\d{2})\(/);
