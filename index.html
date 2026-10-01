@@ -3,23 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 <title>桃源國小 115學年度課後班與行事曆查詢</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap">
 <style>
 :root{
-  --bg:#f5f6f4; --surface:#ffffff; --surface-2:#f0f1ee; --border:#dee0d9;
-  --text:#23241f; --text-soft:#6b6e66; --text-faint:#95988e;
+  --bg:#f5f6f4; --surface:#ffffff; --surface-2:#f0f1ee; --border:#dee0d9; --border-strong:#c9ccc2;
+  --text:#23241f; --text-soft:#5f625a; --text-faint:#767a70;
   --accent:#35507a; --accent-soft:#e7ecf3; --accent-strong:#25395a; --accent-contrast:#ffffff;
   --club:#4f7a5b; --club-soft:#e8f0ea;
-  --warn:#93600e; --warn-soft:#faf0d9;
+  --warn:#8a5a0c; --warn-soft:#faf0d9;
   --error:#a4372a; --error-soft:#f7e9e6;
   --shadow: 0 1px 2px rgba(35,36,31,0.04), 0 8px 24px -12px rgba(35,36,31,0.12);
+  --radius-lg:14px; --radius-md:10px; --radius-sm:8px;
+  --ease-out: cubic-bezier(.16,1,.3,1);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1b17; --surface:#222319; --surface-2:#282a1f; --border:#3a3c30;
-    --text:#eae9e1; --text-soft:#a8a999; --text-faint:#767863;
+    --bg:#1a1b17; --surface:#222319; --surface-2:#282a1f; --border:#3a3c30; --border-strong:#4b4e3f;
+    --text:#eae9e1; --text-soft:#b3b4a5; --text-faint:#979985;
     --accent:#8fadd6; --accent-soft:#29344a; --accent-strong:#c3d5ee; --accent-contrast:#0f1420;
     --club:#93c2a1; --club-soft:#22301f;
     --warn:#e3b055; --warn-soft:#3a2f16;
@@ -28,8 +32,8 @@
   }
 }
 :root[data-theme="dark"]{
-  --bg:#1a1b17; --surface:#222319; --surface-2:#282a1f; --border:#3a3c30;
-  --text:#eae9e1; --text-soft:#a8a999; --text-faint:#767863;
+  --bg:#1a1b17; --surface:#222319; --surface-2:#282a1f; --border:#3a3c30; --border-strong:#4b4e3f;
+  --text:#eae9e1; --text-soft:#b3b4a5; --text-faint:#979985;
   --accent:#8fadd6; --accent-soft:#29344a; --accent-strong:#c3d5ee; --accent-contrast:#0f1420;
   --club:#93c2a1; --club-soft:#22301f;
   --warn:#e3b055; --warn-soft:#3a2f16;
@@ -37,141 +41,267 @@
   --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
 }
 *{box-sizing:border-box;}
-body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC",system-ui,sans-serif;line-height:1.6;}
-.page{max-width:720px;margin:0 auto;padding:48px 20px 80px;}
-.masthead{text-align:center;margin-bottom:36px;}
-.eyebrow{margin:0 0 10px;font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;}
-.masthead h1{margin:0 0 10px;font-family:"Noto Serif TC",serif;font-weight:700;font-size:clamp(24px,4vw,32px);text-wrap:balance;}
-.lede{margin:0;color:var(--text-soft);font-size:15px;max-width:46ch;margin:0 auto;}
-.reminder{display:flex;gap:10px;align-items:flex-start;background:var(--warn-soft);border-radius:10px;box-shadow:inset 3px 0 0 var(--warn);padding:13px 16px;margin-bottom:24px;}
-.reminder .tag{flex-shrink:0;font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--warn);background:var(--surface);border-radius:5px;padding:3px 8px;margin-top:1px;}
-.reminder p{margin:0;font-size:13.5px;color:var(--text);line-height:1.6;}
+html{scroll-behavior:smooth;scroll-padding-top:72px;scrollbar-color:var(--border-strong) var(--bg);accent-color:var(--accent);}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC",system-ui,sans-serif;line-height:1.6;-webkit-text-size-adjust:100%;}
+::selection{background:var(--accent-soft);color:var(--accent-strong);}
+input{caret-color:var(--accent);}
+a{color:var(--accent);text-underline-offset:3px;}
+:where(a,button,input,summary):focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+[hidden]{display:none!important;}
+.visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+.page{max-width:720px;margin:0 auto;padding:44px 20px 80px;}
+
+/* 標題區 */
+.masthead{text-align:center;margin-bottom:12px;}
+.masthead h1{margin:0 0 10px;font-family:"Noto Serif TC",serif;font-weight:700;font-size:clamp(26px,5vw,30px);line-height:1.3;text-wrap:balance;}
+.lede{margin:0 auto;color:var(--text-soft);font-size:15px;max-width:40ch;text-wrap:pretty;}
+.lede .school{display:block;color:var(--accent);font-weight:600;margin-bottom:2px;}
+
+/* 頁內導覽 */
+.jump-nav{position:sticky;top:0;z-index:5;margin:0 -20px 16px;padding:10px 20px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:saturate(1.2) blur(8px);-webkit-backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid transparent;transition:border-color .2s;}
+.jump-nav.is-stuck{border-bottom-color:var(--border);}
+.jump-nav ul{display:flex;justify-content:center;gap:6px;margin:0;padding:0;list-style:none;}
+.jump-nav a{display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:600;color:var(--text-soft);text-decoration:none;transition:background .15s,color .15s;}
+.jump-nav a:hover{background:var(--surface-2);color:var(--text);}
+
+/* 提醒 */
+.reminder{display:flex;gap:10px;align-items:flex-start;background:var(--warn-soft);border-radius:var(--radius-md);padding:13px 16px;margin-bottom:24px;}
+.reminder .tag{flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--warn);background:var(--surface);border-radius:5px;padding:2px 8px;margin-top:1px;}
+.reminder p{margin:0;font-size:14px;color:var(--text);line-height:1.65;}
 .reminder strong{color:var(--warn);}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);padding:28px;margin-bottom:28px;}
-.search-row{display:flex;gap:10px;flex-wrap:wrap;}
-#searchInput{flex:1;min-width:200px;padding:13px 16px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--text);font-size:15px;font-family:inherit;}
-#searchInput:focus{outline:2px solid var(--accent);outline-offset:1px;}
-#searchBtn{padding:13px 26px;border:none;border-radius:9px;background:var(--accent);color:var(--accent-contrast);font-weight:600;font-size:15px;font-family:inherit;cursor:pointer;transition:background .15s;}
-#searchBtn:hover{background:var(--accent-strong);}
-#searchBtn:focus-visible, #searchInput:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
-.error-msg{margin:14px 0 0;padding:11px 14px;border-radius:8px;background:var(--error-soft);color:var(--error);font-size:14px;font-weight:500;}
-.result{margin-top:26px;padding-top:26px;border-top:1px solid var(--border);}
-.result-name{margin:0 0 16px;font-family:"Noto Serif TC",serif;font-size:19px;font-weight:600;}
+
+/* 卡片與區塊標題 */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:28px;margin-bottom:28px;}
+@media (max-width:560px){.card{padding:20px;}}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 16px;}
+.section-title{margin:0;font-family:"Noto Serif TC",serif;font-size:20px;font-weight:700;line-height:1.4;}
+.section-meta{margin:0;font-size:13px;color:var(--text-faint);font-variant-numeric:tabular-nums;}
+
+/* 共用按鈕 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 24px;border:none;border-radius:9px;background:var(--accent);color:var(--accent-contrast);font-weight:600;font-size:15px;font-family:inherit;cursor:pointer;transition:background .15s,transform .1s;white-space:nowrap;}
+.btn:hover{background:var(--accent-strong);}
+.btn:active{transform:translateY(1px);}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+.btn:disabled:hover{background:var(--accent);}
+.field{flex:1;min-width:0;min-height:48px;padding:0 16px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--text);font-size:16px;font-family:inherit;transition:border-color .15s,background .15s;}
+.field::placeholder{color:var(--text-faint);}
+.field:hover{border-color:var(--border-strong);}
+.field:focus{outline:2px solid var(--accent);outline-offset:1px;background:var(--surface);}
+
+/* 查詢 */
+.search-label{display:block;margin:0 0 8px;font-size:14px;font-weight:600;color:var(--text-soft);}
+.search-row{display:flex;gap:10px;}
+@media (max-width:420px){.search-row{flex-direction:column;}}
+.error-msg{margin:14px 0 0;padding:11px 14px;border-radius:var(--radius-sm);background:var(--error-soft);color:var(--error);font-size:14px;font-weight:500;}
+.error-msg small{display:block;font-size:13px;font-weight:400;opacity:.9;}
+.choices{margin:16px 0 0;}
+.choices p{margin:0 0 10px;font-size:14px;color:var(--text-soft);}
+.choice-list{display:flex;flex-wrap:wrap;gap:8px;}
+.choice-list button{min-height:40px;padding:0 16px;border:1px solid var(--border);border-radius:999px;background:var(--surface-2);color:var(--text);font:inherit;font-size:15px;font-weight:500;cursor:pointer;transition:border-color .15s,background .15s;}
+.choice-list button:hover{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-strong);}
+
+.result{margin-top:26px;padding-top:24px;border-top:1px solid var(--border);}
+.result.is-entering{animation:rise .24s var(--ease-out);}
+@keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.result-name{margin:0 0 16px;font-family:"Noto Serif TC",serif;font-size:20px;font-weight:600;}
 .day-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-@media (max-width:560px){.day-grid{grid-template-columns:1fr;}}
-.day-card{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px;}
-.day-card h3{margin:0 0 10px;font-size:14px;font-weight:700;color:var(--accent);}
+.day-card{position:relative;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;}
+.day-card h3{display:flex;align-items:center;gap:6px;margin:0 0 10px;font-size:15px;font-weight:700;color:var(--accent);}
+.day-card.is-today{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 45%,transparent);}
+.today-tag{font-size:11px;font-weight:700;letter-spacing:.04em;background:var(--accent);color:var(--accent-contrast);border-radius:5px;padding:1px 6px;}
 .day-card dl{margin:0;}
-.day-card dl div{display:flex;justify-content:space-between;gap:8px;padding:4px 0;font-size:13.5px;}
+.day-card dl div{display:flex;justify-content:space-between;gap:8px;padding:4px 0;font-size:14px;}
+.day-card dl div + div{border-top:1px dashed var(--border);}
 .day-card dt{color:var(--text-faint);flex-shrink:0;}
-.day-card dd{margin:0;text-align:right;font-weight:500;}
-.clubs-block{margin-top:20px;}
-.clubs-block h3{margin:0 0 10px;font-size:14px;font-weight:700;color:var(--club);}
+.day-card dd{margin:0;text-align:right;font-weight:600;}
+.day-card.is-empty dd{color:var(--text-faint);font-weight:500;}
+@media (max-width:560px){
+  .day-grid{grid-template-columns:1fr;gap:8px;}
+  .day-card{display:grid;grid-template-columns:64px 1fr;gap:0 12px;padding:12px 14px;}
+  .day-card h3{flex-direction:column;align-items:flex-start;gap:4px;margin:4px 0 0;}
+}
+.clubs-block{margin-top:22px;}
+.clubs-block h3{margin:0 0 10px;font-size:15px;font-weight:700;color:var(--club);}
 .club-tags{display:flex;flex-wrap:wrap;gap:8px;}
-.club-tag{background:var(--club-soft);color:var(--club);border-radius:999px;padding:5px 14px;font-size:13px;font-weight:600;}
+.club-tag{background:var(--club-soft);color:var(--club);border-radius:999px;padding:5px 14px;font-size:14px;font-weight:600;}
 .club-tag.none{background:var(--surface-2);color:var(--text-faint);font-weight:500;}
-.notice{margin:14px 0 0;font-size:13px;color:var(--text-soft);}
+.notice{margin:14px 0 0;font-size:13.5px;color:var(--text-soft);}
 .notice strong{color:var(--text);}
-.calendar-section h2{font-family:"Noto Serif TC",serif;font-size:19px;font-weight:700;margin:0 0 16px;}
+
+/* 本週上課情形 */
+.photo-frame{position:relative;border-radius:var(--radius-md);overflow:hidden;background:var(--surface-2);border:1px solid var(--border);}
+.photo-frame.is-loading{aspect-ratio:4/3;}
+.photo-frame.is-loading::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,color-mix(in srgb,var(--surface) 60%,transparent) 50%,transparent 70%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;}
+@keyframes shimmer{from{background-position:150% 0;}to{background-position:-50% 0;}}
+.photo-frame a{display:block;cursor:zoom-in;}
+.photo-frame img{display:block;width:100%;height:auto;}
+.photo-empty{margin:0;padding:40px 20px;text-align:center;color:var(--text-soft);font-size:14px;}
+.photo-empty strong{display:block;color:var(--text);font-size:15px;margin-bottom:2px;}
+.photo-hint{margin:10px 0 0;font-size:13px;color:var(--text-faint);}
+
+.admin{margin-top:20px;border-top:1px solid var(--border);padding-top:16px;}
+.admin summary{display:inline-flex;align-items:center;gap:6px;min-height:36px;font-size:14px;font-weight:600;color:var(--text-soft);cursor:pointer;list-style:none;border-radius:6px;}
+.admin summary::-webkit-details-marker{display:none;}
+.admin summary::before{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .2s var(--ease-out);margin-right:4px;}
+.admin[open] summary::before{transform:rotate(45deg);}
+.admin summary:hover{color:var(--text);}
+.admin-body{display:grid;gap:12px;margin-top:12px;}
+.admin-body label{display:grid;gap:6px;font-size:13.5px;font-weight:600;color:var(--text-soft);}
+.file-field{padding:8px 10px 8px 8px;font-size:14px;display:flex;align-items:center;}
+.file-field::file-selector-button{margin-right:12px;min-height:32px;padding:0 14px;border:1px solid var(--border-strong);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-weight:600;cursor:pointer;}
+.admin-actions{display:flex;gap:10px;align-items:flex-end;}
+.admin-actions label{flex:1;}
+@media (max-width:420px){.admin-actions{flex-direction:column;align-items:stretch;}}
+.upload-status{margin:0;font-size:14px;color:var(--text-soft);}
+.upload-status.is-error{color:var(--error);}
+.upload-status.is-success{color:var(--club);font-weight:600;}
+
+/* 行事曆 */
 .calendar-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
-.week-row{display:grid;grid-template-columns:112px 1fr;gap:16px;background:var(--surface);padding:14px 18px;}
-@media (max-width:520px){.week-row{grid-template-columns:1fr;gap:6px;}}
-.week-row.current{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);}
+.week-row{display:grid;grid-template-columns:120px 1fr;gap:16px;background:var(--surface);padding:16px 18px;}
+@media (max-width:520px){.week-row{grid-template-columns:1fr;gap:8px;padding:14px 16px;}}
+.week-row.current{background:var(--accent-soft);}
+.week-row.past{background:var(--surface-2);}
+.week-row.past .week-events{color:var(--text-soft);}
 .week-label{font-variant-numeric:tabular-nums;color:var(--text-soft);font-size:13px;line-height:1.5;}
 .week-row.current .week-label{color:var(--accent-strong);font-weight:600;}
-.week-num{display:block;font-weight:600;color:var(--text);}
+.week-num{display:flex;align-items:center;gap:6px;font-weight:700;font-size:14px;color:var(--text);}
 .week-row.current .week-num{color:var(--accent-strong);}
-.now-tag{display:inline-block;margin-left:6px;font-size:10px;font-weight:700;letter-spacing:.05em;background:var(--accent);color:var(--accent-contrast);border-radius:5px;padding:1px 6px;vertical-align:2px;}
-.week-events{margin:0;padding:0;list-style:none;font-size:14px;}
-.week-events li{position:relative;padding-left:14px;}
-.week-events li + li{margin-top:5px;}
-.week-events li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--text-faint);}
-.loading{color:var(--text-faint);font-size:14px;padding:14px 18px;background:var(--surface);margin:0;}
-.upload-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-#weeklyPhotoInput{flex:1;min-width:200px;padding:10px 12px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--text);font-size:14px;font-family:inherit;}
-#weeklyPhotoUploadBtn{padding:13px 26px;border:none;border-radius:9px;background:var(--accent);color:var(--accent-contrast);font-weight:600;font-size:15px;font-family:inherit;cursor:pointer;transition:background .15s;}
-#weeklyPhotoUploadBtn:hover{background:var(--accent-strong);}
-#weeklyPhotoUploadBtn:disabled{opacity:.6;cursor:not-allowed;}
-.upload-status{margin:12px 0 0;font-size:13.5px;color:var(--text-soft);}
-.upload-status.is-error{color:var(--error);}
-.upload-status.is-success{color:var(--club);}
-.weekly-photo-preview{margin-top:16px;max-width:100%;border-radius:10px;border:1px solid var(--border);display:block;}
-[hidden]{display:none!important;}
+.now-tag{font-size:11px;font-weight:700;letter-spacing:.04em;background:var(--accent);color:var(--accent-contrast);border-radius:5px;padding:1px 6px;}
+.week-events{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;margin:0;padding:0;list-style:none;font-size:14.5px;}
+.week-events li{display:contents;}
+.ev-date{font-size:13px;font-variant-numeric:tabular-nums;color:var(--text-faint);white-space:nowrap;}
+.week-row.current .ev-date{color:var(--accent);}
+.ev-holiday .ev-text{color:var(--warn);font-weight:600;}
+.past-toggle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;border:none;background:var(--surface-2);color:var(--text-soft);font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s,color .15s;}
+.past-toggle:hover{background:var(--surface);color:var(--text);}
+.past-toggle:focus-visible{outline-offset:-3px;}
+.loading{color:var(--text-faint);font-size:14px;padding:16px 18px;background:var(--surface);margin:0;}
+.skeleton-row{height:84px;background:var(--surface);}
+
+.site-foot{margin-top:28px;text-align:center;font-size:13px;color:var(--text-faint);}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{animation:none!important;transition:none!important;}
+}
 </style>
 </head>
 <body>
 <div class="page">
   <header class="masthead">
-    <p class="eyebrow">桃源國小・115學年度</p>
     <h1>課後班・社團・行事曆查詢</h1>
-    <p class="lede">輸入學生姓名，查詢每週課照學扶班級與社團，並掌握全校最新行事曆。</p>
+    <p class="lede"><span class="school">桃源國小 115 學年度</span>輸入學生姓名，查詢每週課照、學扶班級與社團，並掌握全校最新行事曆。</p>
   </header>
+
+  <nav class="jump-nav" id="jump-nav" aria-label="頁面導覽">
+    <ul>
+      <li><a href="#search">查詢課表</a></li>
+      <li><a href="#weekly">本週上課情形</a></li>
+      <li><a href="#calendar">行事曆</a></li>
+    </ul>
+  </nav>
 
   <div class="reminder" role="note">
     <span class="tag">提醒</span>
     <p><strong>夜光天使</strong>為週一、二、四進行，實際活動時間僅供參考，請以老師近期公告為主。</p>
   </div>
 
-  <section class="card" aria-label="學生查詢">
-    <div class="search-row">
-      <input id="searchInput" type="text" placeholder="輸入學生姓名，例如：柯沐恩" autocomplete="off">
-      <button id="searchBtn" type="button">查詢課表</button>
-    </div>
-    <p id="error-msg" class="error-msg" hidden>找不到「<span id="error-name"></span>」的資料，請確認姓名是否輸入正確。</p>
+  <section class="card" id="search" aria-labelledby="search-label">
+    <form id="searchForm" role="search" novalidate>
+      <label class="search-label" id="search-label" for="searchInput">學生姓名</label>
+      <div class="search-row">
+        <input id="searchInput" class="field" type="search" name="name" placeholder="例如：柯沐恩" autocomplete="off" enterkeyhint="search" spellcheck="false">
+        <button id="searchBtn" class="btn" type="submit" disabled>載入中…</button>
+      </div>
+    </form>
 
-    <div id="result-section" class="result" hidden>
-      <h2 class="result-name"><span id="display-name"></span> 的課後班表</h2>
-      <div class="day-grid">
-        <article class="day-card">
-          <h3>星期一</h3>
-          <dl>
-            <div><dt>班級</dt><dd id="mon-class"></dd></div>
-            <div><dt>教師</dt><dd id="mon-teacher"></dd></div>
-            <div><dt>教室</dt><dd id="mon-room"></dd></div>
-          </dl>
-        </article>
-        <article class="day-card">
-          <h3>星期二</h3>
-          <dl>
-            <div><dt>班級</dt><dd id="tue-class"></dd></div>
-            <div><dt>教師</dt><dd id="tue-teacher"></dd></div>
-            <div><dt>教室</dt><dd id="tue-room"></dd></div>
-          </dl>
-        </article>
-        <article class="day-card">
-          <h3>星期四</h3>
-          <dl>
-            <div><dt>班級</dt><dd id="thu-class"></dd></div>
-            <div><dt>教師</dt><dd id="thu-teacher"></dd></div>
-            <div><dt>教室</dt><dd id="thu-room"></dd></div>
-          </dl>
-        </article>
+    <div id="search-feedback" aria-live="polite">
+      <p id="error-msg" class="error-msg" hidden></p>
+      <div id="choices" class="choices" hidden>
+        <p id="choices-label"></p>
+        <div id="choice-list" class="choice-list"></div>
       </div>
 
-      <div class="clubs-block">
-        <h3>參加社團</h3>
-        <div id="student-clubs" class="club-tags"></div>
-        <p class="notice">社團請假或事項交代，請電洽<strong>學輔處</strong>。</p>
+      <div id="result-section" class="result" hidden>
+        <h2 class="result-name"><span id="display-name"></span> 的課後班表</h2>
+        <div class="day-grid">
+          <article class="day-card" data-day="1">
+            <h3>星期一</h3>
+            <dl>
+              <div><dt>班級</dt><dd id="mon-class"></dd></div>
+              <div><dt>教師</dt><dd id="mon-teacher"></dd></div>
+              <div><dt>教室</dt><dd id="mon-room"></dd></div>
+            </dl>
+          </article>
+          <article class="day-card" data-day="2">
+            <h3>星期二</h3>
+            <dl>
+              <div><dt>班級</dt><dd id="tue-class"></dd></div>
+              <div><dt>教師</dt><dd id="tue-teacher"></dd></div>
+              <div><dt>教室</dt><dd id="tue-room"></dd></div>
+            </dl>
+          </article>
+          <article class="day-card" data-day="4">
+            <h3>星期四</h3>
+            <dl>
+              <div><dt>班級</dt><dd id="thu-class"></dd></div>
+              <div><dt>教師</dt><dd id="thu-teacher"></dd></div>
+              <div><dt>教室</dt><dd id="thu-room"></dd></div>
+            </dl>
+          </article>
+        </div>
+
+        <div class="clubs-block">
+          <h3>參加社團</h3>
+          <div id="student-clubs" class="club-tags"></div>
+          <p class="notice">社團請假或事項交代，請電洽<strong>學輔處</strong>。</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="card" aria-label="本週各類課後班上課情形一覽">
-    <h2 class="result-name" style="margin:0 0 14px;">本週各類課後班上課情形一覽</h2>
-    <div class="upload-row">
-      <input id="weeklyPhotoInput" type="file" accept="image/*">
-      <button id="weeklyPhotoUploadBtn" type="button">上傳圖片</button>
+  <section class="card" id="weekly" aria-labelledby="weekly-title">
+    <div class="section-head">
+      <h2 class="section-title" id="weekly-title">本週各類課後班上課情形一覽</h2>
+      <p class="section-meta" id="weeklyPhotoMeta"></p>
     </div>
-    <p id="weeklyPhotoStatus" class="upload-status" hidden></p>
-    <img id="weeklyPhotoPreview" class="weekly-photo-preview" alt="本週各類課後班上課情形一覽" hidden>
+
+    <div id="weeklyPhotoFrame" class="photo-frame is-loading" aria-busy="true">
+      <a id="weeklyPhotoLink" href="#" target="_blank" rel="noopener" hidden></a>
+      <p id="weeklyPhotoEmpty" class="photo-empty" hidden></p>
+    </div>
+    <p id="weeklyPhotoHint" class="photo-hint" hidden>點圖片可開啟原圖放大檢視。</p>
+
+    <details class="admin" id="weeklyAdmin">
+      <summary>教師上傳新圖片</summary>
+      <form class="admin-body" id="weeklyUploadForm" novalidate>
+        <label>圖片檔案
+          <input id="weeklyPhotoInput" class="field file-field" type="file" accept="image/*">
+        </label>
+        <div class="admin-actions">
+          <label>上傳密碼
+            <input id="weeklyPhotoPasscode" class="field" type="password" inputmode="numeric" autocomplete="off" placeholder="請輸入密碼">
+          </label>
+          <button id="weeklyPhotoUploadBtn" class="btn" type="submit">上傳圖片</button>
+        </div>
+        <p id="weeklyPhotoStatus" class="upload-status" role="status" hidden></p>
+      </form>
+    </details>
   </section>
 
-  <section class="calendar-section" aria-label="全校行事曆">
-    <h2>全校近期行事曆</h2>
-    <div id="calendar-container" class="calendar-list">
-      <p class="loading">載入中…</p>
+  <section class="calendar-section" id="calendar" aria-labelledby="calendar-title">
+    <div class="section-head">
+      <h2 class="section-title" id="calendar-title">全校近期行事曆</h2>
+      <p class="section-meta" id="calendar-meta"></p>
+    </div>
+    <div id="calendar-container" class="calendar-list" aria-busy="true">
+      <div class="skeleton-row"></div><div class="skeleton-row"></div><div class="skeleton-row"></div>
     </div>
   </section>
+
+  <p class="site-foot">資料如有疑問，請洽學校各處室。</p>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -199,70 +329,274 @@ const db = firebase.database();
 // Realtime Database 只存「目前最新圖片網址」這個小指標，圖片本體在 Cloudinary
 const WEEKLY_PHOTO_DB_PATH = 'weeklyAfterschoolPhoto';
 
+// 記住上次查詢的姓名，家長再次打開頁面時直接顯示
+const LAST_NAME_KEY = 'typ-last-student';
+const WEEKDAY_NAMES = ['日', '一', '二', '三', '四', '五', '六'];
+
+const $ = id => document.getElementById(id);
+
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text != null) node.textContent = text;
+  return node;
+}
+
+function storageGet(key) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+function storageSet(key, value) {
+  try { localStorage.setItem(key, value); } catch { /* 無痕模式等情況下略過 */ }
+}
+
 window.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const [calRes, stdRes] = await Promise.all([fetch('calendar.json'), fetch('students.json')]);
-    const calendarData = await calRes.json();
-    studentsData = await stdRes.json();
-    renderCalendar(calendarData);
-  } catch (err) {
-    console.error('資料載入失敗', err);
-    document.getElementById('calendar-container').innerHTML =
-      '<p class="loading">資料載入失敗，請確認 calendar.json 與 students.json 是否與此頁面放在同一資料夾。</p>';
+  $('searchForm').addEventListener('submit', e => {
+    e.preventDefault();
+    searchStudent($('searchInput').value);
+  });
+  $('weeklyUploadForm').addEventListener('submit', e => {
+    e.preventDefault();
+    uploadWeeklyPhoto();
+  });
+  $('weeklyPhotoInput').addEventListener('change', () => setWeeklyPhotoStatus('', ''));
+  watchStickyNav();
+  loadWeeklyPhoto();
+
+  const [calRes, stdRes] = await Promise.allSettled([
+    fetch('calendar.json').then(r => r.json()),
+    fetch('students.json').then(r => r.json())
+  ]);
+
+  if (calRes.status === 'fulfilled') {
+    renderCalendar(calRes.value);
+  } else {
+    console.error('行事曆載入失敗', calRes.reason);
+    showCalendarMessage('行事曆載入失敗，請重新整理頁面再試一次。');
   }
 
-  document.getElementById('searchBtn').addEventListener('click', searchStudent);
-  document.getElementById('searchInput').addEventListener('keypress', e => {
-    if (e.key === 'Enter') searchStudent();
-  });
-
-  document.getElementById('weeklyPhotoUploadBtn').addEventListener('click', uploadWeeklyPhoto);
-  loadWeeklyPhoto();
+  const btn = $('searchBtn');
+  if (stdRes.status === 'fulfilled') {
+    studentsData = stdRes.value;
+    btn.disabled = false;
+    btn.textContent = '查詢課表';
+    const last = storageGet(LAST_NAME_KEY);
+    if (last && findStudent(last)) {
+      $('searchInput').value = last;
+      searchStudent(last, { quiet: true });
+    }
+  } else {
+    console.error('學生名單載入失敗', stdRes.reason);
+    btn.textContent = '暫時無法查詢';
+    showSearchError('學生名單載入失敗', '請重新整理頁面再試一次。');
+  }
 });
 
+function watchStickyNav() {
+  const nav = $('jump-nav');
+  const sentinel = el('div');
+  nav.before(sentinel);
+  new IntersectionObserver(([entry]) => {
+    nav.classList.toggle('is-stuck', !entry.isIntersecting);
+  }).observe(sentinel);
+}
+
+/* ---------- 學生查詢 ---------- */
+
+const normalizeName = s => s.replace(/\s+/g, '').replace(/台/g, '臺');
+
+function findStudent(name) {
+  const key = normalizeName(name);
+  return studentsData.find(s => normalizeName(s.name) === key);
+}
+
+function showSearchError(title, hint) {
+  const msg = $('error-msg');
+  msg.replaceChildren(document.createTextNode(title), el('small', null, hint));
+  msg.hidden = false;
+}
+
+function searchStudent(rawInput, { quiet = false } = {}) {
+  const input = rawInput.trim();
+  const resultSection = $('result-section');
+  $('error-msg').hidden = true;
+  $('choices').hidden = true;
+
+  if (!input) {
+    resultSection.hidden = true;
+    showSearchError('請先輸入學生姓名。', '輸入完整姓名或部分姓名皆可。');
+    $('searchInput').focus();
+    return;
+  }
+
+  let student = findStudent(input);
+  if (!student) {
+    const key = normalizeName(input);
+    const matches = studentsData.filter(s => normalizeName(s.name).includes(key));
+    if (matches.length === 1) {
+      student = matches[0];
+    } else if (matches.length > 1) {
+      resultSection.hidden = true;
+      showChoices(input, matches);
+      return;
+    } else {
+      resultSection.hidden = true;
+      showSearchError(`找不到「${input}」的資料。`, '請確認姓名用字是否正確，也可以只輸入名字中的一兩個字試試看。');
+      return;
+    }
+  }
+
+  showStudent(student, quiet);
+}
+
+function showChoices(input, matches) {
+  const list = $('choice-list');
+  const shown = matches.slice(0, 12);
+  $('choices-label').textContent = matches.length > shown.length
+    ? `有 ${matches.length} 位學生姓名包含「${input}」，請輸入更完整的姓名：`
+    : `有 ${matches.length} 位學生姓名包含「${input}」，請選擇：`;
+  list.replaceChildren(...shown.map(s => {
+    const b = el('button', null, s.name);
+    b.type = 'button';
+    b.addEventListener('click', () => {
+      $('searchInput').value = s.name;
+      showStudent(s);
+    });
+    return b;
+  }));
+  $('choices').hidden = false;
+}
+
+function showStudent(student, quiet = false) {
+  const resultSection = $('result-section');
+  $('error-msg').hidden = true;
+  $('choices').hidden = true;
+  $('display-name').textContent = student.name;
+  storageSet(LAST_NAME_KEY, student.name);
+
+  const today = new Date().getDay();
+  const days = ['mon', 'tue', 'thu'];
+  const dayKeys = ['monday', 'tuesday', 'thursday'];
+  const cards = resultSection.querySelectorAll('.day-card');
+  days.forEach((prefix, i) => {
+    const d = student.schedule[dayKeys[i]] || {};
+    const card = cards[i];
+    $(`${prefix}-class`).textContent = d.class_name || '無';
+    $(`${prefix}-teacher`).textContent = d.teacher || '—';
+    $(`${prefix}-room`).textContent = d.classroom || '—';
+    card.classList.toggle('is-empty', !d.class_name);
+
+    const isToday = Number(card.dataset.day) === today;
+    card.classList.toggle('is-today', isToday);
+    const h3 = card.querySelector('h3');
+    h3.querySelector('.today-tag')?.remove();
+    if (isToday) h3.append(el('span', 'today-tag', '今天'));
+  });
+
+  const clubs = student.schedule.clubs || [];
+  $('student-clubs').replaceChildren(...(clubs.length > 0
+    ? clubs.map(c => el('span', 'club-tag', c))
+    : [el('span', 'club-tag none', '未參加社團')]));
+
+  resultSection.hidden = false;
+  resultSection.classList.remove('is-entering');
+  void resultSection.offsetWidth;
+  resultSection.classList.add('is-entering');
+  if (!quiet) {
+    const rect = resultSection.getBoundingClientRect();
+    if (rect.bottom > window.innerHeight) resultSection.scrollIntoView({ block: 'start' });
+  }
+}
+
+/* ---------- 本週上課情形圖片 ---------- */
+
 function setWeeklyPhotoStatus(message, kind) {
-  const el = document.getElementById('weeklyPhotoStatus');
-  el.textContent = message;
-  el.className = 'upload-status' + (kind ? ` is-${kind}` : '');
-  el.hidden = !message;
+  const status = $('weeklyPhotoStatus');
+  status.textContent = message;
+  status.className = 'upload-status' + (kind ? ` is-${kind}` : '');
+  status.hidden = !message;
+}
+
+function formatUploadedAt(ts) {
+  const d = new Date(ts);
+  if (isNaN(d)) return '';
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return `更新於 ${d.getMonth() + 1}/${d.getDate()}（${WEEKDAY_NAMES[d.getDay()]}）${hh}:${mm}`;
+}
+
+function setPhotoEmpty(title, hint) {
+  const frame = $('weeklyPhotoFrame');
+  frame.classList.remove('is-loading');
+  frame.removeAttribute('aria-busy');
+  $('weeklyPhotoLink').hidden = true;
+  $('weeklyPhotoHint').hidden = true;
+  const empty = $('weeklyPhotoEmpty');
+  empty.replaceChildren(el('strong', null, title), document.createTextNode(hint));
+  empty.hidden = false;
 }
 
 function loadWeeklyPhoto() {
+  const link = $('weeklyPhotoLink');
+  const frame = $('weeklyPhotoFrame');
+  // 圖片網址要等 Firebase 回傳才知道，所以由程式建立 <img>，避免頁面上出現沒有 src 的空圖片
+  const img = el('img');
+  img.alt = '本週各類課後班上課情形一覽';
+  img.decoding = 'async';
+  link.append(img);
+
+  img.addEventListener('load', () => {
+    frame.classList.remove('is-loading');
+    frame.removeAttribute('aria-busy');
+    link.hidden = false;
+    $('weeklyPhotoEmpty').hidden = true;
+    $('weeklyPhotoHint').hidden = false;
+  });
+  img.addEventListener('error', () => setPhotoEmpty('圖片載入失敗', '請檢查網路連線後重新整理頁面。'));
+
   db.ref(WEEKLY_PHOTO_DB_PATH).on('value', snapshot => {
     const data = snapshot.val();
-    const img = document.getElementById('weeklyPhotoPreview');
     if (data && data.url) {
-      img.src = data.url;
-      img.hidden = false;
+      $('weeklyPhotoMeta').textContent = data.uploadedAt ? formatUploadedAt(data.uploadedAt) : '';
+      if (img.getAttribute('src') !== data.url) {
+        frame.classList.add('is-loading');
+        link.hidden = true;
+        link.href = data.url;
+        img.src = data.url;
+      }
     } else {
-      img.hidden = true;
+      $('weeklyPhotoMeta').textContent = '';
+      setPhotoEmpty('本週尚未上傳', '老師上傳後，這裡會自動顯示最新的上課情形。');
     }
-  }, err => console.error('讀取本週課後班照片失敗', err));
+  }, err => {
+    console.error('讀取本週課後班照片失敗', err);
+    setPhotoEmpty('暫時無法讀取圖片', '請稍後重新整理頁面再試一次。');
+  });
 }
 
 async function uploadWeeklyPhoto() {
-  const input = document.getElementById('weeklyPhotoInput');
+  const input = $('weeklyPhotoInput');
+  const passInput = $('weeklyPhotoPasscode');
   const file = input.files[0];
-  const btn = document.getElementById('weeklyPhotoUploadBtn');
+  const btn = $('weeklyPhotoUploadBtn');
 
   if (!file) {
     setWeeklyPhotoStatus('請先選擇一張圖片。', 'error');
+    input.focus();
     return;
   }
   if (!file.type.startsWith('image/')) {
-    setWeeklyPhotoStatus('請上傳圖片檔案（jpg、png 等）。', 'error');
+    setWeeklyPhotoStatus('這不是圖片檔，請改選 jpg、png 等圖片。', 'error');
     return;
   }
-
-  const passcode = window.prompt('請輸入上傳密碼：');
-  if (passcode === null) return;
-  if (passcode !== WEEKLY_PHOTO_PASSCODE) {
-    setWeeklyPhotoStatus('密碼錯誤，上傳取消。', 'error');
+  if (passInput.value !== WEEKLY_PHOTO_PASSCODE) {
+    setWeeklyPhotoStatus(passInput.value ? '密碼錯誤，請重新輸入。' : '請輸入上傳密碼。', 'error');
+    passInput.select();
     return;
   }
 
   btn.disabled = true;
-  setWeeklyPhotoStatus('上傳中…', '');
+  btn.textContent = '上傳中…';
+  setWeeklyPhotoStatus('正在上傳，請勿關閉頁面…', '');
 
   try {
     const formData = new FormData();
@@ -277,15 +611,19 @@ async function uploadWeeklyPhoto() {
     if (!res.ok) throw new Error(result.error?.message || '上傳到圖床失敗');
 
     await db.ref(WEEKLY_PHOTO_DB_PATH).set({ url: result.secure_url, uploadedAt: Date.now() });
-    setWeeklyPhotoStatus('上傳成功！', 'success');
+    setWeeklyPhotoStatus('上傳成功！上方圖片已更新。', 'success');
     input.value = '';
+    passInput.value = '';
   } catch (err) {
     console.error('上傳失敗', err);
-    setWeeklyPhotoStatus('上傳失敗，請稍後再試。', 'error');
+    setWeeklyPhotoStatus('上傳失敗，請檢查網路連線後再試一次。', 'error');
   } finally {
     btn.disabled = false;
+    btn.textContent = '上傳圖片';
   }
 }
+
+/* ---------- 行事曆 ---------- */
 
 function parseWeekRange(dateStr) {
   const m = dateStr.match(/^(\d{2})\/(\d{2})\([^)]*\)[-~](\d{2})\/(\d{2})\(/);
@@ -300,13 +638,6 @@ function parseWeekRange(dateStr) {
   return { start, end };
 }
 
-function isCurrentWeek(dateStr) {
-  const range = parseWeekRange(dateStr);
-  if (!range) return false;
-  const now = new Date();
-  return now >= range.start && now <= range.end;
-}
-
 // 8 月起算的學年序，讓 1 月 (13) 能排在 12 月 (12) 之後，而不是排到最前面
 function eventDateKey(text) {
   const m = text.match(/^(\d{1,2})\/(\d{1,2})/);
@@ -315,73 +646,99 @@ function eventDateKey(text) {
   return (mm >= 8 ? mm : mm + 12) * 100 + dd;
 }
 
-function renderCalendar(data) {
-  const container = document.getElementById('calendar-container');
-  container.innerHTML = '';
-
-  const weekSortKey = dateStr => (parseWeekRange(dateStr) || {}).start ?? Infinity;
-  const weeks = data
-    .filter(w => w.events.length > 0)
-    .slice()
-    .sort((a, b) => weekSortKey(a.date) - weekSortKey(b.date));
-
-  if (weeks.length === 0) {
-    container.innerHTML = '<p class="loading">目前沒有排定的行事曆事項。</p>';
-    return;
-  }
-
-  weeks.forEach(weekData => {
-    weekData = { ...weekData, events: weekData.events.slice().sort((a, b) => eventDateKey(a) - eventDateKey(b)) };
-    const current = isCurrentWeek(weekData.date);
-    const row = document.createElement('div');
-    row.className = 'week-row' + (current ? ' current' : '');
-
-    const eventsHtml = weekData.events.map(ev => `<li>${ev}</li>`).join('');
-    const weekLabel = weekData.week ? `第 ${weekData.week} 週` : '';
-
-    row.innerHTML = `
-      <div class="week-label">
-        ${weekLabel ? `<span class="week-num">${weekLabel}${current ? '<span class="now-tag">本週</span>' : ''}</span>` : (current ? '<span class="now-tag">本週</span>' : '')}
-        ${weekData.date}
-      </div>
-      <ul class="week-events">${eventsHtml}</ul>
-    `;
-    container.appendChild(row);
-  });
+// 把事項開頭的日期（例：09/07（一）~9/11（五））拆出來，另外排成一欄
+const EVENT_DATE_RE = /^(\d{1,2}\/\d{1,2}\s*[（(][^）)]*[）)](?:\s*(?:[-~～]|至)\s*\d{1,2}\/\d{1,2}\s*[（(][^）)]*[）)])?|\d{1,2}\/\d{1,2}(?=\D))\s*/;
+function splitEvent(text) {
+  const m = text.match(EVENT_DATE_RE);
+  if (!m) return { date: '', body: text };
+  const date = m[1]
+    .replace(/（/g, '(').replace(/）/g, ')')
+    .replace(/\s+/g, '')
+    .replace(/[~～至-]/g, '–');
+  return { date, body: text.slice(m[0].length) };
 }
 
-function searchStudent() {
-  const input = document.getElementById('searchInput').value.trim();
-  const resultSection = document.getElementById('result-section');
-  const errorMsg = document.getElementById('error-msg');
+const HOLIDAY_RE = /放假|補假|停課/;
 
-  const student = studentsData.find(s => s.name === input);
+function showCalendarMessage(text) {
+  const container = $('calendar-container');
+  container.removeAttribute('aria-busy');
+  container.replaceChildren(el('p', 'loading', text));
+}
 
-  if (!student) {
-    document.getElementById('error-name').textContent = input || '（空白）';
-    errorMsg.hidden = false;
-    resultSection.hidden = true;
+function buildWeekRow(weekData, state) {
+  const row = el('div', 'week-row' + (state ? ` ${state}` : ''));
+  const label = el('div', 'week-label');
+  const weekText = weekData.week ? `第${weekData.week}週` : '';
+  if (weekText || state === 'current') {
+    const num = el('span', 'week-num', weekText);
+    if (state === 'current') num.append(el('span', 'now-tag', '本週'));
+    label.append(num);
+  }
+  label.append(document.createTextNode(weekData.date));
+
+  const list = el('ul', 'week-events');
+  const seen = new Set();
+  weekData.events
+    .filter(ev => { const k = ev.trim(); if (seen.has(k)) return false; seen.add(k); return true; })
+    .sort((a, b) => eventDateKey(a) - eventDateKey(b))
+    .forEach(ev => {
+      const { date, body } = splitEvent(ev);
+      const li = el('li', HOLIDAY_RE.test(body) ? 'ev-holiday' : null);
+      li.append(el('span', 'ev-date', date), el('span', 'ev-text', body));
+      list.append(li);
+    });
+
+  row.append(label, list);
+  return row;
+}
+
+function renderCalendar(data) {
+  const container = $('calendar-container');
+  container.removeAttribute('aria-busy');
+
+  const now = new Date();
+  const weeks = data
+    .filter(w => w.events.length > 0)
+    .map(w => ({ ...w, range: parseWeekRange(w.date) }))
+    .sort((a, b) => (a.range?.start ?? Infinity) - (b.range?.start ?? Infinity));
+
+  if (weeks.length === 0) {
+    showCalendarMessage('目前沒有排定的行事曆事項。');
     return;
   }
 
-  errorMsg.hidden = true;
-  resultSection.hidden = false;
-  document.getElementById('display-name').textContent = student.name;
+  const stateOf = w => !w.range ? '' : now > w.range.end ? 'past' : now >= w.range.start ? 'current' : '';
+  const past = weeks.filter(w => stateOf(w) === 'past');
+  const upcoming = weeks.filter(w => stateOf(w) !== 'past');
 
-  const days = ['mon', 'tue', 'thu'];
-  const dayKeys = ['monday', 'tuesday', 'thursday'];
-  days.forEach((prefix, i) => {
-    const d = student.schedule[dayKeys[i]] || {};
-    document.getElementById(`${prefix}-class`).textContent = d.class_name || '無';
-    document.getElementById(`${prefix}-teacher`).textContent = d.teacher || '—';
-    document.getElementById(`${prefix}-room`).textContent = d.classroom || '—';
-  });
+  container.replaceChildren();
 
-  const clubs = student.schedule.clubs || [];
-  const clubsContainer = document.getElementById('student-clubs');
-  clubsContainer.innerHTML = clubs.length > 0
-    ? clubs.map(c => `<span class="club-tag">${c}</span>`).join('')
-    : '<span class="club-tag none">未參加社團</span>';
+  // 已結束的週次預設收起，讓本週直接排在最上面
+  if (past.length > 0) {
+    const pastRows = past.map(w => { const r = buildWeekRow(w, 'past'); r.hidden = true; return r; });
+    const toggle = el('button', 'past-toggle');
+    toggle.type = 'button';
+    toggle.setAttribute('aria-expanded', 'false');
+    const setLabel = open => {
+      toggle.textContent = open ? '收起已結束的週次' : `顯示已結束的 ${past.length} 週`;
+    };
+    setLabel(false);
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      pastRows.forEach(r => { r.hidden = !open; });
+      setLabel(open);
+    });
+    container.append(toggle, ...pastRows);
+  }
+
+  upcoming.forEach(w => container.append(buildWeekRow(w, stateOf(w))));
+
+  const current = weeks.find(w => stateOf(w) === 'current');
+  $('calendar-meta').textContent = current && current.week
+    ? `今天是第${current.week}週・${now.getMonth() + 1}/${now.getDate()}（${WEEKDAY_NAMES[now.getDay()]}）`
+    : `今天 ${now.getMonth() + 1}/${now.getDate()}（${WEEKDAY_NAMES[now.getDay()]}）`;
 }
 </script>
 </body>

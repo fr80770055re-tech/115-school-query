@@ -1,0 +1,486 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-30T15:37:43+08:00",
+  "title": "Design System: 桃源國小 課後班・社團・行事曆查詢",
+  "extensions": {
+    "colorMeta": {
+      "bulletin-ink-blue": {
+        "role": "primary",
+        "displayName": "公告墨藍",
+        "canonical": "oklch(43.0% 0.077 259.0)",
+        "darkValue": "#8fadd6",
+        "tonalRamp": [
+          "#010a20",
+          "#132541",
+          "#2c4265",
+          "#47628b",
+          "#6883af",
+          "#8da6cf",
+          "#b3cbef",
+          "#dbf0ff"
+        ]
+      },
+      "bulletin-ink-blue-deep": {
+        "role": "primary",
+        "displayName": "公告墨藍・深",
+        "canonical": "oklch(34.4% 0.064 260.0)",
+        "darkValue": "#c3d5ee",
+        "tonalRamp": [
+          "#030b1c",
+          "#17253c",
+          "#31425f",
+          "#4d6284",
+          "#6d83a7",
+          "#92a6c7",
+          "#b8cae9",
+          "#dff0ff"
+        ]
+      },
+      "bulletin-ink-blue-wash": {
+        "role": "primary",
+        "displayName": "公告墨藍・淡",
+        "canonical": "oklch(94.1% 0.011 256.7)",
+        "darkValue": "#29344a",
+        "tonalRamp": [
+          "#080b10",
+          "#22252a",
+          "#3e4248",
+          "#5d6267",
+          "#7e8389",
+          "#a1a5ac",
+          "#c5cad0",
+          "#eaeff6"
+        ]
+      },
+      "playground-green": {
+        "role": "secondary",
+        "displayName": "操場綠",
+        "canonical": "oklch(53.9% 0.068 152.4)",
+        "darkValue": "#93c2a1",
+        "tonalRamp": [
+          "#001003",
+          "#0f2c19",
+          "#294b33",
+          "#446c4f",
+          "#658e70",
+          "#8ab094",
+          "#b1d3b9",
+          "#daf8e1"
+        ]
+      },
+      "playground-green-wash": {
+        "role": "secondary",
+        "displayName": "操場綠・淡",
+        "canonical": "oklch(94.7% 0.012 153.7)",
+        "darkValue": "#22301f",
+        "tonalRamp": [
+          "#080d09",
+          "#212722",
+          "#3d443f",
+          "#5c635e",
+          "#7d847f",
+          "#a0a7a2",
+          "#c4cbc6",
+          "#e9f1eb"
+        ]
+      },
+      "sticky-note-amber": {
+        "role": "tertiary",
+        "displayName": "便條紙黃",
+        "canonical": "oklch(50.8% 0.105 71.8)",
+        "darkValue": "#e3b055",
+        "tonalRamp": [
+          "#1b0400",
+          "#3b1c00",
+          "#5e3800",
+          "#845610",
+          "#a77839",
+          "#c89c65",
+          "#e9c191",
+          "#ffe8be"
+        ]
+      },
+      "sticky-note-wash": {
+        "role": "tertiary",
+        "displayName": "便條紙黃・淡",
+        "canonical": "oklch(95.7% 0.032 87.3)",
+        "darkValue": "#3a2f16",
+        "tonalRamp": [
+          "#0f0b03",
+          "#2a2418",
+          "#484132",
+          "#69604e",
+          "#8a826e",
+          "#aca492",
+          "#d0c9b8",
+          "#f4eedf"
+        ]
+      },
+      "alert-brick": {
+        "role": "error",
+        "displayName": "警示磚紅",
+        "canonical": "oklch(49.3% 0.146 29.9)",
+        "darkValue": "#e2897b",
+        "tonalRamp": [
+          "#270000",
+          "#4d0000",
+          "#761e14",
+          "#a13a2e",
+          "#c85d4e",
+          "#e88676",
+          "#ffae9f",
+          "#ffd8ca"
+        ]
+      },
+      "alert-brick-wash": {
+        "role": "error",
+        "displayName": "警示磚紅・淡",
+        "canonical": "oklch(94.4% 0.016 32.0)",
+        "darkValue": "#3a2420",
+        "tonalRamp": [
+          "#110907",
+          "#2c2220",
+          "#4a3f3d",
+          "#6a5e5c",
+          "#8c7f7c",
+          "#afa29f",
+          "#d3c6c3",
+          "#f9ebe8"
+        ]
+      },
+      "board-paper": {
+        "role": "neutral",
+        "displayName": "公告板紙白",
+        "canonical": "oklch(97.2% 0.003 128.5)",
+        "darkValue": "#1a1b17",
+        "tonalRamp": [
+          "#0b0b0a",
+          "#252524",
+          "#414241",
+          "#616160",
+          "#828381",
+          "#a4a5a3",
+          "#c8c9c7",
+          "#eeefed"
+        ]
+      },
+      "notice-white": {
+        "role": "neutral",
+        "displayName": "公告白",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "darkValue": "#222319",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "pinned-gray": {
+        "role": "neutral",
+        "displayName": "釘住灰",
+        "canonical": "oklch(95.7% 0.004 121.6)",
+        "darkValue": "#282a1f",
+        "tonalRamp": [
+          "#0b0b0a",
+          "#252523",
+          "#414240",
+          "#61625f",
+          "#828380",
+          "#a4a5a3",
+          "#c8c9c7",
+          "#eeefec"
+        ]
+      },
+      "pin-line": {
+        "role": "neutral",
+        "displayName": "圖釘線",
+        "canonical": "oklch(90.3% 0.010 119.6)",
+        "darkValue": "#3a3c30",
+        "tonalRamp": [
+          "#0b0c07",
+          "#242621",
+          "#41433d",
+          "#60625c",
+          "#81837d",
+          "#a4a69f",
+          "#c8cac3",
+          "#edefe8"
+        ]
+      },
+      "pin-line-strong": {
+        "role": "neutral",
+        "displayName": "圖釘線・深",
+        "canonical": "oklch(84.0% 0.014 120.3)",
+        "darkValue": "#4b4e3f",
+        "tonalRamp": [
+          "#0a0c06",
+          "#24261f",
+          "#41433b",
+          "#60635a",
+          "#81847a",
+          "#a4a69d",
+          "#c8cbc1",
+          "#edf0e6"
+        ]
+      },
+      "print-ink": {
+        "role": "neutral",
+        "displayName": "印刷墨黑",
+        "canonical": "oklch(25.7% 0.009 116.2)",
+        "darkValue": "#eae9e1",
+        "tonalRamp": [
+          "#0b0c07",
+          "#252621",
+          "#42433d",
+          "#61625c",
+          "#82837d",
+          "#a4a69f",
+          "#c9cac3",
+          "#eeefe8"
+        ]
+      },
+      "print-ink-soft": {
+        "role": "neutral",
+        "displayName": "印刷墨灰",
+        "canonical": "oklch(49.1% 0.013 123.7)",
+        "darkValue": "#b3b4a5",
+        "tonalRamp": [
+          "#0a0c06",
+          "#24261f",
+          "#40433c",
+          "#60635b",
+          "#81847b",
+          "#a3a69e",
+          "#c7cbc2",
+          "#ecf0e7"
+        ]
+      },
+      "print-ink-faint": {
+        "role": "neutral",
+        "displayName": "印刷墨淡",
+        "canonical": "oklch(57.3% 0.016 124.7)",
+        "darkValue": "#979985",
+        "tonalRamp": [
+          "#0a0c06",
+          "#23261e",
+          "#40443a",
+          "#5f6359",
+          "#80847a",
+          "#a3a79c",
+          "#c7cbc0",
+          "#ecf0e5"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "頁面主標",
+        "purpose": "只用於頁面主標題一處。"
+      },
+      "headline": {
+        "displayName": "區塊標題",
+        "purpose": "每個公告區塊的標題與查詢結果姓名。"
+      },
+      "title": {
+        "displayName": "卡片小標",
+        "purpose": "星期、參加社團等卡片內小標。"
+      },
+      "body": {
+        "displayName": "正文",
+        "purpose": "說明文字與行事曆事項。"
+      },
+      "label": {
+        "displayName": "標籤",
+        "purpose": "表單標籤、導覽連結、按鈕。"
+      },
+      "tag": {
+        "displayName": "小標籤",
+        "purpose": "本週、今天、提醒。"
+      },
+      "data": {
+        "displayName": "資料",
+        "purpose": "日期、週次區間、更新時間，等寬數字。"
+      }
+    },
+    "shadows": [
+      {
+        "name": "notice-lift",
+        "value": "0 1px 2px rgba(35,36,31,0.04), 0 8px 24px -12px rgba(35,36,31,0.12)",
+        "purpose": "只用於最外層公告卡片。"
+      },
+      {
+        "name": "notice-lift-dark",
+        "value": "0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5)",
+        "purpose": "深色模式的公告卡片。"
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "查詢結果出現、展開箭頭旋轉。"
+      },
+      {
+        "name": "duration-state",
+        "value": "150ms",
+        "purpose": "hover、底色、外框變化。"
+      },
+      {
+        "name": "duration-reveal",
+        "value": "240ms",
+        "purpose": "查詢結果淡入上移 6px。"
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "stack-controls",
+        "value": "420px"
+      },
+      {
+        "name": "stack-week",
+        "value": "520px"
+      },
+      {
+        "name": "single-column-days",
+        "value": "560px"
+      },
+      {
+        "name": "container",
+        "value": "720px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "區塊內唯一的主要操作，例如「查詢課表」「上傳圖片」。",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">查詢課表</button>",
+      "css": ":host{--accent:#35507a;--accent-strong:#25395a;--accent-soft:#e7ecf3;--accent-contrast:#fff;--club:#4f7a5b;--club-soft:#e8f0ea;--warn:#8a5a0c;--warn-soft:#faf0d9;--surface:#fff;--surface-2:#f0f1ee;--border:#dee0d9;--border-strong:#c9ccc2;--text:#23241f;--text-soft:#5f625a;--text-faint:#767a70;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border:none;border-radius:9px;background:var(--accent,#35507a);color:var(--accent-contrast,#fff);font:600 15px 'Noto Sans TC',system-ui,sans-serif;cursor:pointer;transition:background .15s,transform .1s;}.ds-btn-primary:hover{background:var(--accent-strong,#25395a);}.ds-btn-primary:active{transform:translateY(1px);}.ds-btn-primary:focus-visible{outline:2px solid var(--accent,#35507a);outline-offset:2px;}.ds-btn-primary:disabled{opacity:.55;cursor:not-allowed;}"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "學生姓名查詢欄，附可見標籤。",
+      "html": "<label class=\"ds-label\" for=\"ds-q\">學生姓名</label><input id=\"ds-q\" class=\"ds-input\" type=\"search\" placeholder=\"例如：柯沐恩\">",
+      "css": ":host{--accent:#35507a;--accent-strong:#25395a;--accent-soft:#e7ecf3;--accent-contrast:#fff;--club:#4f7a5b;--club-soft:#e8f0ea;--warn:#8a5a0c;--warn-soft:#faf0d9;--surface:#fff;--surface-2:#f0f1ee;--border:#dee0d9;--border-strong:#c9ccc2;--text:#23241f;--text-soft:#5f625a;--text-faint:#767a70;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-label{display:block;margin:0 0 8px;font:600 14px 'Noto Sans TC',system-ui,sans-serif;color:var(--text-soft,#5f625a);}.ds-input{width:100%;min-height:48px;padding:0 16px;border:1px solid var(--border,#dee0d9);border-radius:9px;background:var(--surface-2,#f0f1ee);color:var(--text,#23241f);font:16px 'Noto Sans TC',system-ui,sans-serif;caret-color:var(--accent,#35507a);transition:border-color .15s,background .15s;}.ds-input::placeholder{color:var(--text-faint,#767a70);}.ds-input:hover{border-color:var(--border-strong,#c9ccc2);}.ds-input:focus{outline:2px solid var(--accent,#35507a);outline-offset:1px;background:var(--surface,#fff);}"
+    },
+    {
+      "name": "Jump Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "黏在頂端的頁內導覽膠囊連結。",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\">查詢課表</a><a href=\"#\">本週上課情形</a><a href=\"#\">行事曆</a></nav>",
+      "css": ":host{--accent:#35507a;--accent-strong:#25395a;--accent-soft:#e7ecf3;--accent-contrast:#fff;--club:#4f7a5b;--club-soft:#e8f0ea;--warn:#8a5a0c;--warn-soft:#faf0d9;--surface:#fff;--surface-2:#f0f1ee;--border:#dee0d9;--border-strong:#c9ccc2;--text:#23241f;--text-soft:#5f625a;--text-faint:#767a70;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-nav{display:flex;justify-content:center;gap:6px;}.ds-nav a{display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:999px;font:600 14px 'Noto Sans TC',system-ui,sans-serif;color:var(--text-soft,#5f625a);text-decoration:none;transition:background .15s,color .15s;}.ds-nav a:hover{background:var(--surface-2,#f0f1ee);color:var(--text,#23241f);}.ds-nav a:focus-visible{outline:2px solid var(--accent,#35507a);outline-offset:2px;}"
+    },
+    {
+      "name": "Club Chip",
+      "kind": "chip",
+      "refersTo": "chip-club",
+      "description": "顯示學生參加的社團，不可點。",
+      "html": "<span class=\"ds-chip-club\">合唱團</span> <span class=\"ds-chip-club\">樂活運動社</span>",
+      "css": ":host{--accent:#35507a;--accent-strong:#25395a;--accent-soft:#e7ecf3;--accent-contrast:#fff;--club:#4f7a5b;--club-soft:#e8f0ea;--warn:#8a5a0c;--warn-soft:#faf0d9;--surface:#fff;--surface-2:#f0f1ee;--border:#dee0d9;--border-strong:#c9ccc2;--text:#23241f;--text-soft:#5f625a;--text-faint:#767a70;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-chip-club{display:inline-block;background:var(--club-soft,#e8f0ea);color:var(--club,#4f7a5b);border-radius:999px;padding:5px 14px;font:600 14px 'Noto Sans TC',system-ui,sans-serif;}"
+    },
+    {
+      "name": "Name Choice Chip",
+      "kind": "chip",
+      "refersTo": "chip-choice",
+      "description": "部分姓名符合多位學生時的選項按鈕。",
+      "html": "<button class=\"ds-chip-choice\" type=\"button\">吳宇寧</button>",
+      "css": ":host{--accent:#35507a;--accent-strong:#25395a;--accent-soft:#e7ecf3;--accent-contrast:#fff;--club:#4f7a5b;--club-soft:#e8f0ea;--warn:#8a5a0c;--warn-soft:#faf0d9;--surface:#fff;--surface-2:#f0f1ee;--border:#dee0d9;--border-strong:#c9ccc2;--text:#23241f;--text-soft:#5f625a;--text-faint:#767a70;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-chip-choice{min-height:40px;padding:0 16px;border:1px solid var(--border,#dee0d9);border-radius:999px;background:var(--surface-2,#f0f1ee);color:var(--text,#23241f);font:500 15px 'Noto Sans TC',system-ui,sans-serif;cursor:pointer;transition:border-color .15s,background .15s;}.ds-chip-choice:hover{border-color:var(--accent,#35507a);background:var(--accent-soft,#e7ecf3);color:var(--accent-strong,#25395a);}.ds-chip-choice:focus-visible{outline:2px solid var(--accent,#35507a);outline-offset:2px;}"
+    },
+    {
+      "name": "Notice Card",
+      "kind": "card",
+      "refersTo": "notice-card",
+      "description": "釘在板面上的白色公告，每個區塊一張。",
+      "html": "<section class=\"ds-card\"><h2>本週各類課後班上課情形一覽</h2><p>老師上傳後，這裡會自動顯示最新的上課情形。</p></section>",
+      "css": ":host{--accent:#35507a;--accent-strong:#25395a;--accent-soft:#e7ecf3;--accent-contrast:#fff;--club:#4f7a5b;--club-soft:#e8f0ea;--warn:#8a5a0c;--warn-soft:#faf0d9;--surface:#fff;--surface-2:#f0f1ee;--border:#dee0d9;--border-strong:#c9ccc2;--text:#23241f;--text-soft:#5f625a;--text-faint:#767a70;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-card{background:var(--surface,#fff);border:1px solid var(--border,#dee0d9);border-radius:14px;box-shadow:0 1px 2px rgba(35,36,31,.04),0 8px 24px -12px rgba(35,36,31,.12);padding:28px;font:15px/1.6 'Noto Sans TC',system-ui,sans-serif;color:var(--text,#23241f);}.ds-card h2{margin:0 0 12px;font:700 20px/1.4 'Noto Serif TC',serif;}.ds-card p{margin:0;color:var(--text-soft,#5f625a);}"
+    },
+    {
+      "name": "Day Card",
+      "kind": "card",
+      "refersTo": "day-card",
+      "description": "查詢結果中每天的班級、教師、教室；今天的卡片以墨藍淡底標示。",
+      "html": "<article class=\"ds-day is-today\"><h3>星期二 <span class=\"ds-tag\">今天</span></h3><dl><div><dt>班級</dt><dd>學力班</dd></div><div><dt>教師</dt><dd>謝朝欽</dd></div><div><dt>教室</dt><dd>六忠</dd></div></dl></article>",
+      "css": ":host{--accent:#35507a;--accent-strong:#25395a;--accent-soft:#e7ecf3;--accent-contrast:#fff;--club:#4f7a5b;--club-soft:#e8f0ea;--warn:#8a5a0c;--warn-soft:#faf0d9;--surface:#fff;--surface-2:#f0f1ee;--border:#dee0d9;--border-strong:#c9ccc2;--text:#23241f;--text-soft:#5f625a;--text-faint:#767a70;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-day{background:var(--surface-2,#f0f1ee);border:1px solid var(--border,#dee0d9);border-radius:10px;padding:16px;max-width:220px;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-day.is-today{background:var(--accent-soft,#e7ecf3);}.ds-day h3{display:flex;align-items:center;gap:6px;margin:0 0 10px;font-size:15px;font-weight:700;color:var(--accent,#35507a);}.ds-day dl{margin:0;}.ds-day dl div{display:flex;justify-content:space-between;padding:4px 0;font-size:14px;}.ds-day dl div+div{border-top:1px dashed var(--border,#dee0d9);}.ds-day dt{color:var(--text-faint,#767a70);}.ds-day dd{margin:0;font-weight:600;color:var(--text,#23241f);}.ds-tag{font-size:11px;font-weight:700;letter-spacing:.04em;background:var(--accent,#35507a);color:var(--accent-contrast,#fff);border-radius:5px;padding:1px 6px;}"
+    },
+    {
+      "name": "Calendar Week Row",
+      "kind": "custom",
+      "refersTo": "tag-now",
+      "description": "行事曆的週次列：左週次、右事項，日期欄等寬對齊；本週以墨藍淡底加標籤。",
+      "html": "<div class=\"ds-week\"><div class=\"ds-week-label\"><span class=\"ds-week-num\">第五週 <span class=\"ds-tag\">本週</span></span>09/28(一)~10/04(日)</div><ul><li><span class=\"d\">09/28(一)</span><span class=\"t hol\">教師節放假</span></li><li><span class=\"d\">09/30(三)</span><span class=\"t\">教師研習-班級經營實務經驗分享</span></li></ul></div>",
+      "css": ":host{--accent:#35507a;--accent-strong:#25395a;--accent-soft:#e7ecf3;--accent-contrast:#fff;--club:#4f7a5b;--club-soft:#e8f0ea;--warn:#8a5a0c;--warn-soft:#faf0d9;--surface:#fff;--surface-2:#f0f1ee;--border:#dee0d9;--border-strong:#c9ccc2;--text:#23241f;--text-soft:#5f625a;--text-faint:#767a70;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-week{display:grid;grid-template-columns:120px 1fr;gap:16px;background:var(--accent-soft,#e7ecf3);padding:16px 18px;border-radius:12px;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-week-label{font-size:13px;font-weight:600;color:var(--accent-strong,#25395a);font-variant-numeric:tabular-nums;}.ds-week-num{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;}.ds-week ul{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;padding:0;list-style:none;font-size:14.5px;color:var(--text,#23241f);}.ds-week li{display:contents;}.ds-week .d{font-size:13px;color:var(--accent,#35507a);font-variant-numeric:tabular-nums;}.ds-week .hol{color:var(--warn,#8a5a0c);font-weight:600;}.ds-tag{font-size:11px;font-weight:700;letter-spacing:.04em;background:var(--accent,#35507a);color:var(--accent-contrast,#fff);border-radius:5px;padding:1px 6px;}"
+    },
+    {
+      "name": "Reminder Note",
+      "kind": "custom",
+      "refersTo": "reminder-note",
+      "description": "便條紙黃的提醒，不用左側色條。",
+      "html": "<div class=\"ds-note\"><span class=\"tag\">提醒</span><p><strong>夜光天使</strong>為週一、二、四進行，請以老師近期公告為主。</p></div>",
+      "css": ":host{--accent:#35507a;--accent-strong:#25395a;--accent-soft:#e7ecf3;--accent-contrast:#fff;--club:#4f7a5b;--club-soft:#e8f0ea;--warn:#8a5a0c;--warn-soft:#faf0d9;--surface:#fff;--surface-2:#f0f1ee;--border:#dee0d9;--border-strong:#c9ccc2;--text:#23241f;--text-soft:#5f625a;--text-faint:#767a70;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-note{display:flex;gap:10px;align-items:flex-start;background:var(--warn-soft,#faf0d9);border-radius:10px;padding:13px 16px;font-family:'Noto Sans TC',system-ui,sans-serif;}.ds-note .tag{flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--warn,#8a5a0c);background:var(--surface,#fff);border-radius:5px;padding:2px 8px;}.ds-note p{margin:0;font-size:14px;line-height:1.65;color:var(--text,#23241f);}.ds-note strong{color:var(--warn,#8a5a0c);}"
+    }
+  ],
+  "narrative": {
+    "northStar": "校門口公告欄",
+    "overview": "這個介面是一面整理得很好的校門口公告欄。灰白的板面上，一張張白色公告整齊釘著，每張只講一件事：這週孩子在哪一班、這週上課的情形、全校接下來的行事。家長走過時一眼就能找到跟自己有關的那張，不需要湊近細讀。\n\n氣質是沉穩、清楚、溫和。色彩低彩度，墨藍像正式印刷的公告字，操場綠留給社團，便條紙黃只用在「要注意」的地方。重點靠位置與字重凸顯，不靠裝飾；家長通常在接送前的零碎時間、單手拿手機打開，所以每個元素都要大到好按、少到不必思考。\n\n版面是單欄、手機優先，最寬 720px。層次靠板面與公告的底色深淺堆疊，陰影極淡，只是讓白色公告從灰白板面浮起一點點。",
+    "keyCharacteristics": [
+      "單欄公告串：標題 → 提醒便條 → 查詢公告 → 本週上課情形 → 行事曆",
+      "墨藍只標示「主要操作」與「現在」（本週、今天）",
+      "襯線字只用在頁面與區塊標題，其餘全是黑體",
+      "大觸控目標（主要控制項 48px 高）、溫和圓角、無裝飾性動畫",
+      "完整深色模式，隨系統切換"
+    ],
+    "rules": [
+      {
+        "name": "The One Meaning Rule",
+        "body": "每種顏色只代表一種意思：墨藍＝操作與「現在」，綠＝社團與成功，黃＝提醒與放假，紅＝錯誤。不要為了好看把顏色借給別的用途。",
+        "section": "colors"
+      },
+      {
+        "name": "The Tinted Wash Rule",
+        "body": "狀態強調一律用同色系的淡底加上同色系的字，不用粗色條、不用漸層。",
+        "section": "colors"
+      },
+      {
+        "name": "The Serif Is a Headline Rule",
+        "body": "襯線字只出現在 Display 與 Headline，按鈕、標籤、資料一律黑體。",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Dates Rule",
+        "body": "所有日期與時間使用等寬數字，讓行事曆的日期欄上下對齊。",
+        "section": "typography"
+      },
+      {
+        "name": "The Paper on Board Rule",
+        "body": "只有最外層公告有陰影；公告裡面的東西靠底色與細線分層，永不疊陰影。",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** 讓「現在」永遠最醒目：本週、今天一律用公告墨藍・淡底加墨藍標籤。",
+      "**Do** 主要控制項維持至少 48px 高，次要可點元素至少 36–40px。",
+      "**Do** 狀態用同色系淡底＋同色系字表達（提醒、錯誤、社團、今天）。",
+      "**Do** 每個會載入的區塊都要有載入中、空白、錯誤三種狀態，而且文字說明下一步。",
+      "**Do** 新增的顏色與尺寸先定義成 `:root` token，並同時給深色模式對應值。",
+      "**Do** 動態只用來表達狀態變化（150–250ms），並尊重「減少動態效果」設定。"
+    ],
+    "donts": [
+      "**Don't** 在卡片、便條或列表項目上加超過 1px 的左側或右側色條。",
+      "**Don't** 在標題上方加小字眉標；學校與學年放在標題下方的說明中。",
+      "**Don't** 在公告卡片裡再疊陰影或再包一層卡片。",
+      "**Don't** 用漸層文字、光暈陰影或裝飾性模糊。",
+      "**Don't** 用 emoji 或 Unicode 符號充當圖示。",
+      "**Don't** 把墨藍用在裝飾或非互動的元素上。"
+    ]
+  }
+}
