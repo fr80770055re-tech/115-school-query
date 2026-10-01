@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<title>查詢使用情形・桃源國小課後班後台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="shared.css">
+<style>
+.page{max-width:880px;}
+
+/* 標題列 */
+.admin-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px;}
+.admin-head h1{margin:0;font-family:"Noto Serif TC",serif;font-size:26px;font-weight:700;line-height:1.3;}
+.admin-head p{margin:2px 0 0;font-size:14px;color:var(--text-soft);}
+.head-links{display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.text-btn{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border:none;border-radius:999px;background:none;color:var(--text-soft);font:inherit;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;transition:background .15s,color .15s;}
+.text-btn:hover{background:var(--surface-2);color:var(--text);}
+.account{font-size:13px;color:var(--text-faint);margin-right:4px;}
+
+/* 登入 */
+.login{max-width:420px;margin:8vh auto 0;}
+.login h2{margin:0 0 6px;}
+.login .hint{margin:0 0 20px;font-size:14px;color:var(--text-soft);}
+.login form{display:grid;gap:14px;}
+.login label{display:grid;gap:6px;font-size:14px;font-weight:600;color:var(--text-soft);}
+.login .field{flex:none;width:100%;}
+.form-error{margin:0;padding:11px 14px;border-radius:var(--radius-sm);background:var(--error-soft);color:var(--error);font-size:14px;font-weight:500;}
+
+/* 週次切換 */
+.week-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
+.week-step{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:border-color .15s,background .15s;}
+.week-step:hover{border-color:var(--border-strong);background:var(--surface-2);}
+.week-step:disabled{opacity:.45;cursor:not-allowed;}
+.week-step svg{width:16px;height:16px;}
+.week-title{text-align:center;}
+.week-title strong{display:block;font-family:"Noto Serif TC",serif;font-size:20px;font-weight:700;line-height:1.35;}
+.week-title span{font-size:13px;color:var(--text-faint);font-variant-numeric:tabular-nums;}
+.this-week{font-family:"Noto Sans TC",system-ui,sans-serif;font-size:11px;font-weight:700;letter-spacing:.04em;background:var(--accent);color:var(--accent-contrast);border-radius:5px;padding:1px 6px;vertical-align:3px;margin-left:6px;}
+
+/* 總覽 */
+.summary-line{margin:0 0 14px;font-size:17px;line-height:1.6;}
+.summary-line b{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent-strong);}
+.meter{display:flex;gap:2px;height:12px;border-radius:6px;overflow:hidden;background:var(--surface-2);}
+.meter .read{background:var(--accent);border-radius:6px 0 0 6px;transition:width .4s var(--ease-out);}
+.meter-legend{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 0;padding:0;list-style:none;font-size:13.5px;color:var(--text-soft);}
+.meter-legend li{display:flex;align-items:center;gap:6px;}
+.swatch{width:10px;height:10px;border-radius:3px;background:var(--accent);}
+.swatch.unread{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--border-strong);}
+.figures{display:flex;gap:28px;flex-wrap:wrap;margin:20px 0 0;padding-top:18px;border-top:1px solid var(--border);}
+.figures div{display:grid;gap:2px;}
+.figures dt{font-size:13px;color:var(--text-soft);}
+.figures dd{margin:0;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;}
+.figures dd small{font-size:13px;font-weight:500;color:var(--text-faint);margin-left:4px;}
+
+/* 每日長條圖 */
+.chart{position:relative;margin-top:4px;}
+.chart-plot{position:relative;display:grid;grid-template-columns:repeat(7,1fr);height:180px;margin-left:28px;border-bottom:1px solid var(--border-strong);}
+.chart-grid{position:absolute;left:-28px;right:0;border-top:1px dashed var(--border);pointer-events:none;}
+.chart-grid span{position:absolute;left:0;top:-9px;width:22px;text-align:right;font-size:11px;color:var(--text-faint);font-variant-numeric:tabular-nums;}
+.chart-col{position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;outline:none;cursor:default;}
+.chart-col::before{content:"";position:absolute;inset:0 2px;border-radius:6px;background:transparent;transition:background .15s;}
+.chart-col:hover::before,.chart-col:focus-visible::before{background:var(--surface-2);}
+.chart-col:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:6px;}
+.chart-bar{position:relative;width:min(24px,60%);background:var(--accent);border-radius:4px 4px 0 0;min-height:0;transition:height .4s var(--ease-out);}
+.chart-bar.is-zero{height:0!important;}
+.chart-cap{position:relative;margin-bottom:4px;font-size:12px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;}
+.chart-axis{display:grid;grid-template-columns:repeat(7,1fr);margin:6px 0 0 28px;font-size:12px;color:var(--text-soft);text-align:center;font-variant-numeric:tabular-nums;line-height:1.4;}
+.chart-axis .is-today{color:var(--accent-strong);font-weight:700;}
+.chart-tip{position:absolute;z-index:2;transform:translate(-50%,-100%);margin-top:-8px;padding:6px 10px;border-radius:8px;background:var(--text);color:var(--bg);font-size:12.5px;line-height:1.45;white-space:nowrap;pointer-events:none;box-shadow:0 4px 12px -4px rgba(0,0,0,.3);}
+.data-table-toggle{margin-top:14px;font-size:13.5px;}
+.data-table-toggle summary{display:inline-flex;align-items:center;min-height:32px;font-weight:600;color:var(--text-soft);cursor:pointer;}
+
+/* 名單 */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
+.select{min-height:44px;padding:0 36px 0 14px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23767a70' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;color:var(--text);font:inherit;font-size:15px;appearance:none;cursor:pointer;}
+.select:hover{border-color:var(--border-strong);}
+.tabs{display:inline-flex;padding:3px;border-radius:11px;background:var(--surface-2);border:1px solid var(--border);}
+.tabs button{min-height:38px;padding:0 16px;border:none;border-radius:8px;background:none;color:var(--text-soft);font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s,color .15s;}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.08);}
+.tabs .count{margin-left:6px;font-variant-numeric:tabular-nums;color:var(--text-faint);}
+.toolbar .spacer{flex:1;}
+.btn-quiet{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:border-color .15s,background .15s;}
+.btn-quiet:hover{border-color:var(--border-strong);background:var(--surface-2);}
+.btn-quiet svg{width:16px;height:16px;}
+
+.group + .group{margin-top:18px;}
+.group h3{display:flex;align-items:baseline;gap:8px;margin:0 0 8px;font-size:15px;font-weight:700;}
+.group h3 span{font-size:13px;font-weight:500;color:var(--text-faint);font-variant-numeric:tabular-nums;}
+.name-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.name-chip{padding:4px 12px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);font-size:14px;}
+
+.table-wrap{overflow-x:auto;margin:0 -4px;}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;}
+th{text-align:left;font-size:13px;font-weight:600;color:var(--text-soft);padding:8px 10px;border-bottom:1px solid var(--border-strong);white-space:nowrap;}
+td{padding:10px;border-bottom:1px solid var(--border);white-space:nowrap;}
+td.num,th.num{text-align:right;}
+tbody tr:hover td{background:var(--surface-2);}
+.muted{color:var(--text-faint);}
+
+.state{margin:0;padding:28px 12px;text-align:center;font-size:14px;color:var(--text-soft);}
+.state strong{display:block;font-size:15px;color:var(--text);margin-bottom:2px;}
+.state.is-error strong{color:var(--error);}
+.skeleton{height:14px;border-radius:7px;background:var(--surface-2);margin:10px 0;}
+.skeleton.w60{width:60%;}.skeleton.w40{width:40%;}.skeleton.w80{width:80%;}
+.foot-note{margin:20px 0 0;font-size:13px;color:var(--text-faint);}
+
+@media (max-width:560px){
+  .week-step .label{display:none;}
+  .week-step{padding:0 12px;}
+  .figures{gap:20px;}
+  .toolbar .spacer{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="admin-head">
+    <div>
+      <h1>查詢使用情形</h1>
+      <p>桃源國小 115 學年度・課後班查詢頁後台</p>
+    </div>
+    <div class="head-links">
+      <span id="account" class="account" hidden></span>
+      <a class="text-btn" href="./">回查詢頁</a>
+      <button id="signOutBtn" class="text-btn" type="button" hidden>登出</button>
+    </div>
+  </header>
+
+  <!-- 登入 -->
+  <section id="loginView" class="card login" aria-labelledby="login-title" hidden>
+    <h2 class="section-title" id="login-title">管理者登入</h2>
+    <p class="hint">使用 Firebase 中設定的管理者帳號登入，才能讀取查看紀錄。</p>
+    <form id="loginForm" novalidate>
+      <label>Email
+        <input id="loginEmail" class="field" type="email" autocomplete="username" required>
+      </label>
+      <label>密碼
+        <input id="loginPassword" class="field" type="password" autocomplete="current-password" required>
+      </label>
+      <p id="loginError" class="form-error" role="alert" hidden></p>
+      <button id="loginBtn" class="btn" type="submit">登入</button>
+    </form>
+  </section>
+
+  <!-- 後台 -->
+  <div id="dashView" hidden>
+    <nav class="week-bar" aria-label="切換週次">
+      <button id="prevWeek" class="week-step" type="button" aria-label="上一週">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span class="label">上一週</span>
+      </button>
+      <div class="week-title" aria-live="polite">
+        <strong id="weekName"></strong>
+        <span id="weekRange"></span>
+      </div>
+      <button id="nextWeek" class="week-step" type="button" aria-label="下一週">
+        <span class="label">下一週</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </nav>
+
+    <section class="card" aria-labelledby="summary-title">
+      <div class="section-head">
+        <h2 class="section-title" id="summary-title">本週已讀情形</h2>
+        <p class="section-meta" id="updatedAt"></p>
+      </div>
+      <div id="summaryBody" aria-busy="true">
+        <div class="skeleton w80"></div><div class="skeleton w40"></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="daily-title">
+      <div class="section-head">
+        <h2 class="section-title" id="daily-title">每日不重複裝置數</h2>
+        <p class="section-meta">同一裝置一天只算一次</p>
+      </div>
+      <div id="dailyBody"><div class="skeleton w60"></div></div>
+    </section>
+
+    <section class="card" aria-labelledby="list-title">
+      <div class="section-head">
+        <h2 class="section-title" id="list-title">學生名單</h2>
+      </div>
+      <div class="toolbar">
+        <div class="tabs" role="tablist" aria-label="名單類型">
+          <button id="tabUnread" role="tab" type="button" aria-selected="true" aria-controls="listBody">未讀<span class="count" id="countUnread"></span></button>
+          <button id="tabRead" role="tab" type="button" aria-selected="false" aria-controls="listBody">已讀<span class="count" id="countRead"></span></button>
+        </div>
+        <label class="visually-hidden" for="classFilter">依班級篩選</label>
+        <select id="classFilter" class="select"><option value="">全部班級</option></select>
+        <span class="spacer"></span>
+        <button id="exportBtn" class="btn-quiet" type="button" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>匯出 CSV
+        </button>
+      </div>
+      <div id="listBody" role="tabpanel"><div class="skeleton w80"></div><div class="skeleton w60"></div></div>
+      <p class="foot-note">班級以學生星期一的課後班為準（星期一沒有課則依序看星期二、四）。「已讀」表示這週至少有一台裝置查看過該生課表。</p>
+    </section>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyB2jePwSyZH8xEux6mPc-LlYXoF7xJruIo",
+  authDomain: "typhomeworksystem.firebaseapp.com",
+  projectId: "typhomeworksystem",
+  storageBucket: "typhomeworksystem.firebasestorage.app",
+  messagingSenderId: "563125021119",
+  appId: "1:563125021119:web:169219a4e42e3936aa990a"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const auth = firebase.auth();
+const STUDENT_VIEWS_DB_PATH = 'studentViews';
+const WEEKDAY_NAMES = ['日', '一', '二', '三', '四', '五', '六'];
+
+const $ = id => document.getElementById(id);
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text != null) node.textContent = text;
+  return node;
+}
+
+let students = [];       // [{ name, group }]
+let calendar = [];
+let weekStart = mondayOf(new Date());
+let report = null;       // 目前週次的統計結果
+let listMode = 'unread';
+let loadToken = 0;
+
+/* ---------- 日期工具 ---------- */
+
+function mondayOf(d) {
+  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  x.setDate(x.getDate() - ((x.getDay() + 6) % 7));
+  return x;
+}
+function addDays(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+const md = d => `${d.getMonth() + 1}/${d.getDate()}`;
+function formatTime(ts) {
+  const d = new Date(ts);
+  return `${md(d)}（${WEEKDAY_NAMES[d.getDay()]}）${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
+// 從 calendar.json 找出這週對應的學期週次（例如「第五週」）
+function schoolWeekName(start) {
+  const key = (start.getMonth() + 1) * 100 + start.getDate();
+  for (const w of calendar) {
+    const m = w.date.match(/^(\d{2})\/(\d{2})/);
+    if (m && Number(m[1]) * 100 + Number(m[2]) === key && w.week) return `第${w.week}週`;
+  }
+  return '';
+}
+
+/* ---------- 登入 ---------- */
+
+$('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('loginBtn');
+  const errBox = $('loginError');
+  errBox.hidden = true;
+  const email = $('loginEmail').value.trim();
+  const password = $('loginPassword').value;
+  if (!email || !password) {
+    errBox.textContent = '請輸入 Email 與密碼。';
+    errBox.hidden = false;
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = '登入中…';
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+  } catch (err) {
+    const code = err && err.code;
+    errBox.textContent =
+      code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found'
+        ? 'Email 或密碼不正確，請再試一次。'
+        : code === 'auth/too-many-requests' ? '嘗試次數過多，請稍後再試。'
+        : code === 'auth/operation-not-allowed' ? 'Firebase 尚未啟用「電子郵件／密碼」登入方式，請先到主控台開啟。'
+        : '登入失敗，請檢查網路連線後再試一次。';
+    errBox.hidden = false;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '登入';
+  }
+});
+
+$('signOutBtn').addEventListener('click', () => auth.signOut());
+
+auth.onAuthStateChanged(user => {
+  $('loginView').hidden = !!user;
+  $('dashView').hidden = !user;
+  $('signOutBtn').hidden = !user;
+  $('account').hidden = !user;
+  $('account').textContent = user ? user.email : '';
+  if (user) loadWeek();
+  else $('loginEmail').focus();
+});
+
+/* ---------- 資料 ---------- */
+
+const baseData = Promise.all([
+  fetch('students.json').then(r => r.json()),
+  fetch('calendar.json').then(r => r.json()).catch(() => [])
+]).then(([stds, cal]) => {
+  calendar = cal;
+  students = stds.map(s => {
+    const sc = s.schedule || {};
+    const first = ['monday', 'tuesday', 'thursday'].map(k => sc[k] && sc[k].class_name).find(Boolean);
+    return { name: s.name, group: first || '未分班' };
+  });
+  const groups = [...new Set(students.map(s => s.group))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+  $('classFilter').append(...groups.map(g => { const o = el('option', null, g); o.value = g; return o; }));
+});
+
+$('prevWeek').addEventListener('click', () => { weekStart = addDays(weekStart, -7); loadWeek(); });
+$('nextWeek').addEventListener('click', () => { weekStart = addDays(weekStart, 7); loadWeek(); });
+$('classFilter').addEventListener('change', renderList);
+$('tabUnread').addEventListener('click', () => setMode('unread'));
+$('tabRead').addEventListener('click', () => setMode('read'));
+$('exportBtn').addEventListener('click', exportCsv);
+
+function setMode(mode) {
+  listMode = mode;
+  $('tabUnread').setAttribute('aria-selected', String(mode === 'unread'));
+  $('tabRead').setAttribute('aria-selected', String(mode === 'read'));
+  renderList();
+}
+
+function showLoading() {
+  $('summaryBody').setAttribute('aria-busy', 'true');
+  $('summaryBody').innerHTML = '<div class="skeleton w80"></div><div class="skeleton w40"></div>';
+  $('dailyBody').innerHTML = '<div class="skeleton w60"></div>';
+  $('listBody').innerHTML = '<div class="skeleton w80"></div><div class="skeleton w60"></div>';
+  $('exportBtn').disabled = true;
+  $('updatedAt').textContent = '';
+}
+
+function showState(target, title, hint, isError) {
+  const p = el('p', 'state' + (isError ? ' is-error' : ''));
+  p.append(el('strong', null, title), document.createTextNode(hint));
+  $(target).replaceChildren(p);
+  $(target).removeAttribute('aria-busy');
+}
+
+async function loadWeek() {
+  const token = ++loadToken;
+  const end = addDays(weekStart, 6);
+  const isThisWeek = dateKey(weekStart) === dateKey(mondayOf(new Date()));
+  $('nextWeek').disabled = isThisWeek;
+  showLoading();
+
+  try {
+    await baseData;
+  } catch (err) {
+    console.error(err);
+    showState('summaryBody', '學生名單載入失敗', '請確認 students.json 與此頁放在同一資料夾，並重新整理。', true);
+    return;
+  }
+
+  const name = schoolWeekName(weekStart);
+  const weekName = $('weekName');
+  weekName.textContent = name || `${md(weekStart)} 這週`;
+  if (isThisWeek) weekName.append(el('span', 'this-week', '本週'));
+  $('weekRange').textContent = `${weekStart.getFullYear()}/${md(weekStart)}（一）– ${md(end)}（日）`;
+
+  let raw;
+  try {
+    const snap = await db.ref(STUDENT_VIEWS_DB_PATH).orderByKey()
+      .startAt(dateKey(weekStart)).endAt(dateKey(end)).once('value');
+    raw = snap.val() || {};
+  } catch (err) {
+    if (token !== loadToken) return;
+    console.error('讀取查看紀錄失敗', err);
+    const denied = err && /permission/i.test(err.code || err.message || '');
+    const [t, h] = denied
+      ? ['沒有讀取權限', '請確認 Firebase 規則中的管理者 Email 與目前登入的帳號相同。']
+      : ['讀取失敗', '請檢查網路連線後重新整理頁面。'];
+    showState('summaryBody', t, h, true);
+    $('dailyBody').replaceChildren();
+    $('listBody').replaceChildren();
+    return;
+  }
+  if (token !== loadToken) return;
+
+  report = buildReport(raw);
+  $('updatedAt').textContent = `資料時間 ${formatTime(Date.now())}`;
+  renderSummary();
+  renderDaily();
+  renderList();
+  $('exportBtn').disabled = false;
+}
+
+function buildReport(raw) {
+  const byStudent = new Map(students.map(s => [s.name, { ...s, devices: new Set(), days: new Set(), last: 0 }]));
+  const days = Array.from({ length: 7 }, (_, i) => ({ date: addDays(weekStart, i), devices: new Set() }));
+  const allDevices = new Set();
+  let entries = 0;
+
+  for (const [day, perStudent] of Object.entries(raw)) {
+    const idx = days.findIndex(d => dateKey(d.date) === day);
+    for (const [name, perDevice] of Object.entries(perStudent || {})) {
+      const rec = byStudent.get(name);
+      for (const [device, ts] of Object.entries(perDevice || {})) {
+        entries++;
+        allDevices.add(device);
+        if (idx >= 0) days[idx].devices.add(device);
+        if (!rec) continue; // 已不在名單上的姓名只計入總數
+        rec.devices.add(device);
+        rec.days.add(day);
+        if (typeof ts === 'number' && ts > rec.last) rec.last = ts;
+      }
+    }
+  }
+  const rows = [...byStudent.values()];
+  return {
+    rows,
+    read: rows.filter(r => r.devices.size > 0),
+    unread: rows.filter(r => r.devices.size === 0),
+    days,
+    allDevices: allDevices.size,
+    entries
+  };
+}
+
+/* ---------- 畫面 ---------- */
+
+function renderSummary() {
+  const { rows, read, allDevices, entries } = report;
+  const total = rows.length;
+  const pct = total ? Math.round(read.length / total * 100) : 0;
+  const body = $('summaryBody');
+  body.removeAttribute('aria-busy');
+
+  const line = el('p', 'summary-line');
+  line.append(document.createTextNode(`全校 ${total} 位課後班學生中，已有 `), el('b', null, String(read.length)),
+    document.createTextNode(` 位的課表被家長查看過（${pct}%）。`));
+
+  const meter = el('div', 'meter');
+  meter.setAttribute('role', 'img');
+  meter.setAttribute('aria-label', `已讀 ${read.length} 位，未讀 ${total - read.length} 位`);
+  const bar = el('div', 'read');
+  bar.style.width = `${pct}%`;
+  if (pct === 100) bar.style.borderRadius = '6px';
+  meter.append(bar);
+
+  const legend = el('ul', 'meter-legend');
+  const item = (cls, text) => { const li = el('li'); li.append(el('span', 'swatch' + cls), document.createTextNode(text)); return li; };
+  legend.append(item('', `已讀 ${read.length} 位`), item(' unread', `未讀 ${total - read.length} 位`));
+
+  const figures = el('dl', 'figures');
+  const fig = (label, value, unit) => {
+    const d = el('div');
+    const dd = el('dd', null, value.toLocaleString());
+    dd.append(el('small', null, unit));
+    d.append(el('dt', null, label), dd);
+    return d;
+  };
+  figures.append(
+    fig('不重複裝置', allDevices, '台'),
+    fig('查看人次', entries, '次'),
+    fig('平均每位已讀學生', read.length ? +(entries / read.length).toFixed(1) : 0, '次')
+  );
+
+  body.replaceChildren(line, meter, legend, figures);
+  if (entries === 0) {
+    const p = el('p', 'foot-note', '這週還沒有任何查看紀錄。紀錄從查詢頁加入統計功能後才開始累積。');
+    body.append(p);
+  }
+}
+
+function niceMax(n) {
+  if (n <= 4) return 4;
+  const step = Math.pow(10, Math.floor(Math.log10(n)));
+  return [1, 2, 2.5, 5, 10].map(m => m * step).find(v => v >= n) || n;
+}
+
+function renderDaily() {
+  const { days } = report;
+  const counts = days.map(d => d.devices.size);
+  const max = Math.max(...counts);
+  const top = niceMax(max);
+  const peak = max > 0 ? counts.indexOf(max) : -1;
+  const today = dateKey(new Date());
+
+  const wrap = el('div', 'chart');
+  const plot = el('div', 'chart-plot');
+  [top / 2, top].forEach(v => {
+    const g = el('div', 'chart-grid');
+    g.style.bottom = `${v / top * 100}%`;
+    g.append(el('span', null, String(v)));
+    plot.append(g);
+  });
+
+  const tip = el('div', 'chart-tip');
+  tip.hidden = true;
+  tip.setAttribute('role', 'tooltip');
+
+  days.forEach((d, i) => {
+    const col = el('div', 'chart-col');
+    col.tabIndex = 0;
+    const label = `${md(d.date)}（${WEEKDAY_NAMES[d.date.getDay()]}）${counts[i]} 台裝置`;
+    col.setAttribute('aria-label', label);
+    if (i === peak) col.append(el('span', 'chart-cap', String(counts[i])));
+    const bar = el('div', 'chart-bar' + (counts[i] === 0 ? ' is-zero' : ''));
+    bar.style.height = `${counts[i] / top * 100}%`;
+    col.append(bar);
+    const show = () => {
+      tip.textContent = label;
+      tip.hidden = false;
+      const c = col.getBoundingClientRect(), w = wrap.getBoundingClientRect(), b = bar.getBoundingClientRect();
+      tip.style.left = `${c.left - w.left + c.width / 2}px`;
+      tip.style.top = `${(counts[i] ? b.top : c.bottom) - w.top}px`;
+    };
+    const hide = () => { tip.hidden = true; };
+    col.addEventListener('mouseenter', show);
+    col.addEventListener('focus', show);
+    col.addEventListener('mouseleave', hide);
+    col.addEventListener('blur', hide);
+    col.addEventListener('click', show);
+    plot.append(col);
+  });
+
+  const axis = el('div', 'chart-axis');
+  days.forEach(d => {
+    const s = el('span', dateKey(d.date) === today ? 'is-today' : null);
+    s.append(document.createTextNode(WEEKDAY_NAMES[d.date.getDay()]), el('br'), document.createTextNode(md(d.date)));
+    axis.append(s);
+  });
+
+  // 表格檢視：不靠滑鼠也能讀到每天的數字
+  const details = el('details', 'data-table-toggle');
+  details.append(el('summary', null, '以表格檢視'));
+  const table = el('table');
+  table.innerHTML = '<thead><tr><th>日期</th><th class="num">不重複裝置</th></tr></thead>';
+  const tb = el('tbody');
+  days.forEach((d, i) => {
+    const tr = el('tr');
+    tr.append(el('td', null, `${md(d.date)}（${WEEKDAY_NAMES[d.date.getDay()]}）`), el('td', 'num', String(counts[i])));
+    tb.append(tr);
+  });
+  table.append(tb);
+  details.append(table);
+
+  wrap.append(plot, axis, tip);
+  $('dailyBody').replaceChildren(wrap, details);
+}
+
+function renderList() {
+  if (!report) return;
+  const filter = $('classFilter').value;
+  const pick = rows => rows.filter(r => !filter || r.group === filter);
+  const unread = pick(report.unread);
+  const read = pick(report.read).sort((a, b) => b.last - a.last);
+  $('countUnread').textContent = unread.length;
+  $('countRead').textContent = read.length;
+  const body = $('listBody');
+
+  if (listMode === 'unread') {
+    if (unread.length === 0) {
+      showState('listBody', '沒有未讀的學生', filter ? `「${filter}」的學生這週都已被查看過。` : '這週每位學生的課表都至少被查看過一次。');
+      return;
+    }
+    const groups = new Map();
+    unread.forEach(r => { if (!groups.has(r.group)) groups.set(r.group, []); groups.get(r.group).push(r.name); });
+    const frag = [...groups.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0], 'zh-Hant'))
+      .map(([g, names]) => {
+        const sec = el('div', 'group');
+        const h = el('h3', null, g);
+        h.append(el('span', null, `${names.length} 位`));
+        const chips = el('div', 'name-chips');
+        chips.append(...names.map(n => el('span', 'name-chip', n)));
+        sec.append(h, chips);
+        return sec;
+      });
+    body.replaceChildren(...frag);
+    return;
+  }
+
+  if (read.length === 0) {
+    showState('listBody', '還沒有已讀的學生', '家長在查詢頁查看課表後，就會出現在這裡。');
+    return;
+  }
+  const wrap = el('div', 'table-wrap');
+  const table = el('table');
+  table.innerHTML = '<thead><tr><th>姓名</th><th>班級</th><th class="num">不重複裝置</th><th class="num">查看天數</th><th>最後查看</th></tr></thead>';
+  const tb = el('tbody');
+  read.forEach(r => {
+    const tr = el('tr');
+    tr.append(el('td', null, r.name), el('td', 'muted', r.group),
+      el('td', 'num', String(r.devices.size)), el('td', 'num', String(r.days.size)),
+      el('td', null, r.last ? formatTime(r.last) : '—'));
+    tb.append(tr);
+  });
+  table.append(tb);
+  wrap.append(table);
+  body.replaceChildren(wrap);
+}
+
+function exportCsv() {
+  if (!report) return;
+  const esc = v => `"${String(v).replace(/"/g, '""')}"`;
+  const lines = [['姓名', '班級', '狀態', '不重複裝置數', '查看天數', '最後查看時間'].map(esc).join(',')];
+  [...report.rows]
+    .sort((a, b) => a.group.localeCompare(b.group, 'zh-Hant') || a.name.localeCompare(b.name, 'zh-Hant'))
+    .forEach(r => lines.push([r.name, r.group, r.devices.size ? '已讀' : '未讀', r.devices.size, r.days.size,
+      r.last ? new Date(r.last).toLocaleString('zh-TW', { hour12: false }) : ''].map(esc).join(',')));
+  // 加上 BOM，Excel 開啟時中文才不會變亂碼
+  const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = el('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `查詢使用情形_${dateKey(weekStart)}_${dateKey(addDays(weekStart, 6))}.csv`;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+</script>
+</body>
+</html>

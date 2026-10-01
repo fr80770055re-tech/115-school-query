@@ -8,50 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="shared.css">
 <style>
-:root{
-  --bg:#f5f6f4; --surface:#ffffff; --surface-2:#f0f1ee; --border:#dee0d9; --border-strong:#c9ccc2;
-  --text:#23241f; --text-soft:#5f625a; --text-faint:#767a70;
-  --accent:#35507a; --accent-soft:#e7ecf3; --accent-strong:#25395a; --accent-contrast:#ffffff;
-  --club:#4f7a5b; --club-soft:#e8f0ea;
-  --warn:#8a5a0c; --warn-soft:#faf0d9;
-  --error:#a4372a; --error-soft:#f7e9e6;
-  --shadow: 0 1px 2px rgba(35,36,31,0.04), 0 8px 24px -12px rgba(35,36,31,0.12);
-  --radius-lg:14px; --radius-md:10px; --radius-sm:8px;
-  --ease-out: cubic-bezier(.16,1,.3,1);
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#1a1b17; --surface:#222319; --surface-2:#282a1f; --border:#3a3c30; --border-strong:#4b4e3f;
-    --text:#eae9e1; --text-soft:#b3b4a5; --text-faint:#979985;
-    --accent:#8fadd6; --accent-soft:#29344a; --accent-strong:#c3d5ee; --accent-contrast:#0f1420;
-    --club:#93c2a1; --club-soft:#22301f;
-    --warn:#e3b055; --warn-soft:#3a2f16;
-    --error:#e2897b; --error-soft:#3a2420;
-    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#1a1b17; --surface:#222319; --surface-2:#282a1f; --border:#3a3c30; --border-strong:#4b4e3f;
-  --text:#eae9e1; --text-soft:#b3b4a5; --text-faint:#979985;
-  --accent:#8fadd6; --accent-soft:#29344a; --accent-strong:#c3d5ee; --accent-contrast:#0f1420;
-  --club:#93c2a1; --club-soft:#22301f;
-  --warn:#e3b055; --warn-soft:#3a2f16;
-  --error:#e2897b; --error-soft:#3a2420;
-  --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
-}
-*{box-sizing:border-box;}
-html{scroll-behavior:smooth;scroll-padding-top:72px;scrollbar-color:var(--border-strong) var(--bg);accent-color:var(--accent);}
-body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC",system-ui,sans-serif;line-height:1.6;-webkit-text-size-adjust:100%;}
-::selection{background:var(--accent-soft);color:var(--accent-strong);}
-input{caret-color:var(--accent);}
-a{color:var(--accent);text-underline-offset:3px;}
-:where(a,button,input,summary):focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
-[hidden]{display:none!important;}
-.visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
-
-.page{max-width:720px;margin:0 auto;padding:44px 20px 80px;}
-
 /* 標題區 */
 .masthead{text-align:center;margin-bottom:12px;}
 .masthead h1{margin:0 0 10px;font-family:"Noto Serif TC",serif;font-weight:700;font-size:clamp(26px,5vw,30px);line-height:1.3;text-wrap:balance;}
@@ -71,23 +29,6 @@ a{color:var(--accent);text-underline-offset:3px;}
 .reminder p{margin:0;font-size:14px;color:var(--text);line-height:1.65;}
 .reminder strong{color:var(--warn);}
 
-/* 卡片與區塊標題 */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:28px;margin-bottom:28px;}
-@media (max-width:560px){.card{padding:20px;}}
-.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 16px;}
-.section-title{margin:0;font-family:"Noto Serif TC",serif;font-size:20px;font-weight:700;line-height:1.4;}
-.section-meta{margin:0;font-size:13px;color:var(--text-faint);font-variant-numeric:tabular-nums;}
-
-/* 共用按鈕 */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 24px;border:none;border-radius:9px;background:var(--accent);color:var(--accent-contrast);font-weight:600;font-size:15px;font-family:inherit;cursor:pointer;transition:background .15s,transform .1s;white-space:nowrap;}
-.btn:hover{background:var(--accent-strong);}
-.btn:active{transform:translateY(1px);}
-.btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
-.btn:disabled:hover{background:var(--accent);}
-.field{flex:1;min-width:0;min-height:48px;padding:0 16px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--text);font-size:16px;font-family:inherit;transition:border-color .15s,background .15s;}
-.field::placeholder{color:var(--text-faint);}
-.field:hover{border-color:var(--border-strong);}
-.field:focus{outline:2px solid var(--accent);outline-offset:1px;background:var(--surface);}
 
 /* 查詢 */
 .search-label{display:block;margin:0 0 8px;font-size:14px;font-weight:600;color:var(--text-soft);}
@@ -182,10 +123,6 @@ a{color:var(--accent);text-underline-offset:3px;}
 
 .site-foot{margin-top:28px;text-align:center;font-size:13px;color:var(--text-faint);}
 
-@media (prefers-reduced-motion: reduce){
-  html{scroll-behavior:auto;}
-  *,*::before,*::after{animation:none!important;transition:none!important;}
-}
 </style>
 </head>
 <body>
@@ -329,8 +266,14 @@ const db = firebase.database();
 // Realtime Database 只存「目前最新圖片網址」這個小指標，圖片本體在 Cloudinary
 const WEEKLY_PHOTO_DB_PATH = 'weeklyAfterschoolPhoto';
 
+// 查看紀錄：studentViews/{日期}/{學生姓名}/{匿名裝置碼} = 伺服器時間
+// 同一裝置同一天查看同一位學生只記一次，供 admin.html 統計已讀／未讀
+const STUDENT_VIEWS_DB_PATH = 'studentViews';
+
 // 記住上次查詢的姓名，家長再次打開頁面時直接顯示
 const LAST_NAME_KEY = 'typ-last-student';
+const DEVICE_ID_KEY = 'typ-device-id';
+const VIEWED_TODAY_KEY = 'typ-viewed-today';
 const WEEKDAY_NAMES = ['日', '一', '二', '三', '四', '五', '六'];
 
 const $ = id => document.getElementById(id);
@@ -347,6 +290,43 @@ function storageGet(key) {
 }
 function storageSet(key, value) {
   try { localStorage.setItem(key, value); } catch { /* 無痕模式等情況下略過 */ }
+}
+
+/* ---------- 匿名查看紀錄 ---------- */
+
+// 匿名裝置碼：隨機產生、只存在這台裝置，不含任何個人資料
+let deviceId = storageGet(DEVICE_ID_KEY);
+if (!deviceId) {
+  deviceId = (crypto.randomUUID ? crypto.randomUUID()
+    : Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join(''))
+    .replace(/-/g, '');
+  storageSet(DEVICE_ID_KEY, deviceId);
+}
+
+function localDateKey(d = new Date()) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function recordStudentView(name) {
+  if (/[.#$\[\]\/]/.test(name)) return; // Firebase 路徑不允許的字元
+  const today = localDateKey();
+  let viewed;
+  try { viewed = JSON.parse(storageGet(VIEWED_TODAY_KEY)) || {}; } catch { viewed = {}; }
+  if (viewed.day !== today) viewed = { day: today, names: [] };
+  if (viewed.names.includes(name)) return;
+
+  const remember = () => {
+    viewed.names.push(name);
+    storageSet(VIEWED_TODAY_KEY, JSON.stringify(viewed));
+  };
+  db.ref(`${STUDENT_VIEWS_DB_PATH}/${today}/${name}/${deviceId}`)
+    .set(firebase.database.ServerValue.TIMESTAMP)
+    .then(remember)
+    .catch(err => {
+      // 規則只允許新增：今天已記錄過時會被拒絕，視同已記錄
+      if (err && err.code === 'PERMISSION_DENIED') remember();
+      else console.warn('查看紀錄寫入失敗', err);
+    });
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
@@ -472,6 +452,7 @@ function showStudent(student, quiet = false) {
   $('choices').hidden = true;
   $('display-name').textContent = student.name;
   storageSet(LAST_NAME_KEY, student.name);
+  recordStudentView(student.name);
 
   const today = new Date().getDay();
   const days = ['mon', 'tue', 'thu'];
