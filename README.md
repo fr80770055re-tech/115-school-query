@@ -5,6 +5,7 @@
 - `index.html`：家長查詢頁
 - `admin.html`：查詢使用情形後台（已讀／未讀統計）
 - `shared.css`：兩頁共用的設計 token 與元件，規範見 `DESIGN.md`
+- `memo/`：個人自用的行動記事簿（與查詢頁無關，需登入才看得到資料）
 
 ## 後台設定（只需做一次）
 
@@ -18,3 +19,13 @@
 ## 更新資料
 
 修改 Excel → 執行 `convert_calendar.py`／`convert_students.py` → 產生 `calendar.json`、`students.json` → 推上 GitHub。
+
+## 行動記事簿 memo/（只需設定一次）
+
+網址：`https://<你的 GitHub Pages 網址>/memo/`。記事存在同一個 Firebase 專案的 `memos/{使用者 uid}`，只有登入的本人讀寫得到。
+
+1. **帳號**：沿用後台的「電子郵件/密碼」帳號即可（沒有的話照上方第 1 步新增）。
+2. **加入資料庫規則**：Realtime Database → 規則，把 `memo/firebase-rules-memos.json` 裡的 `"memos": { … }` 整段貼進現有的 `"rules": { … }`，與其他節點並列，然後發布。同樣注意最上層不能有 `".read": true`／`".write": true`。
+3. **加到主畫面**：iPhone 用 Safari 開啟網址 → 分享 → 「加入主畫面」，之後就像 App 一樣開啟（第一次開要登入一次）。
+
+想先看外觀可以開 `memo/?demo`：用示範資料，不會連到資料庫，重新整理就還原。

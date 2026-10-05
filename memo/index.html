@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>記事簿</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f3f5f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#12151b" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="記事簿">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3f5f6;
+    --paper-raised: #fbfcfc;
+    --rule: #cfdbe4;
+    --rule-strong: #b6c6d2;
+    --margin-line: #e0a199;
+    --ink: #1d2740;
+    --ink-soft: #4b566c;
+    --ink-faint: #616c80;
+    --ink-done: #7c8597;
+    --accent: #253f73;
+    --accent-deep: #1a2f58;
+    --accent-wash: #e1e8f3;
+    --on-accent: #fbfcfc;
+    --overdue: #ad3428;
+    --overdue-wash: #f6e4e1;
+    --soon: #85570b;
+    --soon-wash: #f6ecd6;
+    --toast: #1d2740;
+    --on-toast: #f3f5f6;
+    --toast-action: #b9cbef;
+    --lift: 0 1px 2px rgba(29, 39, 64, 0.05), 0 10px 24px -14px rgba(29, 39, 64, 0.22);
+
+    --hand: "LXGW WenKai TC", "Noto Sans TC", system-ui, sans-serif;
+    --sans: "Noto Sans TC", system-ui, -apple-system, sans-serif;
+    --pitch: 32px;
+    --margin-w: 60px;
+    --gutter: 16px;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #12151b;
+      --paper-raised: #1a1e26;
+      --rule: #252c38;
+      --rule-strong: #343d4c;
+      --margin-line: #6e3a34;
+      --ink: #e2e7ef;
+      --ink-soft: #b0b9c8;
+      --ink-faint: #8f99aa;
+      --ink-done: #7f8999;
+      --accent: #a9bfe8;
+      --accent-deep: #c4d4f1;
+      --accent-wash: #1f2a40;
+      --on-accent: #12151b;
+      --overdue: #f19285;
+      --overdue-wash: #3a1f1c;
+      --soon: #e4bb6b;
+      --soon-wash: #33291a;
+      --toast: #e2e7ef;
+      --on-toast: #12151b;
+      --toast-action: #253f73;
+      --lift: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 28px -14px rgba(0, 0, 0, 0.6);
+      color-scheme: dark;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  ::selection { background: var(--accent-wash); color: var(--ink); }
+
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    caret-color: var(--accent);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 560px;
+    margin: 0 auto;
+    padding:
+      calc(env(safe-area-inset-top) + 20px)
+      calc(env(safe-area-inset-right) + var(--gutter))
+      calc(env(safe-area-inset-bottom) + 96px)
+      calc(env(safe-area-inset-left) + var(--gutter));
+  }
+
+  button, input, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+  .icon { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .masthead h1 {
+    margin: 0;
+    font-family: var(--hand);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+  }
+  .today {
+    margin: 4px 0 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .tally {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .tally b { color: var(--ink); font-weight: 700; }
+  .tally .t-overdue b { color: var(--overdue); }
+  .tally .t-soon b { color: var(--soon); }
+
+  .ghost-btn {
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .ghost-btn:hover { color: var(--ink); border-color: var(--ink-faint); }
+
+  .status {
+    display: none;
+    margin: -6px 0 14px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--soon-wash);
+    color: var(--soon);
+    font-size: 13px;
+  }
+  .status.is-shown { display: block; }
+  .status.is-error { background: var(--overdue-wash); color: var(--overdue); }
+
+  /* ---------- Composer ---------- */
+  .composer {
+    position: relative;
+    padding: 14px 14px 14px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: var(--paper-raised);
+    box-shadow: var(--lift);
+  }
+  .field-label {
+    display: block;
+    margin: 0 0 6px;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .composer textarea,
+  .editor textarea {
+    display: block;
+    width: 100%;
+    min-height: 64px;
+    max-height: 40vh;
+    padding: 0;
+    border: 0;
+    background: repeating-linear-gradient(to bottom, transparent 0 25px, var(--rule) 25px 26px, transparent 26px var(--pitch));
+    font-family: var(--hand);
+    font-size: 18px;
+    line-height: var(--pitch);
+    resize: none;
+    outline: none;
+  }
+  .composer textarea::placeholder,
+  .editor textarea::placeholder { color: var(--ink-faint); opacity: 1; }
+  .composer:focus-within { border-color: var(--rule-strong); }
+  .composer .field-label + textarea { margin-bottom: 12px; }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 14px;
+    padding: 0;
+    border: 0;
+  }
+  .chip {
+    position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    min-height: 40px;
+    padding: 9px 13px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    white-space: nowrap;
+    transition: background-color 160ms var(--ease-out), border-color 160ms var(--ease-out), color 160ms var(--ease-out);
+  }
+  .chip small {
+    color: var(--ink-faint);
+    font-size: 12px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip:hover { border-color: var(--ink-faint); }
+  .chip[aria-checked="true"] {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .chip[aria-checked="true"] small { color: inherit; opacity: 0.8; }
+  .chip:has(.pick-input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .chip .icon { width: 16px; height: 16px; align-self: center; }
+  .pick-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    transition: background-color 160ms var(--ease-out), transform 120ms var(--ease-out);
+  }
+  .primary-btn:hover { background: var(--accent-deep); }
+  .primary-btn:active { transform: translateY(1px); }
+  .primary-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+  .composer-foot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hint {
+    margin: 8px 0 0;
+    min-height: 20px;
+    color: var(--ink-faint);
+    font-size: 12px;
+  }
+  .hint.is-error { color: var(--overdue); }
+  .hint:empty { display: none; }
+
+  /* ---------- Ledger ---------- */
+  .ledger-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 30px 0 4px;
+    padding-left: calc(var(--margin-w) + 12px);
+    color: var(--ink-faint);
+    font-size: 12px;
+  }
+  .ledger-head h2 { margin: 0; font-size: 12px; font-weight: 500; color: var(--ink-soft); }
+
+  .ledger {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* Rules are drawn per row so an open editor never knocks the lines below off the text */
+  .ledger > li {
+    background:
+      linear-gradient(to right, transparent calc(var(--margin-w) - 1px), var(--margin-line) calc(var(--margin-w) - 1px) var(--margin-w), transparent var(--margin-w)),
+      repeating-linear-gradient(to bottom, transparent 0 25px, var(--rule) 25px 26px, transparent 26px var(--pitch));
+  }
+  .ledger > li.empty { min-height: calc(var(--pitch) * 3); }
+
+  .entry {
+    display: grid;
+    grid-template-columns: var(--margin-w) 1fr 48px;
+    align-items: start;
+  }
+  .entry-date {
+    padding: 0 10px 0 0;
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: var(--pitch);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .entry-date span { display: block; }
+  .entry-date .wd { color: var(--ink-faint); font-size: 12px; }
+  .entry-date[aria-hidden="true"] { visibility: hidden; }
+
+  .entry-body {
+    min-width: 0;
+    margin: 0;
+    padding: 0 0 0 12px;
+    border: 0;
+    background: none;
+    text-align: left;
+    border-radius: 6px;
+  }
+  .entry-text {
+    margin: 0;
+    font-family: var(--hand);
+    font-size: 18px;
+    line-height: var(--pitch);
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+  .entry-text .ink {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 58%;
+    background-size: 0% 1.5px;
+  }
+  .entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 8px;
+    margin: 0;
+    color: var(--ink-faint);
+    font-size: 13px;
+    line-height: var(--pitch);
+    font-variant-numeric: tabular-nums;
+  }
+  .due-rel {
+    display: inline-block;
+    padding: 0 7px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 20px;
+    background: var(--accent-wash);
+    color: var(--accent);
+  }
+  .entry.is-overdue .due-rel { background: var(--overdue-wash); color: var(--overdue); }
+  .entry.is-overdue .due-date { color: var(--overdue); }
+  .entry.is-soon .due-rel { background: var(--soon-wash); color: var(--soon); }
+  .entry.is-soon .due-date { color: var(--soon); }
+  .entry.is-far .due-rel { background: transparent; color: var(--ink-faint); padding: 0; font-weight: 500; }
+
+  .check {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: var(--pitch);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink-faint);
+  }
+  .check::before {
+    content: "";
+    position: absolute;
+    width: 48px;
+    height: 48px;
+  }
+  .check { position: relative; }
+  .check svg { width: 24px; height: 24px; }
+  .check .ring { stroke: currentColor; stroke-width: 1.6; fill: none; }
+  .check .tick { stroke: var(--on-accent); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 14; stroke-dashoffset: 14; }
+  .check .disc { fill: var(--accent); transform: scale(0); transform-origin: 12px 12px; }
+  .check:hover { color: var(--accent); }
+
+  /* Completing: the pen strikes through, then the line leaves the page */
+  .entry.is-striking .ink { background-size: 100% 1.5px; transition: background-size 380ms var(--ease-out); }
+  .entry.is-striking .entry-text,
+  .entry.is-striking .entry-meta { color: var(--ink-done); transition: color 300ms 200ms var(--ease-out); }
+  .entry.is-striking .disc { transform: scale(1); transition: transform 260ms var(--ease-out); }
+  .entry.is-striking .tick { stroke-dashoffset: 0; transition: stroke-dashoffset 240ms 120ms var(--ease-out); }
+
+  .entry.is-new .entry-text { animation: settle 900ms var(--ease-out); }
+  @keyframes settle {
+    from { background: var(--accent-wash); }
+    to { background: transparent; }
+  }
+
+  .empty {
+    margin: 0;
+    padding-left: calc(var(--margin-w) + 12px);
+    font-family: var(--hand);
+    font-size: 17px;
+    line-height: var(--pitch);
+    color: var(--ink-faint);
+  }
+
+  /* ---------- Editor (inline) ---------- */
+  .entry.is-editing { display: block; padding: 6px 0 14px; background: none; }
+  .editor {
+    margin: 0;
+    padding: 14px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 12px;
+    background: var(--paper-raised);
+    box-shadow: var(--lift);
+  }
+  .editor .field-label { margin-top: 0; }
+  .editor textarea { margin-bottom: 12px; }
+  .editor-due {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .date-input {
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 10px;
+    background: var(--paper);
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+  }
+  .editor-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .editor-actions .spacer { flex: 1; }
+  .text-btn {
+    min-height: 44px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .text-btn:hover { background: var(--accent-wash); color: var(--ink); }
+  .text-btn.danger { color: var(--overdue); padding-left: 4px; }
+  .text-btn.danger:hover { background: var(--overdue-wash); }
+  .editor .primary-btn { width: auto; min-height: 44px; }
+
+  /* ---------- Done drawer ---------- */
+  .done-wrap { margin-top: 26px; }
+  .done-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 44px;
+    padding: 0 0 0 calc(var(--margin-w) + 12px);
+    border: 0;
+    background: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+  }
+  .done-toggle .icon { width: 16px; height: 16px; transition: transform 200ms var(--ease-out); }
+  .done-toggle[aria-expanded="true"] .icon { transform: rotate(90deg); }
+  .done-toggle:hover { color: var(--ink); }
+  .done-list .entry-text { color: var(--ink-done); text-decoration: line-through; text-decoration-thickness: 1.5px; text-decoration-color: var(--ink-done); }
+  .done-list .check { color: var(--accent); }
+  .done-list .check .disc { transform: scale(1); }
+  .done-list .check .tick { stroke-dashoffset: 0; }
+  .done-foot {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 8px;
+  }
+
+  /* ---------- Sign-in ---------- */
+  .signin {
+    max-width: 380px;
+    margin: 12vh auto 0;
+  }
+  .signin h1 {
+    margin: 0 0 6px;
+    font-family: var(--hand);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .signin p { margin: 0 0 24px; color: var(--ink-soft); }
+  .signin .composer { padding: 18px; }
+  .text-input {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    margin-bottom: 14px;
+    padding: 0 14px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 10px;
+    background: var(--paper);
+    font-size: 16px;
+  }
+  .text-input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(env(safe-area-inset-bottom) + 18px);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: min(calc(100% - 2 * var(--gutter)), 528px);
+    min-height: 52px;
+    padding: 6px 6px 6px 16px;
+    border-radius: 12px;
+    background: var(--toast);
+    color: var(--on-toast);
+    box-shadow: 0 12px 30px -10px rgba(10, 14, 24, 0.45);
+    font-size: 14px;
+    transform: translate(-50%, 140%);
+    visibility: hidden;
+    transition: transform 320ms var(--ease-out), visibility 0s 320ms;
+  }
+  .toast.is-shown { transform: translate(-50%, 0); visibility: visible; transition: transform 320ms var(--ease-out); }
+  .toast-msg { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .toast button {
+    min-height: 40px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--toast-action);
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .toast button:hover { background: rgba(127, 140, 170, 0.18); }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  [hidden] { display: none !important; }
+
+  @media (min-width: 480px) {
+    :root { --margin-w: 72px; --gutter: 24px; }
+    .composer { padding: 18px; }
+    .composer-foot .primary-btn { width: auto; min-width: 140px; margin-left: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+</svg>
+
+<main class="page" id="app">
+  <p class="empty" style="padding-left:0">翻開記事簿…</p>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span class="toast-msg" id="toastMsg"></span>
+  <button type="button" id="toastAction" hidden>復原</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyB2jePwSyZH8xEux6mPc-LlYXoF7xJruIo",
+  authDomain: "typhomeworksystem.firebaseapp.com",
+  projectId: "typhomeworksystem",
+  storageBucket: "typhomeworksystem.firebasestorage.app",
+  messagingSenderId: "563125021119",
+  appId: "1:563125021119:web:169219a4e42e3936aa990a"
+};
+</script>
+<script>
+'use strict';
+
+const MAX_LEN = 500;
+const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
+const DEMO = new URLSearchParams(location.search).has('demo');
+const app = document.getElementById('app');
+
+/* ---------- Dates ---------- */
+const pad = n => String(n).padStart(2, '0');
+const dateKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const fromKey = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+const startOfToday = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const dayDiff = (a, b) => Math.round((fromKey(dateKey(b)) - fromKey(dateKey(a))) / 86400000);
+const md = d => `${pad(d.getMonth() + 1)}/${pad(d.getDate())}`;
+const wd = d => `週${WEEKDAYS[d.getDay()]}`;
+
+function presets() {
+  const t = startOfToday();
+  const dow = t.getDay();
+  let toFri = (5 - dow + 7) % 7;
+  let friLabel = '週五';
+  if (toFri < 2) { toFri += 7; friLabel = '下週五'; }
+  let toMon = (8 - dow) % 7 || 7;
+  if (toMon === 1) toMon = 8;
+  return [
+    { id: 'none', label: '不限' },
+    { id: 'today', label: '今天', date: t },
+    { id: 'tomorrow', label: '明天', date: addDays(t, 1) },
+    { id: 'fri', label: friLabel, date: addDays(t, toFri) },
+    { id: 'mon', label: '下週一', date: addDays(t, toMon) },
+  ];
+}
+
+function dueInfo(due) {
+  if (!due) return null;
+  const d = fromKey(due);
+  const n = dayDiff(startOfToday(), d);
+  let rel, tone;
+  if (n < 0) { rel = `逾期 ${-n} 天`; tone = 'overdue'; }
+  else if (n === 0) { rel = '今天到期'; tone = 'soon'; }
+  else if (n === 1) { rel = '明天到期'; tone = 'soon'; }
+  else if (n <= 6) { rel = `剩 ${n} 天`; tone = 'near'; }
+  else { rel = `剩 ${n} 天`; tone = 'far'; }
+  return { d, n, rel, tone };
+}
+
+const CHECK_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle class="disc" cx="12" cy="12" r="10.2"/><circle class="ring" cx="12" cy="12" r="10"/><path class="tick" d="M7.5 12.4l3 3 6-6.4"/></svg>';
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* ---------- Stores ---------- */
+function firebaseStore(uid) {
+  const ref = firebase.database().ref('memos/' + uid);
+  const now = () => firebase.database.ServerValue.TIMESTAMP;
+  return {
+    subscribe(onData, onError) { ref.on('value', s => onData(s.val() || {}), onError); },
+    add(data) { return ref.push({ ...data, createdAt: now() }); },
+    update(id, patch) { return ref.child(id).update(patch); },
+    remove(id) { return ref.child(id).remove(); },
+    restore(id, data) { return ref.child(id).set(data); },
+    now,
+  };
+}
+
+function demoStore() {
+  const t = startOfToday();
+  const at = (days, h) => addDays(t, days).getTime() + h * 3600000;
+  let data = {
+    a1: { text: '繳交 115-1 課後班名冊給教務處', createdAt: at(-9, 9), due: dateKey(addDays(t, -1)) },
+    a2: { text: '確認夜光天使十月份點心廠商', createdAt: at(-9, 15) },
+    a3: { text: '社團成果發表場地借用單', createdAt: at(-5, 10), due: dateKey(t) },
+    a4: { text: '週三晨會報告：校外教學行前說明，記得帶簽到表', createdAt: at(-2, 8), due: dateKey(addDays(t, 2)) },
+    a5: { text: '更新本週課後班上課情形照片', createdAt: at(-2, 13), due: dateKey(addDays(t, 1)) },
+    a6: { text: '期中評量命題（三年級數學）', createdAt: at(0, 7), due: dateKey(addDays(t, 16)) },
+    d1: { text: '回覆家長關於接送時間的訊息', createdAt: at(-6, 9), doneAt: at(-1, 17) },
+  };
+  let listener = () => {};
+  const emit = () => setTimeout(() => listener(JSON.parse(JSON.stringify(data))), 0);
+  let seq = 0;
+  return {
+    subscribe(onData) { listener = onData; emit(); },
+    add(d) { const id = 'n' + (++seq) + Date.now(); data[id] = { ...d, createdAt: Date.now() }; emit(); return Object.assign(Promise.resolve(), { key: id }); },
+    update(id, p) { const x = { ...data[id] }; for (const k in p) p[k] === null ? delete x[k] : (x[k] = p[k]); data[id] = x; emit(); return Promise.resolve(); },
+    remove(id) { delete data[id]; emit(); return Promise.resolve(); },
+    restore(id, d) { data[id] = d; emit(); return Promise.resolve(); },
+    now: () => Date.now(),
+  };
+}
+
+/* ---------- Toast ---------- */
+const toastEl = document.getElementById('toast');
+const toastMsg = document.getElementById('toastMsg');
+const toastAction = document.getElementById('toastAction');
+let toastTimer, toastHandler;
+function toast(msg, actionLabel, onAction) {
+  clearTimeout(toastTimer);
+  toastMsg.textContent = msg;
+  toastHandler = onAction || null;
+  toastAction.hidden = !onAction;
+  if (onAction) toastAction.textContent = actionLabel;
+  toastEl.classList.add('is-shown');
+  toastTimer = setTimeout(hideToast, onAction ? 6000 : 3200);
+}
+function hideToast() { toastEl.classList.remove('is-shown'); toastHandler = null; }
+toastAction.addEventListener('click', () => { const h = toastHandler; hideToast(); if (h) h(); });
+
+const saveFailed = err => toast('沒有儲存成功：' + (err && err.code === 'PERMISSION_DENIED' ? '沒有寫入權限，請確認資料庫規則。' : '請稍後再試一次。'));
+
+/* ---------- Sign-in ---------- */
+function renderSignIn(auth) {
+  app.innerHTML = `
+    <section class="signin">
+      <h1>記事簿</h1>
+      <p>登入後，手機和電腦看到的是同一本。</p>
+      <form class="composer" id="signinForm" novalidate>
+        <label class="field-label" for="email">Email</label>
+        <input class="text-input" id="email" type="email" autocomplete="username" inputmode="email" required>
+        <label class="field-label" for="password">密碼</label>
+        <input class="text-input" id="password" type="password" autocomplete="current-password" required>
+        <button class="primary-btn" type="submit" id="signinBtn">登入</button>
+        <p class="hint" id="signinHint" role="alert"></p>
+      </form>
+    </section>`;
+  const form = document.getElementById('signinForm');
+  const btn = document.getElementById('signinBtn');
+  const hint = document.getElementById('signinHint');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = form.email.value.trim();
+    const password = form.password.value;
+    if (!email || !password) { hint.textContent = '請輸入 Email 和密碼。'; hint.classList.add('is-error'); return; }
+    btn.disabled = true; btn.textContent = '登入中…';
+    hint.textContent = ''; hint.classList.remove('is-error');
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+    } catch (err) {
+      const code = err && err.code;
+      hint.textContent =
+        code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found' ? 'Email 或密碼不正確，請再確認一次。'
+        : code === 'auth/too-many-requests' ? '嘗試次數太多，請過幾分鐘再試。'
+        : code === 'auth/network-request-failed' ? '連不上網路，請確認連線後再試。'
+        : code === 'auth/operation-not-allowed' ? 'Firebase 尚未啟用「電子郵件／密碼」登入方式。'
+        : '登入失敗，請稍後再試。';
+      hint.classList.add('is-error');
+      btn.disabled = false; btn.textContent = '登入';
+    }
+  });
+}
+
+/* ---------- Notebook ---------- */
+function startNotebook(store, { uid, onSignOut } = {}) {
+  const cacheKey = uid ? 'memo-cache:' + uid : null;
+  let items = null;
+  let editingId = null;
+  let pendingRender = false;
+  let striking = new Set();
+  let doneOpen = false;
+  let chosen = { id: 'none', due: null };
+  let customDue = null;
+  let freshId = null;
+
+  const todayD = startOfToday();
+  app.innerHTML = `
+    <header class="masthead">
+      <div>
+        <h1>記事簿</h1>
+        <p class="today">${todayD.getFullYear()} 年 ${todayD.getMonth() + 1} 月 ${todayD.getDate()} 日　${wd(todayD)}</p>
+        <ul class="tally" id="tally" aria-label="摘要"></ul>
+      </div>
+      ${onSignOut ? '<button class="ghost-btn" type="button" id="signOut">登出</button>' : '<span class="ghost-btn" style="display:inline-grid;place-items:center">示範</span>'}
+    </header>
+    <p class="status" id="status" role="status"></p>
+
+    <form class="composer" id="composer" novalidate>
+      <label class="field-label" for="memoText">事由</label>
+      <textarea id="memoText" rows="2" maxlength="${MAX_LEN}" enterkeyhint="done" placeholder="要記得做什麼？"></textarea>
+      <fieldset class="chips" id="chips" role="radiogroup" aria-labelledby="dueLabel">
+        <legend class="field-label" id="dueLabel" style="float:left;width:100%">時限</legend>
+      </fieldset>
+      <div class="composer-foot">
+        <button class="primary-btn" type="submit" id="addBtn">記下</button>
+      </div>
+      <p class="hint" id="composerHint" aria-live="polite"></p>
+    </form>
+
+    <div class="ledger-head"><h2 id="ledgerTitle">待辦，依新增先後</h2><span id="ledgerCount"></span></div>
+    <ol class="ledger" id="ledger" aria-labelledby="ledgerTitle"></ol>
+
+    <section class="done-wrap" id="doneWrap" hidden>
+      <button class="done-toggle" type="button" id="doneToggle" aria-expanded="false" aria-controls="doneList">
+        <svg class="icon" aria-hidden="true"><use href="#i-chev"/></svg><span id="doneLabel"></span>
+      </button>
+      <div id="doneBody" hidden>
+        <ol class="ledger done-list" id="doneList"></ol>
+        <div class="done-foot"><button class="text-btn danger" type="button" id="clearDone">清除全部已完成</button></div>
+      </div>
+    </section>`;
+
+  const $ = id => document.getElementById(id);
+  const textEl = $('memoText');
+  const chipsEl = $('chips');
+  const hintEl = $('composerHint');
+  const ledger = $('ledger');
+  const statusEl = $('status');
+
+  if (onSignOut) $('signOut').addEventListener('click', onSignOut);
+
+  /* --- Composer --- */
+  function renderChips() {
+    const legend = chipsEl.querySelector('legend').outerHTML;
+    const opts = presets().map(p => `
+      <button type="button" class="chip" role="radio" data-preset="${p.id}" data-due="${p.date ? dateKey(p.date) : ''}" aria-checked="${chosen.id === p.id}">
+        ${p.label}${p.date ? `<small>${md(p.date)}</small>` : ''}
+      </button>`).join('');
+    const customOn = chosen.id === 'custom';
+    const customText = customOn && customDue ? `${md(fromKey(customDue))}<small>${wd(fromKey(customDue))}</small>` : '選日期';
+    chipsEl.innerHTML = legend + opts + `
+      <label class="chip" role="radio" aria-checked="${customOn}">
+        <svg class="icon" aria-hidden="true"><use href="#i-cal"/></svg>${customText}
+        <input class="pick-input" type="date" id="pickDate" aria-label="自訂時限日期" min="${dateKey(startOfToday())}" value="${customDue || ''}">
+      </label>`;
+  }
+  chipsEl.addEventListener('click', e => {
+    const b = e.target.closest('button[data-preset]');
+    if (!b) return;
+    chosen = { id: b.dataset.preset, due: b.dataset.due || null };
+    renderChips();
+    chipsEl.querySelector(`[data-preset="${chosen.id}"]`).focus();
+  });
+  chipsEl.addEventListener('change', e => {
+    if (e.target.id !== 'pickDate') return;
+    customDue = e.target.value || null;
+    chosen = customDue ? { id: 'custom', due: customDue } : { id: 'none', due: null };
+    renderChips();
+  });
+  renderChips();
+
+  function autoGrow(el) { el.style.height = 'auto'; el.style.height = Math.max(64, el.scrollHeight) + 'px'; }
+  textEl.addEventListener('input', () => {
+    autoGrow(textEl);
+    if (hintEl.classList.contains('is-error')) { hintEl.textContent = ''; hintEl.classList.remove('is-error'); }
+  });
+  textEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); $('composer').requestSubmit(); }
+  });
+
+  $('composer').addEventListener('submit', e => {
+    e.preventDefault();
+    const text = textEl.value.trim();
+    if (!text) {
+      hintEl.textContent = '先寫下事由，再按「記下」。';
+      hintEl.classList.add('is-error');
+      textEl.focus();
+      return;
+    }
+    const data = { text };
+    if (chosen.due) data.due = chosen.due;
+    const p = store.add(data);
+    freshId = p.key || null;
+    p.catch(saveFailed);
+    textEl.value = '';
+    autoGrow(textEl);
+    chosen = { id: 'none', due: null };
+    customDue = null;
+    renderChips();
+    hintEl.classList.remove('is-error');
+    hintEl.textContent = '';
+    toast(`已記下，排在待辦最後一筆`, '查看', () => {
+      const row = ledger.querySelector(`[data-id="${freshId}"]`) || ledger.lastElementChild;
+      if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  /* --- Ledger --- */
+  function rowHTML(it, showDate, done) {
+    const c = new Date(it.createdAt || Date.now());
+    const sameYear = c.getFullYear() === todayD.getFullYear();
+    const info = done ? null : dueInfo(it.due);
+    const cls = ['entry'];
+    if (info) cls.push('is-' + info.tone);
+    if (it.id === freshId) cls.push('is-new');
+    let meta;
+    if (done) {
+      meta = `<span>${md(new Date(it.doneAt))} 完成</span>`;
+    } else if (info) {
+      meta = `<span class="due-date">${md(info.d)} ${wd(info.d)}截止</span><span class="due-rel">${info.rel}</span>`;
+    } else {
+      meta = '<span>未定時限</span>';
+    }
+    const dateLabel = `${sameYear ? '' : c.getFullYear() + '/'}${md(c)} ${wd(c)}新增`;
+    return `
+      <li class="${cls.join(' ')}" data-id="${esc(it.id)}">
+        <div class="entry-date"${showDate ? '' : ' aria-hidden="true"'}>
+          <span>${md(c)}</span><span class="wd">${sameYear ? wd(c) : c.getFullYear()}</span>
+          <span class="sr-only">${dateLabel}</span>
+        </div>
+        <div class="entry-body" ${done ? '' : `role="button" tabindex="0" aria-label="編輯：${esc(it.text)}"`}>
+          <p class="entry-text"><span class="ink">${esc(it.text)}</span></p>
+          <p class="entry-meta">${meta}</p>
+        </div>
+        <button class="check" type="button" data-act="${done ? 'undone' : 'done'}" aria-label="${done ? '改回待辦' : '標示完成'}：${esc(it.text)}">
+          ${CHECK_SVG}
+        </button>
+      </li>`;
+  }
+
+  function listHTML(list, done) {
+    let prev = null;
+    return list.map(it => {
+      const k = dateKey(new Date(it.createdAt || Date.now()));
+      const show = done || k !== prev;
+      prev = k;
+      return rowHTML(it, show, done);
+    }).join('');
+  }
+
+  function split() {
+    const all = Object.entries(items || {})
+      .filter(([, v]) => v && typeof v.text === 'string')
+      .map(([id, v]) => ({ id, ...v }));
+    const open = all.filter(x => !x.doneAt).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    const done = all.filter(x => x.doneAt).sort((a, b) => b.doneAt - a.doneAt);
+    return { open, done };
+  }
+
+  function renderTally(open) {
+    const overdue = open.filter(x => { const i = dueInfo(x.due); return i && i.n < 0; }).length;
+    const soon = open.filter(x => { const i = dueInfo(x.due); return i && (i.n === 0 || i.n === 1); }).length;
+    $('tally').innerHTML =
+      `<li>待辦 <b>${open.length}</b></li>` +
+      (overdue ? `<li class="t-overdue">逾期 <b>${overdue}</b></li>` : '') +
+      (soon ? `<li class="t-soon">今明到期 <b>${soon}</b></li>` : '');
+    $('ledgerCount').textContent = open.length ? `共 ${open.length} 筆` : '';
+  }
+
+  function render() {
+    if (items === null) {
+      ledger.innerHTML = '<li class="empty">翻開記事簿…</li>';
+      return;
+    }
+    const { open, done } = split();
+    renderTally(open);
+    if (editingId || striking.size) { pendingRender = true; return; }
+    pendingRender = false;
+
+    ledger.innerHTML = open.length
+      ? listHTML(open, false)
+      : `<li class="empty">${done.length ? '全部做完了，好好休息。' : '這頁還空著。在上面寫下第一件要記得的事。'}</li>`;
+    freshId = null;
+
+    $('doneWrap').hidden = !done.length;
+    $('doneLabel').textContent = `已完成 ${done.length} 筆`;
+    $('doneToggle').setAttribute('aria-expanded', String(doneOpen));
+    $('doneBody').hidden = !doneOpen;
+    $('doneList').innerHTML = doneOpen ? listHTML(done, true) : '';
+  }
+
+  function flush() { if (pendingRender && !editingId && !striking.size) render(); }
+
+  function complete(row) {
+    const id = row.dataset.id;
+    const it = items[id];
+    if (!it || striking.has(id)) return;
+    striking.add(id);
+    row.classList.add('is-striking');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setTimeout(() => {
+      store.update(id, { doneAt: store.now() }).catch(saveFailed);
+      striking.delete(id);
+      pendingRender = true;
+      flush();
+      toast(`完成「${it.text}」`, '復原', () => store.update(id, { doneAt: null }).catch(saveFailed));
+    }, reduce ? 0 : 620);
+  }
+
+  function openEditor(row) {
+    if (editingId) closeEditor();
+    const id = row.dataset.id;
+    const it = items[id];
+    if (!it) return;
+    editingId = id;
+    row.classList.add('is-editing');
+    row.innerHTML = `
+      <form class="editor" novalidate>
+        <label class="field-label" for="editText">事由</label>
+        <textarea id="editText" maxlength="${MAX_LEN}" rows="2">${esc(it.text)}</textarea>
+        <label class="field-label" for="editDue">時限</label>
+        <div class="editor-due">
+          <input class="date-input" type="date" id="editDue" value="${it.due || ''}">
+          <button class="text-btn" type="button" data-act="clear-due">不設時限</button>
+        </div>
+        <div class="editor-actions">
+          <button class="text-btn danger" type="button" data-act="delete">刪除</button>
+          <span class="spacer"></span>
+          <button class="text-btn" type="button" data-act="cancel">取消</button>
+          <button class="primary-btn" type="submit">儲存</button>
+        </div>
+      </form>`;
+    const ta = row.querySelector('textarea');
+    autoGrow(ta);
+    ta.addEventListener('input', () => autoGrow(ta));
+    ta.focus();
+    ta.setSelectionRange(ta.value.length, ta.value.length);
+    row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  function closeEditor(focusId) {
+    editingId = null;
+    pendingRender = true;
+    flush();
+    if (focusId) {
+      const body = ledger.querySelector(`[data-id="${focusId}"] .entry-body`);
+      if (body) body.focus({ preventScroll: true });
+    }
+  }
+
+  ledger.addEventListener('click', e => {
+    const row = e.target.closest('.entry');
+    if (!row) return;
+    const act = e.target.closest('[data-act]');
+    if (act) {
+      const a = act.dataset.act;
+      const id = row.dataset.id;
+      if (a === 'done') return complete(row);
+      if (a === 'cancel') return closeEditor(id);
+      if (a === 'clear-due') { row.querySelector('#editDue').value = ''; return; }
+      if (a === 'delete') {
+        const snapshot = { ...items[id] };
+        editingId = null;
+        store.remove(id).catch(saveFailed);
+        pendingRender = true; flush();
+        toast(`已刪除「${snapshot.text}」`, '復原', () => store.restore(id, snapshot).catch(saveFailed));
+        return;
+      }
+      return;
+    }
+    if (!row.classList.contains('is-editing') && e.target.closest('.entry-body')) openEditor(row);
+  });
+  ledger.addEventListener('keydown', e => {
+    const body = e.target.closest('.entry-body[role="button"]');
+    if (body && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openEditor(body.closest('.entry')); }
+    if (e.key === 'Escape' && editingId) closeEditor(editingId);
+  });
+  ledger.addEventListener('submit', e => {
+    e.preventDefault();
+    const row = e.target.closest('.entry');
+    const id = row.dataset.id;
+    const text = row.querySelector('#editText').value.trim();
+    const due = row.querySelector('#editDue').value || null;
+    if (!text) { row.querySelector('#editText').focus(); toast('事由不能空白；不需要了可以按「刪除」。'); return; }
+    store.update(id, { text, due }).catch(saveFailed);
+    closeEditor(id);
+  });
+
+  $('doneToggle').addEventListener('click', () => { doneOpen = !doneOpen; pendingRender = true; flush(); });
+  $('doneList').addEventListener('click', e => {
+    const b = e.target.closest('[data-act="undone"]');
+    if (!b) return;
+    const id = b.closest('.entry').dataset.id;
+    store.update(id, { doneAt: null }).catch(saveFailed);
+    toast('已改回待辦');
+  });
+  $('clearDone').addEventListener('click', () => {
+    const { done } = split();
+    const snapshot = done.map(({ id, ...v }) => [id, v]);
+    snapshot.forEach(([id]) => store.remove(id).catch(saveFailed));
+    doneOpen = false;
+    toast(`已清除 ${snapshot.length} 筆已完成`, '復原', () => snapshot.forEach(([id, v]) => store.restore(id, v).catch(saveFailed)));
+  });
+
+  /* --- Data --- */
+  if (cacheKey) {
+    try { const c = localStorage.getItem(cacheKey); if (c) items = JSON.parse(c); } catch (_) {}
+  }
+  render();
+  store.subscribe(val => {
+    items = val;
+    if (cacheKey) { try { localStorage.setItem(cacheKey, JSON.stringify(val)); } catch (_) {} }
+    statusEl.classList.remove('is-shown', 'is-error');
+    pendingRender = true;
+    flush();
+    if (!editingId && !striking.size) render();
+  }, err => {
+    statusEl.textContent = err && err.code === 'PERMISSION_DENIED'
+      ? '讀不到記事：資料庫還沒開放 memos 的權限，請照 README 的步驟加入規則。'
+      : '讀取記事時發生問題，請重新整理頁面再試。';
+    statusEl.classList.add('is-shown', 'is-error');
+    if (items === null) { items = {}; render(); }
+  });
+
+  // Keep relative deadlines honest when the page stays open past midnight
+  let lastDay = dateKey(new Date());
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    if (dateKey(new Date()) !== lastDay) location.reload();
+  });
+
+  return {
+    setOffline(off) {
+      if (statusEl.classList.contains('is-error')) return;
+      statusEl.textContent = '目前離線。可以照常記，連上網路後會自動同步。';
+      statusEl.classList.toggle('is-shown', off);
+    },
+  };
+}
+
+/* ---------- Boot ---------- */
+if (DEMO) {
+  startNotebook(demoStore());
+} else {
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  let nb = null;
+  auth.onAuthStateChanged(user => {
+    if (!user) { nb = null; renderSignIn(auth); return; }
+    nb = startNotebook(firebaseStore(user.uid), {
+      uid: user.uid,
+      onSignOut: () => {
+        try { localStorage.removeItem('memo-cache:' + user.uid); } catch (_) {}
+        auth.signOut();
+      },
+    });
+  });
+  let everConnected = false;
+  firebase.database().ref('.info/connected').on('value', s => {
+    const on = s.val() === true;
+    if (on) everConnected = true;
+    if (nb && (everConnected || !on)) nb.setOffline(!on && everConnected);
+  });
+}
+</script>
+</body>
+</html>

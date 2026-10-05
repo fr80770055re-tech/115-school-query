@@ -5,5 +5,17 @@
       "maxFindings": 5,
       "maxChars": 8000
     }
+  },
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "lxgw wenkai tc",
+        "createdAt": "2026-10-05T12:06:52.747Z",
+        "reason": "same as above: memo/ notebook direction chosen by user"
+      }
+    ]
   }
 }
