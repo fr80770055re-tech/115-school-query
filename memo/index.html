@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>記事簿</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#f3f5f6" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#12151b" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#e6f0df">
+<meta name="color-scheme" content="light only">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="記事簿">
@@ -19,27 +19,30 @@
 <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #f3f5f6;
-    --paper-raised: #fbfcfc;
-    --rule: #cfdbe4;
-    --rule-strong: #b6c6d2;
-    --margin-line: #e0a199;
-    --ink: #1d2740;
-    --ink-soft: #4b566c;
-    --ink-faint: #616c80;
-    --ink-done: #7c8597;
-    --accent: #253f73;
-    --accent-deep: #1a2f58;
-    --accent-wash: #e1e8f3;
-    --on-accent: #fbfcfc;
-    --overdue: #ad3428;
-    --overdue-wash: #f6e4e1;
-    --soon: #85570b;
-    --soon-wash: #f6ecd6;
-    --toast: #1d2740;
-    --on-toast: #f3f5f6;
-    --toast-action: #b9cbef;
-    --lift: 0 1px 2px rgba(29, 39, 64, 0.05), 0 10px 24px -14px rgba(29, 39, 64, 0.22);
+    --page: #e6f0df;
+    --paper: #fffdf8;
+    --paper-raised: #fbf6e9;
+    --rule: #e6dcc4;
+    --rule-strong: #d3c7aa;
+    --margin-line: #f0b48c;
+    --ink: #2a3326;
+    --ink-soft: #505b4a;
+    --ink-faint: #646d5c;
+    --ink-done: #8b917f;
+    --accent: #c0561a;
+    --accent-deep: #a1460f;
+    --accent-wash: #fbe6d4;
+    --on-accent: #fffdf8;
+    --green: #3f6b3a;
+    --green-wash: #e2eedb;
+    --overdue: #b3261e;
+    --overdue-wash: #f8e1dd;
+    --soon: #9a430c;
+    --soon-wash: #fde3cc;
+    --toast: #2f4a2c;
+    --on-toast: #f6f9f3;
+    --toast-action: #ffc89e;
+    --lift: 0 1px 2px rgba(42, 51, 38, 0.05), 0 10px 24px -14px rgba(42, 51, 38, 0.22);
 
     --hand: "LXGW WenKai TC", "Noto Sans TC", system-ui, sans-serif;
     --sans: "Noto Sans TC", system-ui, -apple-system, sans-serif;
@@ -50,40 +53,13 @@
     color-scheme: light;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper: #12151b;
-      --paper-raised: #1a1e26;
-      --rule: #252c38;
-      --rule-strong: #343d4c;
-      --margin-line: #6e3a34;
-      --ink: #e2e7ef;
-      --ink-soft: #b0b9c8;
-      --ink-faint: #8f99aa;
-      --ink-done: #7f8999;
-      --accent: #a9bfe8;
-      --accent-deep: #c4d4f1;
-      --accent-wash: #1f2a40;
-      --on-accent: #12151b;
-      --overdue: #f19285;
-      --overdue-wash: #3a1f1c;
-      --soon: #e4bb6b;
-      --soon-wash: #33291a;
-      --toast: #e2e7ef;
-      --on-toast: #12151b;
-      --toast-action: #253f73;
-      --lift: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 28px -14px rgba(0, 0, 0, 0.6);
-      color-scheme: dark;
-    }
-  }
-
   *, *::before, *::after { box-sizing: border-box; }
-  ::selection { background: var(--accent-wash); color: var(--ink); }
+  ::selection { background: var(--soon-wash); color: var(--ink); }
 
   html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
-    background: var(--paper);
+    background: var(--page);
     color: var(--ink);
     font-family: var(--sans);
     font-size: 15px;
@@ -291,12 +267,21 @@
   .hint:empty { display: none; }
 
   /* ---------- Ledger ---------- */
+  .sheet {
+    margin-top: 20px;
+    padding: 14px 0 18px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: var(--paper-raised);
+    box-shadow: var(--lift);
+    overflow: hidden;
+  }
   .ledger-head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    margin: 30px 0 4px;
-    padding-left: calc(var(--margin-w) + 12px);
+    margin: 0 0 4px;
+    padding: 0 16px 0 calc(var(--margin-w) + 12px);
     color: var(--ink-faint);
     font-size: 12px;
   }
@@ -374,8 +359,8 @@
     font-size: 12px;
     font-weight: 700;
     line-height: 20px;
-    background: var(--accent-wash);
-    color: var(--accent);
+    background: var(--green-wash);
+    color: var(--green);
   }
   .entry.is-overdue .due-rel { background: var(--overdue-wash); color: var(--overdue); }
   .entry.is-overdue .due-date { color: var(--overdue); }
@@ -430,7 +415,7 @@
   }
 
   /* ---------- Editor (inline) ---------- */
-  .entry.is-editing { display: block; padding: 6px 0 14px; background: none; }
+  .entry.is-editing { display: block; padding: 6px 10px 14px; background: none; }
   .editor {
     margin: 0;
     padding: 14px;
@@ -479,7 +464,8 @@
   .editor .primary-btn { width: auto; min-height: 44px; }
 
   /* ---------- Done drawer ---------- */
-  .done-wrap { margin-top: 26px; }
+  .done-wrap { margin-top: 14px; }
+  .done-foot { padding-right: 12px; }
   .done-toggle {
     display: flex;
     align-items: center;
@@ -798,6 +784,7 @@ function startNotebook(store, { uid, onSignOut } = {}) {
       <p class="hint" id="composerHint" aria-live="polite"></p>
     </form>
 
+    <section class="sheet">
     <div class="ledger-head"><h2 id="ledgerTitle">待辦，依新增先後</h2><span id="ledgerCount"></span></div>
     <ol class="ledger" id="ledger" aria-labelledby="ledgerTitle"></ol>
 
@@ -809,6 +796,7 @@ function startNotebook(store, { uid, onSignOut } = {}) {
         <ol class="ledger done-list" id="doneList"></ol>
         <div class="done-foot"><button class="text-btn danger" type="button" id="clearDone">清除全部已完成</button></div>
       </div>
+    </section>
     </section>`;
 
   const $ = id => document.getElementById(id);

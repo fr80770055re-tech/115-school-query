@@ -1,12 +1,14 @@
 # Design System: 記事簿（memo/）
 
-**North Star：隨身橫線手帳。** 這頁不是 App 待辦清單，而是一本口袋手帳：冷白紙、淡藍橫線、左側朱紅邊線隔出日期欄，事由像用藍黑墨水寫在線上。
+**North Star：隨身橫線手帳。** 這頁不是 App 待辦清單，而是一本口袋手帳：淺綠的桌面上放著米白的手帳紙，淡卡其橫線、左側橘色邊線隔出日期欄，事由像用墨水寫在線上。只有淺色，不隨系統切換深色。
 
-## Colors（`memo/index.html` 的 `:root`，深色模式同名覆寫）
-- 紙 `--paper #f3f5f6`、浮起紙 `--paper-raised #fbfcfc`（新增欄、編輯欄）
-- 橫線 `--rule #cfdbe4`、邊線 `--margin-line #e0a199`
-- 藍黑墨水 `--ink #1d2740`／`--ink-soft`／`--ink-faint`；主要操作 `--accent #253f73`
-- **一色一義：** 朱紅 `--overdue` 只代表逾期；赭黃 `--soon` 只代表今天／明天到期；墨藍淡底代表一週內。
+## Colors（`memo/index.html` 的 `:root`）
+- 桌面淺綠 `--page #e6f0df`：整頁底色
+- 米白手帳紙 `--paper-raised #fbf6e9`：新增欄、記事清單、編輯欄；輸入框 `--paper #fffdf8`
+- 橫線 `--rule #e6dcc4`、邊線 `--margin-line #f0b48c`
+- 墨色 `--ink #2a3326`／`--ink-soft`／`--ink-faint`
+- 橘 `--accent #c0561a`：主要按鈕、選中的時限、完成勾選
+- **一色一義：** 紅 `--overdue` 只代表逾期；橘淡底 `--soon` 代表今天／明天到期；綠淡底 `--green` 代表一週內到期。
 
 ## Typography
 - 事由與標題：LXGW WenKai TC（霞鶩文楷，手寫感），18px，行高 = 行距 32px
