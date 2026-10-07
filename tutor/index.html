@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+<title>小波老師</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#2c4536">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="小波老師">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232c4536'/%3E%3Cpath d='M32 17v-5' stroke='%23d6403a' stroke-width='3'/%3E%3Ccircle cx='32' cy='8' r='4' fill='none' stroke='%23d6403a' stroke-width='3'/%3E%3Cpath d='M14 64c0-14 7-22 18-22s18 8 18 22z' fill='%23d6403a'/%3E%3Ccircle cx='32' cy='31' r='15' fill='%23d6403a'/%3E%3Cellipse cx='32' cy='33' rx='10' ry='9' fill='%23f3cfae'/%3E%3Ccircle cx='28' cy='31' r='1.8' fill='%231d140d'/%3E%3Ccircle cx='36' cy='31' r='1.8' fill='%231d140d'/%3E%3Cpath d='M28.5 36q3.5 3 7 0' stroke='%237a2a1e' stroke-width='1.4' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* 黑板與粉筆：粉筆只有四色，意思固定 */
+    --board: #2c4536;
+    --board-deep: #223829;
+    --chalk: #f3f1e7;           /* 老師的話 */
+    --chalk-dim: rgba(243, 241, 231, 0.72);
+    --chalk-faint: rgba(243, 241, 231, 0.28);
+    --chalk-yellow: #f2d36b;    /* 關鍵：目前步驟、選項 */
+    --chalk-coral: #f4a690;     /* 要再看一次的地方 */
+    --chalk-green: #acd9a6;     /* 完成的步驟 */
+
+    /* 木框、粉筆槽 */
+    --wood: #8a5a34;
+    --wood-light: #a8733f;
+    --wood-deep: #5b391f;
+
+    /* 紙條與磁鐵 */
+    --paper: #fbf8ef;
+    --kraft: #e6d1a8;
+    --ink: #22303a;
+    --ink-soft: #4b5862;
+    --ink-faint: #66717a;
+    --magnet-red: #d4513f;
+    --magnet-blue: #3f6fb5;
+    --magnet-yellow: #e7b522;
+
+    /* 教室牆面：上白下綠的牆裙 */
+    --wall: #e9ebe1;
+    --wall-skirt: #7ea58a;
+
+    --kai: "LXGW WenKai TC", "BiauKai", "DFKai-SB", serif;
+    --sans: "Noto Sans TC", system-ui, -apple-system, sans-serif;
+    --say: 20px;                /* 對話只用這一種字級 */
+    --gutter: 16px;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --slip-shadow: 0 1px 1px rgba(10, 20, 14, 0.25), 0 6px 14px -6px rgba(10, 20, 14, 0.55);
+    --magnet-shadow: 0 1px 1px rgba(0, 0, 0, 0.35), 0 3px 5px -1px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+    --chalk-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.1 1.45'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23m)'/%3E%3C/svg%3E");
+    --wavy-yellow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='6'%3E%3Cpath d='M0 3 Q6 0 12 3 T24 3' fill='none' stroke='%23f2d36b' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+    --wavy-coral: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='6'%3E%3Cpath d='M0 3 Q6 0 12 3 T24 3' fill='none' stroke='%23f4a690' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { height: 100%; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background:
+      linear-gradient(to bottom, var(--wall) 0 58%, #6c917a 58% calc(58% + 6px), var(--wall-skirt) calc(58% + 6px));
+    color: var(--chalk);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--chalk-yellow); color: var(--board-deep); }
+  button, input, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  [hidden] { display: none !important; }
+  :focus-visible { outline: 3px solid var(--chalk-yellow); outline-offset: 3px; border-radius: 6px; }
+  .icon { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- 黑板 ---------- */
+  .board {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-width: 780px;
+    margin: 0 auto;
+    background-color: var(--board);
+    background-image:
+      var(--grain),
+      radial-gradient(ellipse 60% 22% at 30% 30%, rgba(243, 241, 231, 0.06), transparent 70%),
+      radial-gradient(ellipse 50% 18% at 75% 62%, rgba(243, 241, 231, 0.05), transparent 70%);
+    overflow: hidden;
+  }
+  @media (min-width: 720px) {
+    .board {
+      height: calc(100dvh - 48px);
+      margin-top: 24px;
+      border: 14px solid var(--wood);
+      border-bottom-width: 0;
+      border-image: linear-gradient(160deg, var(--wood-light), var(--wood) 40%, var(--wood-deep)) 14;
+      box-shadow:
+        inset 0 6px 18px rgba(0, 0, 0, 0.35),
+        0 18px 40px -18px rgba(30, 40, 30, 0.6);
+    }
+  }
+
+  /* 板面頂端 */
+  .top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: calc(env(safe-area-inset-top) + 10px) var(--gutter) 4px;
+  }
+  .top .mascot { width: 52px; height: 52px; flex: none; }
+  .top-title { flex: 1; min-width: 0; }
+  .top-title h1 {
+    margin: 0;
+    font-family: var(--kai);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+  }
+  .top-title p { margin: 2px 0 0; font-family: var(--kai); font-size: 15px; color: var(--chalk-dim); }
+  .eraser-btn {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 60px;
+    min-height: 56px;
+    padding: 6px 8px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--chalk);
+    font-family: var(--kai);
+    font-size: 14px;
+  }
+  .eraser-btn .eraser-art { width: 44px; height: 22px; }
+  .eraser-btn:hover { background: rgba(243, 241, 231, 0.06); }
+
+  .chalk-text {
+    -webkit-mask-image: var(--chalk-mask);
+    mask-image: var(--chalk-mask);
+    text-shadow: 0 0 1px rgba(243, 241, 231, 0.35);
+  }
+
+  .demo-flag {
+    margin: 2px var(--gutter) 0;
+    font-family: var(--kai);
+    font-size: 14px;
+    color: var(--chalk-yellow);
+  }
+
+  /* 解題步驟：粉筆寫在板面上方 */
+  .steps {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 6px var(--gutter) 0;
+    padding: 6px 0 8px;
+    list-style: none;
+    font-family: var(--kai);
+    font-size: 16px;
+    color: rgba(243, 241, 231, 0.64);
+    border-bottom: 1px dashed var(--chalk-faint);
+  }
+  .steps li { display: inline-flex; align-items: center; gap: 3px; padding: 2px 4px 6px; white-space: nowrap; transition: color 0.3s; }
+  .steps li + li::before {
+    content: "";
+    width: 12px;
+    height: 2px;
+    margin-right: 6px;
+    background: var(--chalk-faint);
+    border-radius: 2px;
+  }
+  .steps .icon { width: 16px; height: 16px; stroke-width: 2.6; display: none; }
+  .steps li.past { color: var(--chalk-green); }
+  .steps li.past .icon { display: block; }
+  .steps li.now {
+    color: var(--chalk-yellow);
+    font-weight: 700;
+    background: var(--wavy-yellow) repeat-x left bottom / 24px 6px;
+  }
+  .steps.all-done li { color: var(--chalk-green); }
+  .steps.all-done li .icon { display: block; }
+
+  /* ---------- 對話 ---------- */
+  .chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px var(--gutter) 12px;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--chalk-faint) transparent;
+  }
+
+  /* 老師的話：粉筆直接寫在板上 */
+  .say {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 8px;
+    margin: 0 0 22px;
+    max-width: 34em;
+  }
+  .say .mascot { width: 34px; height: 34px; margin-top: 2px; }
+  .say-body { min-width: 0; }
+  .say-text {
+    margin: 0;
+    font-family: var(--kai);
+    font-size: var(--say);
+    line-height: 1.75;
+    color: var(--chalk);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .say.past .say-text { color: var(--chalk-dim); }
+  .say.past .mascot { visibility: hidden; }
+  .say-text .ch { animation: write 0.32s var(--ease-out) both; animation-delay: calc(var(--i) * 26ms); }
+  @keyframes write {
+    from { opacity: 0; filter: blur(1.5px); transform: translateY(1px); }
+    to { opacity: 1; filter: none; transform: none; }
+  }
+
+  .speak {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    min-height: 40px;
+    padding: 0 12px 0 8px;
+    border: 1.5px dashed var(--chalk-faint);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--chalk-dim);
+    font-family: var(--kai);
+    font-size: 15px;
+  }
+  .speak .icon { width: 20px; height: 20px; }
+  .speak:hover { color: var(--chalk); border-color: var(--chalk-dim); }
+  .speak[aria-pressed="true"] { color: var(--chalk-yellow); border-color: var(--chalk-yellow); border-style: solid; }
+
+  /* 孩子的話：用磁鐵釘上的紙條 */
+  .slip-row { display: flex; justify-content: flex-end; margin: 0 0 22px; }
+  .slip {
+    position: relative;
+    max-width: min(82%, 30em);
+    padding: 16px 16px 12px;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: var(--say);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    border-radius: 2px;
+    box-shadow: var(--slip-shadow);
+    transform: rotate(var(--tilt, 0.8deg));
+    animation: pin 0.35s var(--ease-out) both;
+  }
+  .slip-row:nth-of-type(3n) .slip { --tilt: -0.7deg; --m: var(--magnet-blue); }
+  .slip-row:nth-of-type(3n + 1) .slip { --tilt: 0.4deg; --m: var(--magnet-yellow); }
+  .slip::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.55), transparent 45%), var(--m, var(--magnet-red));
+    box-shadow: var(--magnet-shadow);
+  }
+  @keyframes pin {
+    from { opacity: 0; transform: translateY(-8px) rotate(var(--tilt, 0.8deg)) scale(1.02); }
+    to { opacity: 1; transform: rotate(var(--tilt, 0.8deg)); }
+  }
+
+  /* 照片：四角各一顆磁鐵 */
+  .slip.has-photo { width: min(82%, 300px); padding: 10px; }
+  .slip.has-photo::before { display: none; }
+  .photo {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  .photo img { display: block; width: 100%; max-height: 300px; object-fit: contain; background: #fff; }
+  .photo .mag {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.55), transparent 45%), var(--mc, var(--magnet-red));
+    box-shadow: var(--magnet-shadow);
+  }
+  .photo .mag:nth-of-type(1) { top: -6px; left: -6px; }
+  .photo .mag:nth-of-type(2) { top: -6px; right: -6px; --mc: var(--magnet-blue); }
+  .photo .mag:nth-of-type(3) { bottom: -6px; left: -6px; --mc: var(--magnet-yellow); }
+  .photo .mag:nth-of-type(4) { bottom: -6px; right: -6px; }
+  .photo .zoom {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px 4px 6px;
+    border-radius: 999px;
+    background: rgba(34, 48, 58, 0.85);
+    color: #fff;
+    font-size: 14px;
+  }
+  .photo .zoom .icon { width: 16px; height: 16px; }
+  .slip-caption { padding: 8px 4px 0; }
+  .slip:not(.has-photo) .slip-caption { padding: 0; }
+
+  /* 小波想一想 */
+  .thinking .say-text { display: flex; align-items: center; gap: 8px; color: var(--chalk-dim); }
+  .thinking .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--chalk); animation: blink 1.2s infinite; }
+  .thinking .dot:nth-child(2) { animation-delay: 0.2s; }
+  .thinking .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.9; } }
+
+  /* 要再看一次：珊瑚色粉筆 */
+  .notice {
+    margin: 0 0 22px 42px;
+    max-width: 30em;
+    font-family: var(--kai);
+    font-size: 18px;
+    line-height: 1.9;
+    color: var(--chalk-coral);
+  }
+  .notice p { margin: 0; display: inline; white-space: pre-line; padding-bottom: 6px; background: var(--wavy-coral) repeat-x left bottom / 24px 6px; }
+  .notice button { display: flex; align-items: center; margin-top: 12px; }
+
+  /* 開始：選科目的磁鐵卡 */
+  .subjects { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: -4px 0 28px 42px; max-width: 30em; }
+  .subject {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 20px 8px 14px;
+    border: 0;
+    border-radius: 3px;
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--slip-shadow);
+    font-size: 22px;
+    font-weight: 700;
+    transform: rotate(-0.8deg);
+    transition: transform 0.25s var(--ease-out);
+  }
+  .subject + .subject { transform: rotate(0.9deg); }
+  .subject::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    margin-left: -9px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.55), transparent 45%), var(--mc, var(--magnet-blue));
+    box-shadow: var(--magnet-shadow);
+  }
+  .subject .icon { width: 44px; height: 44px; stroke-width: 1.8; color: var(--magnet-blue); }
+  .subject small { font-size: 14px; font-weight: 500; color: var(--ink-faint); }
+  .subject:hover { transform: rotate(0deg) translateY(-2px); }
+  .subject[aria-pressed="true"] { --mc: var(--magnet-yellow); outline: 3px solid var(--chalk-yellow); outline-offset: 4px; transform: rotate(0deg); }
+
+  /* ---------- 粉筆槽 ---------- */
+  .tray {
+    position: relative;
+    padding: 16px var(--gutter) calc(env(safe-area-inset-bottom) + 12px);
+    background:
+      var(--grain),
+      linear-gradient(to bottom, var(--wood-light), var(--wood) 12px, var(--wood) 70%, var(--wood-deep));
+    box-shadow: 0 -2px 0 var(--wood-deep), 0 -10px 18px -10px rgba(0, 0, 0, 0.5);
+  }
+  .tray::before {
+    /* 粉筆槽裡的兩支粉筆 */
+    content: "";
+    position: absolute;
+    top: 3px;
+    right: 22px;
+    width: 46px;
+    height: 7px;
+    border-radius: 4px;
+    background: var(--chalk);
+    box-shadow: -60px 1px 0 -0.5px var(--chalk-yellow);
+    opacity: 0.9;
+  }
+
+  .quota {
+    margin: 0 0 8px;
+    font-family: var(--kai);
+    font-size: 15px;
+    color: #fbe9c4;
+  }
+  .choices { display: flex; flex-wrap: wrap; gap: 14px 10px; padding: 6px 0 14px; }
+  .choices:empty { display: none; }
+  .card {
+    position: relative;
+    flex: none;
+    min-height: 50px;
+    padding: 10px 18px 8px;
+    border: 0;
+    border-radius: 3px;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 18px;
+    font-weight: 700;
+    box-shadow: var(--slip-shadow);
+    transform: rotate(var(--tilt, -0.6deg));
+    transition: transform 0.2s var(--ease-out);
+  }
+  .card:nth-child(2n) { --tilt: 0.7deg; }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    margin-left: -7px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.55), transparent 45%), var(--magnet-yellow);
+    box-shadow: var(--magnet-shadow);
+  }
+  .card:hover { transform: rotate(0deg) translateY(-2px); }
+  .card:active { transform: rotate(0deg) scale(0.97); }
+  .card.next { display: inline-flex; align-items: center; gap: 8px; background: var(--chalk-green); }
+  .card.next .icon { width: 22px; height: 22px; }
+
+  .helpers { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 0 12px; }
+  .helpers:empty { display: none; }
+  .tag {
+    min-height: 44px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--kraft);
+    color: var(--wood-deep);
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: inset 0 -2px 0 rgba(91, 57, 31, 0.18);
+  }
+  .tag:hover { background: #ecdab6; }
+  .tag:active { transform: scale(0.97); }
+
+  .preview { display: inline-block; position: relative; margin: 2px 0 14px; }
+  .preview img { display: block; height: 92px; max-width: 64vw; object-fit: cover; border: 4px solid var(--paper); box-shadow: var(--slip-shadow); transform: rotate(-1deg); }
+  .preview button {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 3px solid var(--wood);
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+  }
+  .preview button .icon { width: 18px; height: 18px; stroke-width: 2.6; }
+
+  .composer { display: flex; align-items: flex-end; gap: 8px; }
+  .camera {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 16px;
+    background: var(--chalk-yellow);
+    color: var(--board-deep);
+    box-shadow: 0 2px 0 #b99a3a, 0 6px 12px -6px rgba(0, 0, 0, 0.5);
+  }
+  .camera .icon { width: 28px; height: 28px; stroke-width: 2.2; }
+  .camera:active { transform: translateY(1px); box-shadow: 0 1px 0 #b99a3a; }
+  textarea {
+    flex: 1;
+    min-width: 0;
+    min-height: 56px;
+    max-height: 136px;
+    resize: none;
+    padding: 14px 14px 12px;
+    border: 0;
+    border-radius: 3px;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1.55;
+    box-shadow: var(--slip-shadow);
+    color-scheme: light;
+    caret-color: var(--magnet-red);
+  }
+  textarea::placeholder { color: var(--ink-faint); }
+  textarea::selection { background: #f6e3a1; color: var(--ink); }
+  .mic {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--kraft);
+    color: var(--wood-deep);
+    box-shadow: inset 0 -2px 0 rgba(91, 57, 31, 0.2);
+  }
+  .mic.listening { background: var(--chalk-coral); color: var(--board-deep); animation: pulse 1.2s infinite; }
+  @keyframes pulse { 50% { transform: scale(1.07); } }
+  .send {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 56px;
+    padding: 0 16px 0 18px;
+    border: 0;
+    border-radius: 16px;
+    background: var(--board-deep);
+    color: var(--chalk);
+    font-family: var(--kai);
+    font-size: 19px;
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1.5px rgba(243, 241, 231, 0.2);
+  }
+  .send .icon { width: 20px; height: 20px; stroke-width: 2.4; }
+  .send:disabled { opacity: 0.5; cursor: progress; }
+  @media (max-width: 480px) {
+    .composer .send span { display: none; }
+    .composer .send { width: 56px; padding: 0; justify-content: center; }
+    .composer .send .icon { width: 24px; height: 24px; }
+    .steps { font-size: 15px; gap: 2px; }
+    .steps li { padding: 2px 2px 6px; }
+    .steps li + li::before { width: 8px; margin-right: 4px; }
+  }
+
+  /* ---------- 擦黑板 ---------- */
+  .wipe-eraser {
+    position: absolute;
+    left: 0;
+    width: 64px;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    z-index: 5;
+  }
+  .wipe-eraser svg { width: 64px; height: 30px; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.4)); }
+
+  /* ---------- 照片放大 ---------- */
+  dialog.lightbox {
+    width: min(96vw, 900px);
+    max-height: 92dvh;
+    padding: 12px;
+    border: 0;
+    border-radius: 4px;
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  }
+  dialog.lightbox::backdrop { background: rgba(20, 32, 25, 0.82); }
+  dialog.lightbox img { display: block; width: 100%; max-height: calc(92dvh - 96px); object-fit: contain; }
+  dialog.lightbox form { display: flex; justify-content: center; margin-top: 10px; }
+  dialog.lightbox button {
+    display: inline-flex; align-items: center; gap: 6px;
+    min-height: 48px; padding: 0 22px; border: 0; border-radius: 999px;
+    background: var(--board-deep); color: var(--chalk); font-family: var(--kai); font-size: 18px;
+  }
+
+  /* ---------- 密碼 ---------- */
+  .gate {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    padding: 24px var(--gutter) calc(env(safe-area-inset-bottom) + 24px);
+    overflow-y: auto;
+  }
+  .gate-card { width: 100%; max-width: 360px; text-align: center; }
+  .gate-card .mascot { width: 132px; height: 132px; }
+  .gate-card h2 { margin: 6px 0 4px; font-family: var(--kai); font-size: 28px; letter-spacing: 0.04em; }
+  .gate-card p { margin: 0 0 22px; font-family: var(--kai); font-size: 18px; color: var(--chalk-dim); }
+  .gate-card input {
+    width: 100%;
+    min-height: 60px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 3px;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 24px;
+    text-align: center;
+    letter-spacing: 0.12em;
+    box-shadow: var(--slip-shadow);
+    transform: rotate(-0.6deg);
+    color-scheme: light;
+    caret-color: var(--magnet-red);
+  }
+  .gate-card .gate-error { min-height: 1.7em; margin: 14px 0 0; color: var(--chalk-coral); }
+  .gate-card .send { width: 100%; justify-content: center; margin-top: 4px; height: 58px; background: var(--chalk-yellow); color: var(--board-deep); box-shadow: 0 2px 0 #b99a3a; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-delay: 0ms !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="chalky" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="4" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8" xChannelSelector="R" yChannelSelector="G" result="wobble"/>
+      <feTurbulence type="fractalNoise" baseFrequency="1.5" numOctaves="1" seed="9" result="grain"/>
+      <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.2 1.5" result="mask"/>
+      <feComposite in="wobble" in2="mask" operator="in"/>
+    </filter>
+  </defs>
+  <!-- 小波：紅色圓臉、頭頂圓圈天線、肚子上的螢幕 -->
+  <symbol id="mascot" viewBox="0 0 120 120">
+    <g filter="url(#chalky)" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M28 120 C28 92 40 73 60 73 C80 73 92 92 92 120 Z" fill="#d6403a" stroke="#f3f1e7" stroke-width="2.4"/>
+      <rect x="45" y="88" width="30" height="23" rx="5" fill="#bcc6c6" stroke="#f3f1e7" stroke-width="2"/>
+      <path d="M60 27 L60 17" fill="none" stroke="#d6403a" stroke-width="4"/>
+      <circle cx="60" cy="10" r="6.5" fill="none" stroke="#d6403a" stroke-width="4"/>
+      <circle cx="60" cy="10" r="6.5" fill="none" stroke="#f3f1e7" stroke-width="1.2" opacity="0.7"/>
+      <ellipse cx="34" cy="49" rx="5.5" ry="8" fill="#d6403a" stroke="#f3f1e7" stroke-width="2.2"/>
+      <ellipse cx="86" cy="49" rx="5.5" ry="8" fill="#d6403a" stroke="#f3f1e7" stroke-width="2.2"/>
+      <ellipse cx="60" cy="49" rx="26" ry="24" fill="#d6403a" stroke="#f3f1e7" stroke-width="2.4"/>
+      <ellipse cx="60" cy="53" rx="17.5" ry="15.5" fill="#f3cfae"/>
+      <ellipse cx="53.5" cy="49.5" rx="2.8" ry="3.4" fill="#1d140d"/>
+      <ellipse cx="66.5" cy="49.5" rx="2.8" ry="3.4" fill="#1d140d"/>
+      <circle cx="54.5" cy="48.3" r="1" fill="#fff"/>
+      <circle cx="67.5" cy="48.3" r="1" fill="#fff"/>
+      <circle cx="49" cy="57" r="3.2" fill="#f2a08f" opacity="0.8"/>
+      <circle cx="71" cy="57" r="3.2" fill="#f2a08f" opacity="0.8"/>
+      <path d="M54 58 q6 5.5 12 0" fill="none" stroke="#7a2a1e" stroke-width="2"/>
+    </g>
+  </symbol>
+  <symbol id="eraser-art" viewBox="0 0 64 30">
+    <rect x="2" y="2" width="60" height="16" rx="3" fill="#a8733f"/>
+    <rect x="2" y="2" width="60" height="5" rx="2" fill="#c08a53"/>
+    <rect x="3" y="18" width="58" height="10" rx="2" fill="#e9e6da"/>
+    <path d="M8 23h48" stroke="#cfcabb" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M16.5 9a4.5 4.5 0 0 1 0 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-zoom" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></symbol>
+  <symbol id="i-math" viewBox="0 0 48 48"><path d="M8 14h12M14 8v12M28 14h12M9 30l10 10M19 30l-10 10M28 35h12M34 29.5v.01M34 40.5v.01"/></symbol>
+  <symbol id="i-book" viewBox="0 0 48 48"><path d="M6 11c6-2 12-2 18 2 6-4 12-4 18-2v26c-6-2-12-2-18 2-6-4-12-4-18-2z"/><path d="M24 13v26M11 18c3-.6 6-.4 9 1M11 24c3-.6 6-.4 9 1M28 19c3-1.4 6-1.6 9-1M28 25c3-1.4 6-1.6 9-1"/></symbol>
+</svg>
+
+<div class="board" id="board">
+  <header class="top">
+    <svg class="mascot" aria-hidden="true"><use href="#mascot"/></svg>
+    <div class="top-title">
+      <h1 class="chalk-text">小波老師</h1>
+      <p class="chalk-text">不直接給答案，陪你一步一步想</p>
+    </div>
+    <button class="eraser-btn" id="restart" type="button" hidden>
+      <svg class="eraser-art" aria-hidden="true"><use href="#eraser-art"/></svg>
+      <span class="chalk-text">換一題</span>
+    </button>
+  </header>
+  <p class="demo-flag chalk-text" id="demoFlag" hidden>示範模式：回答是預先寫好的，不會真的看照片</p>
+
+  <!-- 密碼 -->
+  <section class="gate" id="gate" hidden>
+    <form class="gate-card" id="gateForm">
+      <svg class="mascot" aria-hidden="true"><use href="#mascot"/></svg>
+      <h2 class="chalk-text">嗨！我是小波老師</h2>
+      <p class="chalk-text">請輸入老師給你的班級密碼</p>
+      <input id="gateInput" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="班級密碼" aria-describedby="gateError" required>
+      <p class="gate-error chalk-text" id="gateError" role="alert"></p>
+      <button class="send" type="submit"><span>開始</span><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+    </form>
+  </section>
+
+  <ol class="steps" id="steps" aria-label="解題步驟" hidden>
+    <li data-stage="read"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span class="chalk-text">看懂題目</span></li>
+    <li data-stage="plan"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span class="chalk-text">想方法</span></li>
+    <li data-stage="do"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span class="chalk-text">動手做</span></li>
+    <li data-stage="check"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span class="chalk-text">檢查</span></li>
+  </ol>
+
+  <main class="chat" id="chat" aria-live="polite" hidden></main>
+
+  <footer class="tray" id="tray" hidden>
+    <p class="quota" id="quota" role="status" hidden></p>
+    <div class="choices" id="choices" aria-label="可以直接點的回答"></div>
+    <div class="helpers" id="helpers"></div>
+    <div class="preview" id="preview" hidden>
+      <img id="previewImg" alt="準備送出的照片">
+      <button type="button" id="previewRemove" aria-label="不要這張照片"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <form class="composer" id="composer">
+      <button class="camera" type="button" id="cameraBtn" aria-label="拍題目">
+        <svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg>
+      </button>
+      <input type="file" id="fileInput" accept="image/*" capture="environment" hidden>
+      <textarea id="input" rows="1" placeholder="打字或用說的" aria-label="想對老師說的話"></textarea>
+      <button class="mic" type="button" id="micBtn" aria-label="用說的" hidden>
+        <svg class="icon" aria-hidden="true"><use href="#i-mic"/></svg>
+      </button>
+      <button class="send" type="submit" id="sendBtn" aria-label="送出"><span>送出</span><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+    </form>
+  </footer>
+</div>
+
+<dialog class="lightbox" id="lightbox" aria-label="放大的照片">
+  <img id="lightboxImg" alt="你拍的作業照片（放大）">
+  <form method="dialog"><button><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>關閉</button></form>
+</dialog>
+
+<script>
+// 部署 Worker 之後，把網址填在這裡
+const API_URL = "https://owl-tutor.fr80770055re.workers.dev";
+
+const DEMO = new URLSearchParams(location.search).has("demo");
+const STORE_PASS = "tutor.passcode";
+const STORE_CHAT = "tutor.chat";
+const STORE_DEVICE = "tutor.device";
+const HELPERS = ["我不懂", "再給我提示", "我算出來了"];
+const STAGES = ["read", "plan", "do", "check"];
+const SUBJECTS = { math: "數學", chinese: "國語" };
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)");
+
+const $ = (id) => document.getElementById(id);
+const els = {
+  board: $("board"),
+  gate: $("gate"), gateForm: $("gateForm"), gateInput: $("gateInput"), gateError: $("gateError"),
+  chat: $("chat"), tray: $("tray"), steps: $("steps"), choices: $("choices"), helpers: $("helpers"),
+  input: $("input"), composer: $("composer"), sendBtn: $("sendBtn"),
+  cameraBtn: $("cameraBtn"), fileInput: $("fileInput"), micBtn: $("micBtn"),
+  preview: $("preview"), previewImg: $("previewImg"), previewRemove: $("previewRemove"),
+  restart: $("restart"), demoFlag: $("demoFlag"), quota: $("quota"),
+  lightbox: $("lightbox"), lightboxImg: $("lightboxImg"),
+};
+
+const state = {
+  passcode: "",
+  subject: null,
+  messages: [],       // { role: "user", text, image? } | { role: "assistant", reply }
+  pendingImage: null, // { media_type, data, url }
+  busy: false,
+};
+
+// ---------- 儲存（只存在這台裝置，失敗也不影響使用） ----------
+function load(key, fallback) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
+}
+function save(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+}
+function saveChat() {
+  const data = { subject: state.subject, messages: state.messages };
+  try {
+    sessionStorage.setItem(STORE_CHAT, JSON.stringify(data));
+  } catch {
+    // 照片太大存不下就只存文字
+    try {
+      sessionStorage.setItem(STORE_CHAT, JSON.stringify({
+        subject: state.subject,
+        messages: state.messages.map(({ image, ...m }) => (image ? { ...m, text: m.text || "（照片）" } : m)),
+      }));
+    } catch {}
+  }
+}
+function loadChat() {
+  try { return JSON.parse(sessionStorage.getItem(STORE_CHAT)); } catch { return null; }
+}
+
+// 每台裝置一組隨機碼，只用來計算每天的提問次數
+function deviceId() {
+  let id = load(STORE_DEVICE, "");
+  if (!/^[A-Za-z0-9-]{8,64}$/.test(id)) {
+    id = "d-" + (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36));
+    save(STORE_DEVICE, id);
+  }
+  return id;
+}
+
+function showQuota(remaining) {
+  const show = typeof remaining === "number" && remaining <= 5;
+  els.quota.hidden = !show;
+  if (show) els.quota.textContent = remaining > 0 ? `今天還可以問 ${remaining} 次` : "今天的提問次數用完了";
+}
+
+// ---------- 畫面 ----------
+function svgUse(id, cls) {
+  return `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+}
+function scrollDown() {
+  requestAnimationFrame(() => els.chat.scrollTo({ top: els.chat.scrollHeight, behavior: REDUCED.matches ? "auto" : "smooth" }));
+}
+
+// 老師的話：粉筆寫在黑板上；舊的字變淡，眼前只有一個問題
+function addTeacher(text, { animate = true } = {}) {
+  els.chat.querySelectorAll(".say:not(.past)").forEach((el) => el.classList.add("past"));
+  const row = document.createElement("div");
+  row.className = "say";
+  row.innerHTML = svgUse("mascot", "mascot") + '<div class="say-body"><p class="say-text chalk-text"></p></div>';
+  const p = row.querySelector(".say-text");
+  if (animate && !REDUCED.matches) {
+    p.setAttribute("aria-label", text);
+    let i = 0;
+    for (const ch of text) {
+      const s = document.createElement("span");
+      s.className = "ch";
+      s.setAttribute("aria-hidden", "true");
+      s.style.setProperty("--i", Math.min(i++, 70));
+      s.textContent = ch;
+      p.append(s);
+    }
+  } else {
+    p.textContent = text;
+  }
+  if ("speechSynthesis" in window) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "speak";
+    btn.setAttribute("aria-pressed", "false");
+    btn.innerHTML = svgUse("i-speaker", "icon") + "<span>念給我聽</span>";
+    btn.addEventListener("click", () => speak(text, btn));
+    row.querySelector(".say-body").append(btn);
+  }
+  els.chat.append(row);
+  scrollDown();
+  return row;
+}
+
+// 孩子的話：用磁鐵釘上去的紙條
+function addKid(text, imageUrl) {
+  const row = document.createElement("div");
+  row.className = "slip-row";
+  const slip = document.createElement("div");
+  slip.className = "slip";
+  if (imageUrl) {
+    slip.classList.add("has-photo");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "photo";
+    btn.setAttribute("aria-label", "放大看照片");
+    const img = document.createElement("img");
+    img.src = imageUrl;
+    img.alt = "你拍的作業照片";
+    btn.append(img);
+    btn.insertAdjacentHTML("beforeend", '<span class="mag"></span><span class="mag"></span><span class="mag"></span><span class="mag"></span><span class="zoom">' + svgUse("i-zoom", "icon") + "放大</span>");
+    btn.addEventListener("click", () => openPhoto(imageUrl));
+    slip.append(btn);
+  }
+  if (text) {
+    const t = document.createElement("div");
+    t.className = "slip-caption";
+    t.textContent = text;
+    slip.append(t);
+  }
+  row.append(slip);
+  els.chat.append(row);
+  scrollDown();
+}
+
+function openPhoto(url) {
+  els.lightboxImg.src = url;
+  if (typeof els.lightbox.showModal === "function") els.lightbox.showModal();
+}
+
+function showThinking() {
+  const row = document.createElement("div");
+  row.className = "say thinking";
+  row.innerHTML = svgUse("mascot", "mascot") + '<div class="say-body"><p class="say-text chalk-text"><span class="dot"></span><span class="dot"></span><span class="dot"></span>小波想一想…</p></div>';
+  els.chat.append(row);
+  scrollDown();
+  return row;
+}
+
+function showNotice(text, retry) {
+  const div = document.createElement("div");
+  div.className = "notice";
+  div.setAttribute("role", "alert");
+  div.innerHTML = '<p class="chalk-text"></p>';
+  div.querySelector("p").textContent = text;
+  if (retry) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "tag";
+    btn.textContent = "再試一次";
+    btn.addEventListener("click", () => { div.remove(); retry(); });
+    div.append(btn);
+  }
+  els.chat.append(div);
+  scrollDown();
+}
+
+function setStage(stage) {
+  els.steps.hidden = false;
+  els.steps.classList.toggle("all-done", stage === "done");
+  const idx = STAGES.indexOf(stage);
+  els.steps.querySelectorAll("li").forEach((li, i) => {
+    const now = i === idx;
+    li.classList.toggle("now", now);
+    li.classList.toggle("past", idx > -1 && i < idx);
+    if (now) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current");
+  });
+}
+
+function renderChips(choices = [], stage) {
+  els.choices.innerHTML = "";
+  els.helpers.innerHTML = "";
+  if (stage === "done") {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "card next";
+    b.innerHTML = svgUse("i-camera", "icon") + "<span>拍下一題</span>";
+    b.addEventListener("click", async () => { await restart(); els.fileInput.click(); });
+    els.choices.append(b);
+    return;
+  }
+  for (const c of choices) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "card";
+    b.textContent = c;
+    b.addEventListener("click", () => !state.busy && send(c));
+    els.choices.append(b);
+  }
+  if (state.messages.length === 0) return;
+  for (const h of HELPERS) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "tag";
+    b.textContent = h;
+    b.addEventListener("click", () => {
+      if (state.busy) return;
+      if (h === "我算出來了") {
+        els.input.value = "我算出來了，答案是 ";
+        autoGrow();
+        els.input.focus();
+        els.input.setSelectionRange(els.input.value.length, els.input.value.length);
+        return;
+      }
+      send(h);
+    });
+    els.helpers.append(b);
+  }
+}
+
+function renderStart(animate) {
+  addTeacher("嗨！我是小波老師。\n我不會直接告訴你答案，但我會陪你一步一步想出來。\n今天要問哪一科呢？", { animate });
+  const box = document.createElement("div");
+  box.className = "subjects";
+  box.innerHTML = `
+    <button type="button" class="subject" data-subject="math" aria-pressed="false">${svgUse("i-math", "icon")}數學<small>算式、應用題</small></button>
+    <button type="button" class="subject" data-subject="chinese" aria-pressed="false">${svgUse("i-book", "icon")}國語<small>國字、造句、閱讀</small></button>`;
+  box.querySelectorAll(".subject").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.subject = btn.dataset.subject;
+      box.querySelectorAll(".subject").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+      saveChat();
+      if (state.messages.length === 0) {
+        els.chat.querySelector(".say.pick-reply")?.remove();
+        const r = addTeacher(`好，我們來看${SUBJECTS[state.subject]}！\n按左下角黃色的相機把題目拍下來，或用說的、打字告訴我是哪一題。`);
+        r.classList.add("pick-reply");
+      }
+      els.input.placeholder = "例如：第 3 題不會";
+    });
+  });
+  els.chat.append(box);
+}
+
+function renderAll({ animate = false } = {}) {
+  els.chat.innerHTML = "";
+  renderStart(animate && state.messages.length === 0);
+  if (state.subject) {
+    els.chat.querySelector(`[data-subject="${state.subject}"]`)?.setAttribute("aria-pressed", "true");
+  }
+  let last = null;
+  for (const m of state.messages) {
+    if (m.role === "user") {
+      addKid(m.text, m.image ? `data:${m.image.media_type};base64,${m.image.data}` : null);
+    } else {
+      addTeacher(m.reply.reply, { animate: false });
+      last = m.reply;
+    }
+  }
+  if (last) setStage(last.stage);
+  else els.steps.hidden = true;
+  renderChips(last?.choices, last?.stage);
+  els.restart.hidden = state.messages.length === 0;
+}
+
+// ---------- 送出 ----------
+async function send(text) {
+  text = (text ?? els.input.value).trim();
+  const image = state.pendingImage;
+  if (state.busy || (!text && !image)) return;
+
+  stopListening();
+  const msg = { role: "user", text };
+  if (image) msg.image = { media_type: image.media_type, data: image.data };
+  state.messages.push(msg);
+  addKid(text, image?.url);
+  els.input.value = "";
+  autoGrow();
+  clearImage();
+  els.restart.hidden = false;
+  saveChat();
+  await ask();
+}
+
+async function ask() {
+  state.busy = true;
+  els.sendBtn.disabled = true;
+  els.choices.innerHTML = "";
+  els.helpers.innerHTML = "";
+  const thinking = showThinking();
+  try {
+    const reply = DEMO ? await demoReply() : await callApi();
+    thinking.remove();
+    state.messages.push({ role: "assistant", reply });
+    saveChat();
+    addTeacher(reply.reply);
+    setStage(reply.stage);
+    renderChips(reply.choices, reply.stage);
+    showQuota(reply.remaining);
+  } catch (err) {
+    thinking.remove();
+    if (err.code === "daily_limit" || err.code === "out_of_credit") {
+      showQuota(err.code === "daily_limit" ? 0 : null);
+      showNotice(err.message);
+      els.choices.innerHTML = "";
+      els.helpers.innerHTML = "";
+      return;
+    }
+    if (err.code === "wrong_passcode") {
+      save(STORE_PASS, "");
+      showGate("密碼好像不對，請再輸入一次。");
+      return;
+    }
+    showNotice(err.message || "連線出了點問題。", () => ask());
+    renderChips([]);
+  } finally {
+    state.busy = false;
+    els.sendBtn.disabled = false;
+  }
+}
+
+async function callApi() {
+  if (!API_URL) throw new Error("老師還沒有把小波老師設定好，請先跟老師說。");
+  let res;
+  try {
+    res = await fetch(API_URL.replace(/\/$/, "") + "/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ passcode: state.passcode, deviceId: deviceId(), subject: state.subject, messages: state.messages }),
+    });
+  } catch {
+    throw new Error("網路好像斷掉了，檢查一下網路再試一次。");
+  }
+  const data = await res.json().catch(() => ({}));
+  if (res.ok && data.reply) return data;
+  const err = new Error(
+    data.error === "out_of_credit" ? "這個月小波老師的額度用完了，下個月再來找我喔！\n可以先自己想想看，或請老師、家人陪你看這一題。"
+    : data.error === "daily_limit" ? "今天的提問次數用完了，明天再來找小波老師喔！\n可以先自己想想看，或請老師、家人陪你看這一題。"
+    : data.error === "busy" ? "現在問問題的人很多，等一下下再試一次。"
+    : data.error === "bad_image" ? "這張照片太大或格式不對，換一張再試試看。"
+    : "小波老師暫時沒有回應，等一下再試一次。"
+  );
+  err.code = data.error;
+  throw err;
+}
+
+// ---------- 照片 ----------
+els.cameraBtn.addEventListener("click", () => els.fileInput.click());
+els.fileInput.addEventListener("change", async () => {
+  const file = els.fileInput.files?.[0];
+  els.fileInput.value = "";
+  if (!file) return;
+  try {
+    state.pendingImage = await compressImage(file);
+    els.previewImg.src = state.pendingImage.url;
+    els.preview.hidden = false;
+    els.input.placeholder = "要問第幾題？可以直接送出";
+  } catch {
+    showNotice("這張照片打不開，換一張或重拍一次。");
+  }
+});
+els.previewRemove.addEventListener("click", clearImage);
+function clearImage() {
+  state.pendingImage = null;
+  els.preview.hidden = true;
+  els.previewImg.removeAttribute("src");
+  els.input.placeholder = "打字或用說的";
+}
+
+// 縮到最長邊 1200px 的 JPEG：字還看得清楚，也比較省錢
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const max = 1200;
+      const scale = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+      const w = Math.round(img.naturalWidth * scale);
+      const h = Math.round(img.naturalHeight * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+      resolve({ media_type: "image/jpeg", data: dataUrl.split(",")[1], url: dataUrl });
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("load")); };
+    img.src = url;
+  });
+}
+
+// ---------- 語音輸入 ----------
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognizer = null;
+if (Recognition) {
+  els.micBtn.hidden = false;
+  els.micBtn.addEventListener("click", () => (recognizer ? stopListening() : startListening()));
+}
+function startListening() {
+  recognizer = new Recognition();
+  recognizer.lang = "zh-TW";
+  recognizer.interimResults = true;
+  recognizer.continuous = false;
+  const before = els.input.value;
+  recognizer.onresult = (e) => {
+    let said = "";
+    for (const r of e.results) said += r[0].transcript;
+    els.input.value = before + said;
+    autoGrow();
+  };
+  recognizer.onerror = (e) => {
+    if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+      showNotice("要先允許使用麥克風，才能用說的喔。");
+    }
+  };
+  recognizer.onend = () => {
+    recognizer = null;
+    els.micBtn.classList.remove("listening");
+    els.micBtn.setAttribute("aria-label", "用說的");
+  };
+  try {
+    recognizer.start();
+    els.micBtn.classList.add("listening");
+    els.micBtn.setAttribute("aria-label", "停止聽");
+  } catch {
+    recognizer = null;
+  }
+}
+function stopListening() {
+  recognizer?.stop();
+}
+
+// ---------- 朗讀 ----------
+let speakingBtn = null;
+function speak(text, btn) {
+  const synth = window.speechSynthesis;
+  const wasThis = speakingBtn === btn;
+  synth.cancel();
+  if (speakingBtn) speakingBtn.setAttribute("aria-pressed", "false");
+  speakingBtn = null;
+  if (wasThis) return;
+  const u = new SpeechSynthesisUtterance(text.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, ""));
+  u.lang = "zh-TW";
+  u.rate = 0.85;
+  const voices = synth.getVoices();
+  const voice = voices.find((v) => v.lang === "zh-TW") || voices.find((v) => v.lang.startsWith("zh"));
+  if (voice) u.voice = voice;
+  u.onend = u.onerror = () => { btn.setAttribute("aria-pressed", "false"); if (speakingBtn === btn) speakingBtn = null; };
+  btn.setAttribute("aria-pressed", "true");
+  speakingBtn = btn;
+  synth.speak(u);
+}
+
+// ---------- 輸入框 ----------
+function autoGrow() {
+  els.input.style.height = "auto";
+  els.input.style.height = Math.min(els.input.scrollHeight, 136) + "px";
+}
+els.input.addEventListener("input", autoGrow);
+els.input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
+    e.preventDefault();
+    send();
+  }
+});
+els.composer.addEventListener("submit", (e) => { e.preventDefault(); send(); });
+
+// ---------- 擦黑板（換一題） ----------
+els.restart.addEventListener("click", restart);
+async function restart() {
+  if (state.busy) return;
+  window.speechSynthesis?.cancel();
+  if (!REDUCED.matches && els.chat.animate) await wipeBoard();
+  state.messages = [];
+  clearImage();
+  saveChat();
+  renderAll();
+  addTeacher("黑板擦乾淨了！把新的題目拍下來給我看。");
+}
+function wipeBoard() {
+  const width = els.chat.clientWidth;
+  const eraser = document.createElement("div");
+  eraser.className = "wipe-eraser";
+  eraser.style.top = els.chat.offsetTop + "px";
+  eraser.style.height = els.chat.clientHeight + "px";
+  eraser.innerHTML = '<svg aria-hidden="true"><use href="#eraser-art"/></svg>';
+  els.board.append(eraser);
+  const timing = { duration: 720, easing: "cubic-bezier(0.45, 0, 0.2, 1)", fill: "forwards" };
+  eraser.animate([{ transform: "translateX(-64px)" }, { transform: `translateX(${width}px)` }], timing);
+  const wipe = els.chat.animate(
+    [{ clipPath: "inset(0 0 0 0)", filter: "blur(0)" }, { clipPath: "inset(0 0 0 100%)", filter: "blur(2px)" }],
+    timing,
+  );
+  return wipe.finished.then(() => {
+    eraser.remove();
+    wipe.cancel();
+  });
+}
+
+// ---------- 密碼 ----------
+function showGate(message = "") {
+  els.gate.hidden = false;
+  els.chat.hidden = els.tray.hidden = els.steps.hidden = true;
+  els.restart.hidden = true;
+  els.gateError.textContent = message;
+  els.gateInput.value = "";
+  els.gateInput.focus();
+}
+els.gateForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const v = els.gateInput.value.trim();
+  if (!v) return;
+  state.passcode = v;
+  save(STORE_PASS, v);
+  els.gate.hidden = true;
+  openChat();
+  // 如果是密碼錯誤被退回，補問剛剛那一句
+  if (state.messages[state.messages.length - 1]?.role === "user") ask();
+});
+
+function openChat() {
+  els.chat.hidden = els.tray.hidden = false;
+  renderAll({ animate: true });
+}
+
+// ---------- 示範模式 ----------
+const DEMO_SCRIPT = [
+  { reply: "我看到第 1 題：3/4 + 1/8 = ?\n你是要問這一題嗎？", choices: ["對，是這題", "不是，是別題"], stage: "read" },
+  { reply: "好！先看看這兩個分數的分母（下面的數字），它們一樣嗎？", choices: ["一樣", "不一樣"], stage: "read" },
+  { reply: "你看得很仔細！一個是 4，一個是 8。\n分母不一樣的時候，要先把分母變成一樣。你覺得可以都變成多少？", choices: ["都變成 8", "都變成 4", "都變成 12"], stage: "plan" },
+  { reply: "好想法！那 3/4 要變成分母是 8 的分數。\n想想看：4 要乘以多少才會變成 8？分子也要乘一樣的數喔。", choices: [], stage: "do" },
+  { reply: "你一步一步算，很認真！現在兩個分數的分母都是 8 了。\n接下來分子要怎麼辦呢？", choices: ["分子相加", "分子相乘", "分母也相加"], stage: "do" },
+  { reply: "沒錯，分母一樣，就把分子加起來。\n你算出來是多少？用一句話告訴我你怎麼算的。", choices: [], stage: "check" },
+  { reply: "你自己先把分母變一樣，再把分子相加，這就是「通分」！\n這題是你自己完成的。想問下一題，就再拍一張給我看。", choices: [], stage: "done" },
+];
+function demoReply() {
+  const turn = state.messages.filter((m) => m.role === "assistant").length;
+  const r = DEMO_SCRIPT[Math.min(turn, DEMO_SCRIPT.length - 1)];
+  return new Promise((resolve) => setTimeout(() => resolve({ subject: "math", ...r }), 900));
+}
+
+// ---------- 啟動 ----------
+(function init() {
+  const saved = loadChat();
+  if (saved) {
+    state.subject = saved.subject || null;
+    state.messages = Array.isArray(saved.messages) ? saved.messages : [];
+    if (state.messages[state.messages.length - 1]?.role === "user") state.messages.pop();
+  }
+  if (DEMO) {
+    els.demoFlag.hidden = false;
+    openChat();
+    return;
+  }
+  state.passcode = load(STORE_PASS, "");
+  if (state.passcode) openChat();
+  else showGate();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+name = "owl-tutor"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+# 台灣的連線常由香港機房處理，但 Anthropic API 不接受來自香港的請求。
+# 固定在美國東部執行，呼叫 API 才不會被拒絕（403 Request not allowed）。
+[placement]
+region = "aws:us-east-1"
+
+[vars]
+# 允許呼叫這個 API 的網頁來源，逗號分隔（GitHub Pages 網址只要寫到網域，不含路徑）
+ALLOWED_ORIGINS = "https://fr80770055re-tech.github.io"
+# 每台裝置每天最多問幾輪（老師回答一次算一輪）
+DAILY_TURNS = "40"
+# 可選：改模型或思考深度
+# MODEL = "claude-opus-5-5"
+# 思考深度：實測 medium 偶爾會記錯孩子寫的數字，high 正確且每輪花費差不多
+EFFORT = "high"
+# API 金鑰沒有綁定工作區時，填 Claude Console 的工作區 ID（wrkspc_ 開頭）
+# ANTHROPIC_WORKSPACE_ID = "wrkspc_..."
+
+# 記錄每天提問次數（Cloudflare KV，免費方案每天可寫 1000 次）
+[[kv_namespaces]]
+binding = "USAGE"
+id = "a57666a4481e41d29a26a5eb085a8ce9"
+
+# 以下兩個是機密，請用指令設定，不要寫在這個檔案：
+#   npx wrangler secret put ANTHROPIC_API_KEY
+#   npx wrangler secret put CLASS_PASSCODE

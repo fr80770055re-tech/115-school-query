@@ -15,6 +15,33 @@
         "value": "lxgw wenkai tc",
         "createdAt": "2026-10-05T12:06:52.747Z",
         "reason": "same as above: memo/ notebook direction chosen by user"
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "tutor/index.html"
+        ],
+        "createdAt": "2026-10-07T09:52:57.506Z",
+        "reason": "Claude: previewImg/lightboxImg get src at runtime and live in hidden containers until then"
+      },
+      {
+        "rule": "clipped-overflow-container",
+        "value": "*",
+        "files": [
+          "tutor/index.html"
+        ],
+        "createdAt": "2026-10-07T09:52:57.518Z",
+        "reason": "Claude: the wipe eraser is meant to be clipped inside the board frame"
+      },
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          "tutor/index.html"
+        ],
+        "createdAt": "2026-10-07T09:56:31.840Z",
+        "reason": "Claude: dots are the loading state while the tutor replies, not decoration"
       }
     ]
   }
