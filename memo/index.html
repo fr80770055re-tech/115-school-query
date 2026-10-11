@@ -266,6 +266,52 @@
   .hint.is-error { color: var(--overdue); }
   .hint:empty { display: none; }
 
+  /* ---------- Category switch (公務／私人) and filter ---------- */
+  .field-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: -4px 0 8px;
+  }
+  .field-row .field-label { margin: 0; }
+  .seg {
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    background: var(--paper);
+  }
+  .seg button {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    min-height: 34px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 34px;
+    transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+  }
+  .seg button:hover { color: var(--ink); }
+  .seg button[aria-checked="true"] { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+  .seg small { font-size: 12px; font-weight: 400; opacity: 0.8; font-variant-numeric: tabular-nums; }
+  .filter-row { padding: 2px 16px 10px calc(var(--margin-w) + 12px); }
+  .cat {
+    padding: 0 6px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 5px;
+    color: var(--ink-soft);
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .cat.is-none { border-style: dashed; color: var(--ink-faint); }
+  .editor .seg { margin-bottom: 14px; }
+
   /* ---------- Ledger ---------- */
   .sheet {
     margin-top: 20px;
@@ -647,6 +693,18 @@ function dueInfo(due) {
 }
 
 const CHECK_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle class="disc" cx="12" cy="12" r="10.2"/><circle class="ring" cx="12" cy="12" r="10"/><path class="tick" d="M7.5 12.4l3 3 6-6.4"/></svg>';
+const CATS = { work: '公務', personal: '私人' };
+const catOf = it => (it && CATS[it.category] ? it.category : null);
+const segHTML = (name, label, options, value) =>
+  `<div class="seg" role="radiogroup" aria-label="${label}" data-seg="${name}">` +
+  options.map(([val, text]) => `<button type="button" role="radio" data-val="${val}" aria-checked="${val === value}">${text}</button>`).join('') +
+  '</div>';
+const pickSeg = btn => {
+  btn.parentElement.querySelectorAll('[role="radio"]').forEach(b => b.setAttribute('aria-checked', String(b === btn)));
+  return btn.dataset.val;
+};
+const readPref = k => { try { return localStorage.getItem(k); } catch (_) { return null; } };
+const writePref = (k, v) => { try { localStorage.setItem(k, v); } catch (_) {} };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 /* ---------- Stores ---------- */
@@ -667,13 +725,15 @@ function demoStore() {
   const t = startOfToday();
   const at = (days, h) => addDays(t, days).getTime() + h * 3600000;
   let data = {
-    a1: { text: '繳交 115-1 課後班名冊給教務處', createdAt: at(-9, 9), due: dateKey(addDays(t, -1)) },
-    a2: { text: '確認夜光天使十月份點心廠商', createdAt: at(-9, 15) },
-    a3: { text: '社團成果發表場地借用單', createdAt: at(-5, 10), due: dateKey(t) },
-    a4: { text: '週三晨會報告：校外教學行前說明，記得帶簽到表', createdAt: at(-2, 8), due: dateKey(addDays(t, 2)) },
-    a5: { text: '更新本週課後班上課情形照片', createdAt: at(-2, 13), due: dateKey(addDays(t, 1)) },
-    a6: { text: '期中評量命題（三年級數學）', createdAt: at(0, 7), due: dateKey(addDays(t, 16)) },
-    d1: { text: '回覆家長關於接送時間的訊息', createdAt: at(-6, 9), doneAt: at(-1, 17) },
+    a1: { text: '繳交 115-1 課後班名冊給教務處', createdAt: at(-9, 9), due: dateKey(addDays(t, -1)), category: 'work' },
+    a2: { text: '確認夜光天使十月份點心廠商', createdAt: at(-9, 15), category: 'work' },
+    p1: { text: '繳電話費', createdAt: at(-4, 20), due: dateKey(addDays(t, 3)), category: 'personal' },
+    a3: { text: '社團成果發表場地借用單', createdAt: at(-5, 10), due: dateKey(t), category: 'work' },
+    a4: { text: '週三晨會報告：校外教學行前說明，記得帶簽到表', createdAt: at(-2, 8), due: dateKey(addDays(t, 2)), category: 'work' },
+    a5: { text: '更新本週課後班上課情形照片', createdAt: at(-2, 13), due: dateKey(addDays(t, 1)), category: 'work' },
+    p2: { text: '週末帶媽媽回診，順便拿處方箋', createdAt: at(-1, 21), due: dateKey(addDays(t, 5)), category: 'personal' },
+    a6: { text: '期中評量命題（三年級數學）', createdAt: at(0, 7), due: dateKey(addDays(t, 16)), category: 'work' },
+    d1: { text: '回覆家長關於接送時間的訊息', createdAt: at(-6, 9), doneAt: at(-1, 17), category: 'work' },
   };
   let listener = () => {};
   const emit = () => setTimeout(() => listener(JSON.parse(JSON.stringify(data))), 0);
@@ -759,6 +819,8 @@ function startNotebook(store, { uid, onSignOut } = {}) {
   let chosen = { id: 'none', due: null };
   let customDue = null;
   let freshId = null;
+  let category = CATS[readPref('memo-cat')] ? readPref('memo-cat') : 'work';
+  let filter = ['all', 'work', 'personal'].includes(readPref('memo-filter')) ? readPref('memo-filter') : 'all';
 
   const todayD = startOfToday();
   app.innerHTML = `
@@ -773,7 +835,10 @@ function startNotebook(store, { uid, onSignOut } = {}) {
     <p class="status" id="status" role="status"></p>
 
     <form class="composer" id="composer" novalidate>
-      <label class="field-label" for="memoText">事由</label>
+      <div class="field-row">
+        <label class="field-label" for="memoText">事由</label>
+        ${segHTML('cat', '類別', [['work', '公務'], ['personal', '私人']], category)}
+      </div>
       <textarea id="memoText" rows="2" maxlength="${MAX_LEN}" enterkeyhint="done" placeholder="要記得做什麼？"></textarea>
       <fieldset class="chips" id="chips" role="radiogroup" aria-labelledby="dueLabel">
         <legend class="field-label" id="dueLabel" style="float:left;width:100%">時限</legend>
@@ -786,6 +851,7 @@ function startNotebook(store, { uid, onSignOut } = {}) {
 
     <section class="sheet">
     <div class="ledger-head"><h2 id="ledgerTitle">待辦，依新增先後</h2><span id="ledgerCount"></span></div>
+    <div class="filter-row" id="filterRow"></div>
     <ol class="ledger" id="ledger" aria-labelledby="ledgerTitle"></ol>
 
     <section class="done-wrap" id="doneWrap" hidden>
@@ -847,6 +913,13 @@ function startNotebook(store, { uid, onSignOut } = {}) {
     if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); $('composer').requestSubmit(); }
   });
 
+  $('composer').addEventListener('click', e => {
+    const b = e.target.closest('[data-seg="cat"] [role="radio"]');
+    if (!b) return;
+    category = pickSeg(b);
+    writePref('memo-cat', category);
+  });
+
   $('composer').addEventListener('submit', e => {
     e.preventDefault();
     const text = textEl.value.trim();
@@ -858,6 +931,7 @@ function startNotebook(store, { uid, onSignOut } = {}) {
     }
     const data = { text };
     if (chosen.due) data.due = chosen.due;
+    data.category = category;
     const p = store.add(data);
     freshId = p.key || null;
     p.catch(saveFailed);
@@ -882,6 +956,8 @@ function startNotebook(store, { uid, onSignOut } = {}) {
     const cls = ['entry'];
     if (info) cls.push('is-' + info.tone);
     if (it.id === freshId) cls.push('is-new');
+    const cat = catOf(it);
+    const tag = cat ? `<span class="cat">${CATS[cat]}</span>` : '<span class="cat is-none">未分類</span>';
     let meta;
     if (done) {
       meta = `<span>${md(new Date(it.doneAt))} 完成</span>`;
@@ -891,6 +967,7 @@ function startNotebook(store, { uid, onSignOut } = {}) {
       meta = '<span>未定時限</span>';
     }
     const dateLabel = `${sameYear ? '' : c.getFullYear() + '/'}${md(c)} ${wd(c)}新增`;
+    meta = tag + meta;
     return `
       <li class="${cls.join(' ')}" data-id="${esc(it.id)}">
         <div class="entry-date"${showDate ? '' : ' aria-hidden="true"'}>
@@ -923,7 +1000,17 @@ function startNotebook(store, { uid, onSignOut } = {}) {
       .map(([id, v]) => ({ id, ...v }));
     const open = all.filter(x => !x.doneAt).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
     const done = all.filter(x => x.doneAt).sort((a, b) => b.doneAt - a.doneAt);
-    return { open, done };
+    const keep = x => filter === 'all' || catOf(x) === filter;
+    return { open: open.filter(keep), done: done.filter(keep), allOpen: open };
+  }
+
+  function renderFilter(allOpen) {
+    const n = c => allOpen.filter(x => catOf(x) === c).length;
+    $('filterRow').innerHTML = segHTML('filter', '篩選類別', [
+      ['all', `全部<small>${allOpen.length}</small>`],
+      ['work', `公務<small>${n('work')}</small>`],
+      ['personal', `私人<small>${n('personal')}</small>`],
+    ], filter);
   }
 
   function renderTally(open) {
@@ -933,7 +1020,6 @@ function startNotebook(store, { uid, onSignOut } = {}) {
       `<li>待辦 <b>${open.length}</b></li>` +
       (overdue ? `<li class="t-overdue">逾期 <b>${overdue}</b></li>` : '') +
       (soon ? `<li class="t-soon">今明到期 <b>${soon}</b></li>` : '');
-    $('ledgerCount').textContent = open.length ? `共 ${open.length} 筆` : '';
   }
 
   function render() {
@@ -941,14 +1027,17 @@ function startNotebook(store, { uid, onSignOut } = {}) {
       ledger.innerHTML = '<li class="empty">翻開記事簿…</li>';
       return;
     }
-    const { open, done } = split();
-    renderTally(open);
+    const { open, done, allOpen } = split();
+    renderTally(allOpen);
+    renderFilter(allOpen);
     if (editingId || striking.size) { pendingRender = true; return; }
     pendingRender = false;
 
     ledger.innerHTML = open.length
       ? listHTML(open, false)
-      : `<li class="empty">${done.length ? '全部做完了，好好休息。' : '這頁還空著。在上面寫下第一件要記得的事。'}</li>`;
+      : `<li class="empty">${filter !== 'all' && allOpen.length ? `${CATS[filter]}目前沒有待辦。` : done.length ? '全部做完了，好好休息。' : '這頁還空著。在上面寫下第一件要記得的事。'}</li>`;
+    $('ledgerCount').textContent = open.length ? `共 ${open.length} 筆` : '';
+    $('clearDone').textContent = filter === 'all' ? '清除全部已完成' : `清除已完成的${CATS[filter]}`;
     freshId = null;
 
     $('doneWrap').hidden = !done.length;
@@ -957,6 +1046,15 @@ function startNotebook(store, { uid, onSignOut } = {}) {
     $('doneBody').hidden = !doneOpen;
     $('doneList').innerHTML = doneOpen ? listHTML(done, true) : '';
   }
+
+  $('filterRow').addEventListener('click', e => {
+    const b = e.target.closest('[role="radio"]');
+    if (!b) return;
+    filter = pickSeg(b);
+    writePref('memo-filter', filter);
+    pendingRender = true;
+    flush();
+  });
 
   function flush() { if (pendingRender && !editingId && !striking.size) render(); }
 
@@ -987,6 +1085,8 @@ function startNotebook(store, { uid, onSignOut } = {}) {
       <form class="editor" novalidate>
         <label class="field-label" for="editText">事由</label>
         <textarea id="editText" maxlength="${MAX_LEN}" rows="2">${esc(it.text)}</textarea>
+        <span class="field-label">類別</span>
+        ${segHTML('editcat', '類別', [['work', '公務'], ['personal', '私人']], catOf(it))}
         <label class="field-label" for="editDue">時限</label>
         <div class="editor-due">
           <input class="date-input" type="date" id="editDue" value="${it.due || ''}">
@@ -1037,6 +1137,8 @@ function startNotebook(store, { uid, onSignOut } = {}) {
       }
       return;
     }
+    const seg = e.target.closest('[data-seg="editcat"] [role="radio"]');
+    if (seg) { pickSeg(seg); return; }
     if (!row.classList.contains('is-editing') && e.target.closest('.entry-body')) openEditor(row);
   });
   ledger.addEventListener('keydown', e => {
@@ -1051,7 +1153,10 @@ function startNotebook(store, { uid, onSignOut } = {}) {
     const text = row.querySelector('#editText').value.trim();
     const due = row.querySelector('#editDue').value || null;
     if (!text) { row.querySelector('#editText').focus(); toast('事由不能空白；不需要了可以按「刪除」。'); return; }
-    store.update(id, { text, due }).catch(saveFailed);
+    const picked = row.querySelector('[data-seg="editcat"] [aria-checked="true"]');
+    const patch = { text, due };
+    if (picked) patch.category = picked.dataset.val;
+    store.update(id, patch).catch(saveFailed);
     closeEditor(id);
   });
 

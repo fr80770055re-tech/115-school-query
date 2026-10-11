@@ -5,11 +5,24 @@
       ".write": "auth != null && auth.uid === $uid",
       "$memo": {
         ".validate": "newData.hasChildren(['text', 'createdAt'])",
-        "text": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 500" },
-        "due": { ".validate": "newData.isString() && newData.val().matches(/^20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]$/)" },
-        "createdAt": { ".validate": "newData.isNumber()" },
-        "doneAt": { ".validate": "newData.isNumber()" },
-        "$other": { ".validate": false }
+        "text": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 500"
+        },
+        "due": {
+          ".validate": "newData.isString() && newData.val().matches(/^20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]$/)"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "doneAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "category": {
+          ".validate": "newData.isString() && (newData.val() === 'work' || newData.val() === 'personal')"
+        },
+        "$other": {
+          ".validate": false
+        }
       }
     }
   }
