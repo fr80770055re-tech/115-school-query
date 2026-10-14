@@ -158,6 +158,35 @@
     color: var(--chalk-yellow);
   }
 
+  /* 本月額度：粉筆畫的進度條＋老師的提醒 */
+  .budget {
+    margin: 4px var(--gutter) 0;
+    font-family: var(--kai);
+    color: var(--chalk-dim);
+  }
+  .budget-row { display: flex; align-items: center; gap: 10px; font-size: 15px; }
+  .budget-row span:first-child { flex: none; }
+  .budget-bar {
+    position: relative;
+    flex: 1;
+    height: 10px;
+    border: 1.5px dashed var(--chalk-faint);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .budget-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0;
+    background: var(--chalk-yellow);
+    border-radius: 999px;
+    transition: width 0.8s var(--ease-out);
+  }
+  .budget-fill.low { background: var(--chalk-coral); }
+  .budget-num { flex: none; color: var(--chalk); font-variant-numeric: tabular-nums; }
+  .budget-note { margin: 4px 0 0; font-size: 14px; line-height: 1.6; }
+  .budget-turns { white-space: nowrap; }
+
   /* 解題步驟：粉筆寫在板面上方 */
   .steps {
     display: flex;
@@ -683,6 +712,14 @@
     </button>
   </header>
   <p class="demo-flag chalk-text" id="demoFlag" hidden>示範模式：回答是預先寫好的，不會真的看照片</p>
+  <section class="budget" aria-label="本月用量">
+    <div class="budget-row" id="budgetRow" hidden>
+      <span class="chalk-text">本月額度</span>
+      <span class="budget-bar" id="budgetBar" role="meter" aria-label="本月額度已用" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="budget-fill" id="budgetFill"></span></span>
+      <span class="budget-num chalk-text" id="budgetNum"></span>
+    </div>
+    <p class="budget-note chalk-text">浩宇老師自製自費，用量有限，請在真的無法指導跟找到答案的情況下酌量使用。<span class="budget-turns" id="budgetTurns"></span></p>
+  </section>
 
   <!-- 密碼 -->
   <section class="gate" id="gate" hidden>
@@ -754,6 +791,7 @@ const els = {
   cameraBtn: $("cameraBtn"), fileInput: $("fileInput"), micBtn: $("micBtn"),
   preview: $("preview"), previewImg: $("previewImg"), previewRemove: $("previewRemove"),
   restart: $("restart"), demoFlag: $("demoFlag"), quota: $("quota"),
+  budgetRow: $("budgetRow"), budgetBar: $("budgetBar"), budgetFill: $("budgetFill"), budgetNum: $("budgetNum"), budgetTurns: $("budgetTurns"),
   lightbox: $("lightbox"), lightboxImg: $("lightboxImg"),
 };
 
@@ -804,6 +842,31 @@ function showQuota(remaining) {
   const show = typeof remaining === "number" && remaining <= 5;
   els.quota.hidden = !show;
   if (show) els.quota.textContent = remaining > 0 ? `今天還可以問 ${remaining} 次` : "今天的提問次數用完了";
+}
+
+// 全班本月用量（伺服器依 token 估算的花費）
+function showUsage(u) {
+  if (!u || !u.budget) return;
+  const pct = Math.min(100, (u.usd / u.budget) * 100);
+  const shown = pct > 0 && pct < 1 ? "不到 1%" : `${Math.round(pct)}%`;
+  els.budgetRow.hidden = false;
+  els.budgetFill.style.width = pct + "%";
+  els.budgetFill.classList.toggle("low", pct >= 80);
+  els.budgetBar.setAttribute("aria-valuenow", String(Math.round(pct)));
+  els.budgetNum.textContent = `已用 ${shown}`;
+  els.budgetTurns.textContent = `全班這個月已經問了 ${u.turns} 次。`;
+}
+async function loadUsage() {
+  if (DEMO) return showUsage({ usd: 0.6, budget: 5, turns: 80 });
+  if (!API_URL || !state.passcode) return;
+  try {
+    const res = await fetch(API_URL.replace(/\/$/, "") + "/usage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ passcode: state.passcode }),
+    });
+    if (res.ok) showUsage(await res.json());
+  } catch {}
 }
 
 // ---------- 畫面 ----------
@@ -1043,6 +1106,7 @@ async function ask() {
     setStage(reply.stage);
     renderChips(reply.choices, reply.stage);
     showQuota(reply.remaining);
+    showUsage(reply.usage);
   } catch (err) {
     thinking.remove();
     if (err.code === "daily_limit" || err.code === "out_of_credit") {
@@ -1270,6 +1334,7 @@ els.gateForm.addEventListener("submit", (e) => {
 
 function openChat() {
   els.chat.hidden = els.tray.hidden = false;
+  loadUsage();
   renderAll({ animate: true });
 }
 

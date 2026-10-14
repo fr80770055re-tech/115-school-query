@@ -13,6 +13,8 @@ region = "aws:us-east-1"
 ALLOWED_ORIGINS = "https://fr80770055re-tech.github.io"
 # 每台裝置每天最多問幾輪（老師回答一次算一輪）
 DAILY_TURNS = "40"
+# 每月預算（美元），畫面上的額度條以此計算；請與 Claude Console 的花費上限設成一樣
+MONTHLY_BUDGET_USD = "5"
 # 可選：改模型或思考深度
 # MODEL = "claude-opus-5-5"
 # 思考深度：實測 medium 偶爾會記錯孩子寫的數字，high 正確且每輪花費差不多

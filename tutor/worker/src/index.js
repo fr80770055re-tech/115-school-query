@@ -5,7 +5,9 @@
 //   { passcode, deviceId, subject: "math" | "chinese" | null,
 //     messages: [ { role: "user", text, image?: { media_type, data } }
 //               | { role: "assistant", reply: { reply, choices, stage, subject } } ] }
-// → { reply, choices, stage, subject, remaining }
+// → { reply, choices, stage, subject, remaining, usage }
+//
+// POST /usage  { passcode } → { usd, budget, turns }：全班本月的估計花費（依 token 用量計算）
 //
 // 每台裝置每天最多問 DAILY_TURNS 輪（預設 40），次數記在 KV（USAGE）。沒有綁 KV 時不限制。
 
@@ -18,6 +20,13 @@ const MAX_IMAGE_B64 = 2_000_000;  // 約 1.5 MB 圖片
 const KEEP_IMAGES = 1;            // 只附上最新的照片，較早的以文字代替（省錢）
 const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 const SUBJECT_LABEL = { math: "數學", chinese: "國語" };
+
+// 每百萬 token 的美元價格：[輸入, 輸出, 快取讀取, 快取寫入(5 分鐘)]
+const PRICES = {
+  "claude-sonnet-5-5": [2, 10, 0.2, 2.5],
+  "claude-opus-5-5": [4, 20, 0.2, 5],
+  "claude-haiku-4-5": [1, 5, 0.1, 1.25],
+};
 
 const FALLBACK_REPLY = {
   reply: "小波老師剛剛沒聽清楚，可以再說一次，或換個方式問問看嗎？",
@@ -41,7 +50,7 @@ export async function handle(request, env, createClient) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
 
   const url = new URL(request.url);
-  if (url.pathname !== "/chat" || request.method !== "POST") {
+  if (!["/chat", "/usage"].includes(url.pathname) || request.method !== "POST") {
     return json({ error: "not_found" }, 404, cors);
   }
   if (!cors["Access-Control-Allow-Origin"]) return json({ error: "forbidden_origin" }, 403, cors);
@@ -56,6 +65,8 @@ export async function handle(request, env, createClient) {
   if (!env.CLASS_PASSCODE || body.passcode !== env.CLASS_PASSCODE) {
     return json({ error: "wrong_passcode" }, 401, cors);
   }
+
+  if (url.pathname === "/usage") return json(await readSpend(env), 200, cors);
 
   const built = buildMessages(body);
   if (built.error) return json({ error: built.error }, 400, cors);
@@ -89,13 +100,14 @@ export async function handle(request, env, createClient) {
     if (response.stop_reason === "refusal") {
       return json({ ...FALLBACK_REPLY, reply: "這個問題小波老師沒辦法回答喔。我們回到作業吧！" }, 200, cors);
     }
+    const usage = await addSpend(env, turnCost(response));
     let remaining = null;
     if (env.USAGE) {
       // 只在成功回答後才算一次；KV 免費方案每天可寫 1000 次
       await env.USAGE.put(key, String(used + 1), { expirationTtl: 60 * 60 * 48 });
       remaining = Math.max(0, limit - used - 1);
     }
-    return json({ ...parseReply(response), remaining }, 200, cors);
+    return json({ ...parseReply(response), remaining, usage }, 200, cors);
   } catch (err) {
     console.error("claude_error", err?.status, err?.message);
     // 預付額度用完或達到每月花費上限：告訴孩子這個月先到這裡
@@ -157,6 +169,37 @@ export function buildMessages(body) {
     messages.push({ role: "user", content });
   }
   return { messages };
+}
+
+// 這一輪的花費（美元）。被備援模型接手時，以實際回答的模型計價。
+export function turnCost(response) {
+  const [inp, out, read, write] = PRICES[response.model] || PRICES["claude-sonnet-5-5"];
+  const u = response.usage || {};
+  return (
+    ((u.input_tokens || 0) * inp +
+      (u.output_tokens || 0) * out +
+      (u.cache_read_input_tokens || 0) * read +
+      (u.cache_creation_input_tokens || 0) * write) / 1e6
+  );
+}
+
+function monthKey() {
+  return "spend:" + new Date(Date.now() + 8 * 3600_000).toISOString().slice(0, 7);
+}
+
+export async function readSpend(env) {
+  const budget = Number(env.MONTHLY_BUDGET_USD) || 5;
+  if (!env.USAGE) return { usd: 0, budget, turns: 0 };
+  const saved = JSON.parse((await env.USAGE.get(monthKey())) || "{}");
+  return { usd: saved.usd || 0, budget, turns: saved.turns || 0 };
+}
+
+async function addSpend(env, usd) {
+  const now = await readSpend(env);
+  if (!env.USAGE) return now;
+  const next = { usd: Math.round((now.usd + usd) * 1e6) / 1e6, turns: now.turns + 1 };
+  await env.USAGE.put(monthKey(), JSON.stringify(next), { expirationTtl: 60 * 60 * 24 * 70 });
+  return { ...next, budget: now.budget };
 }
 
 // 以台灣日期＋裝置碼計數；沒有裝置碼時退回用 IP

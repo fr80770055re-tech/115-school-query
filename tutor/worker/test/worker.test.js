@@ -46,7 +46,7 @@ test("returns structured reply and sends schema, fallback, subject hint", async 
     fakeClient(okReply, cap),
   );
   assert.equal(res.status, 200);
-  assert.deepEqual(await res.json(), { ...okReply, remaining: null });
+  assert.deepEqual(await res.json(), { ...okReply, remaining: null, usage: { usd: 0, budget: 5, turns: 0 } });
   assert.equal(cap.params.model, "claude-sonnet-5-5");
   assert.equal(cap.params.fallbacks, "default");
   assert.equal(cap.params.output_config.format.type, "json_schema");
@@ -123,4 +123,23 @@ test("out of credit returns a clear error", async () => {
   const res = await handle(req({ passcode: "owl123", messages: [{ role: "user", text: "hi" }] }), env, broke);
   assert.equal(res.status, 503);
   assert.equal((await res.json()).error, "out_of_credit");
+});
+
+test("monthly spend accumulates and /usage reports it", async () => {
+  const kv = fakeKV();
+  const e = { ...env, USAGE: kv, MONTHLY_BUDGET_USD: "5" };
+  const client = () => ({ beta: { messages: { create: async () => ({
+    model: "claude-sonnet-5-5", stop_reason: "end_turn",
+    usage: { input_tokens: 1000, output_tokens: 1000, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 },
+    content: [{ type: "text", text: JSON.stringify(okReply) }],
+  }) } } });
+  const body = { passcode: "owl123", deviceId: "dev-12345678", messages: [{ role: "user", text: "hi" }] };
+  const r1 = await (await handle(req(body), e, client)).json();
+  assert.equal(r1.usage.turns, 1);
+  assert.ok(Math.abs(r1.usage.usd - 0.012) < 1e-9);
+  await handle(req(body), e, client);
+  const u = await (await handle(new Request("https://w.dev/usage", { method: "POST", headers: { Origin: ORIGIN }, body: JSON.stringify({ passcode: "owl123" }) }), e, client)).json();
+  assert.deepEqual(u, { usd: 0.024, budget: 5, turns: 2 });
+  const bad = await handle(new Request("https://w.dev/usage", { method: "POST", headers: { Origin: ORIGIN }, body: JSON.stringify({ passcode: "x" }) }), e, client);
+  assert.equal(bad.status, 401);
 });
