@@ -1042,7 +1042,10 @@ function renderStart(animate) {
       saveChat();
       if (state.messages.length === 0) {
         els.chat.querySelector(".say.pick-reply")?.remove();
-        const r = addTeacher(`好，我們來看${SUBJECTS[state.subject]}！\n按左下角黃色的相機把題目拍下來，或用說的、打字告訴我是哪一題。`);
+        const hint = state.subject === "chinese"
+          ? "\n問課文的題目時，請把課文和題目拍在同一張，字要拍清楚，我才看得到喔！"
+          : "";
+        const r = addTeacher(`好，我們來看${SUBJECTS[state.subject]}！\n按左下角黃色的相機把題目拍下來，或用說的、打字告訴我是哪一題。${hint}`);
         r.classList.add("pick-reply");
       }
       els.input.placeholder = "例如：第 3 題不會";
